@@ -1,161 +1,156 @@
-# PlayableLearn - Day 07: The Reverse Time
+# PlayableLearn - Day 08: The Director Name
 
 ## Overview
-Day 07 introduces Reverse Time functionality with negative speed support and time wrapping. This demonstrates how to implement reverse playback and cyclic time behavior in the PlayableGraph system.
+Day 08 introduces Graph Naming functionality for debugging in the Unity Profiler. This demonstrates how to assign meaningful names to PlayableGraphs, making them easier to identify and debug in the Unity Profiler window.
 
 ## What You'll Learn
-- How to use negative speed values for reverse playback
-- Understanding time direction (forward vs reverse)
-- Implementing time wrapping for cyclic behavior
-- Tracking accumulated time across direction changes
-- Detecting direction transitions
-- Visualizing reverse time state
+- How to name PlayableGraphs for Profiler visibility
+- Understanding graph naming and sanitization
+- Implementing dynamic graph renaming based on state
+- Tracking graph name changes
+- Validating graph names
+- Using named graphs in the Unity Profiler
 
 ## Files Structure
 ```
-Assets/Day07/Scripts/
-├── Day07.asmdef                        # Assembly definition
-├── Day07Entry.cs                       # MonoBehaviour entry point
-├── Day07ReverseData.cs                 # Data layer: Reverse time control handle
-├── Day07ReverseExtensions.cs           # Adapter layer: Reverse time operations
-└── ReverseTimeOps.cs                   # Operations layer: Burst-compiled reverse time ops
+Assets/Day08/Scripts/
+├── Day08.asmdef                        # Assembly definition
+├── Day08Entry.cs                       # MonoBehaviour entry point
+├── Day08NamedGraphData.cs              # Data layer: Named graph handle
+├── Day08NamedGraphExtensions.cs        # Adapter layer: Graph naming operations
+└── GraphNamingOps.cs                   # Operations layer: Burst-compiled naming ops
 ```
 
 ## The Three-Layer Architecture
 
-### Layer A: Data (Day07ReverseData)
+### Layer A: Data (Day08NamedGraphData)
 Pure data structure with no logic:
-- `PlayableGraph Graph` - The graph being controlled
+- `PlayableGraph Graph` - The graph being named
+- `string GraphName` - The current name of the graph
+- `string PreviousName` - The previous name of the graph
 - `bool IsActive` - Local state tracking
 - `int ControllerId` - Debug identifier
-- `bool EnableReverseTime` - Whether reverse time is enabled
-- `bool EnableTimeWrapping` - Whether time wrapping is enabled
-- `double AccumulatedTime` - Accumulated time tracking (can be negative)
-- `double WrapLimit` - Time wrapping limit in seconds
-- `double LastKnownSpeed` - Speed reference for direction tracking
 - `bool IsValidControl` - Whether the control is valid
+- `bool IsNameSet` - Whether the name has been set
+- `int NameChangeCount` - Number of name changes
 
-### Layer B: Operations (ReverseTimeOps)
-Burst-compiled static methods for reverse time operations:
-- `IsReversing()` - Checks if speed is negative
-- `IsForward()` - Checks if speed is positive
-- `IsStopped()` - Checks if speed is near zero
-- `ClampSpeed()` - Clamps speed within bounds
-- `WrapTime()` - Wraps accumulated time within limit
-- `UpdateAccumulatedTime()` - Updates time based on delta time and speed
-- `DidDirectionChange()` - Detects direction changes
-- `IsTransitionToReverse()` - Checks if transitioning to reverse
-- `IsTransitionToForward()` - Checks if transitioning to forward
-- `GetSpeedMagnitude()` - Gets absolute speed value
-- `GetSpeedDirection()` - Gets direction as -1, 0, or 1
-- `CalculateNormalizedProgress()` - Gets normalized time progress
-- `CalculateWrapOverflow()` - Calculates time wrap overflow
+### Layer B: Operations (GraphNamingOps)
+Burst-compiled static methods for graph naming operations:
+- `IsValidName()` - Checks if a graph name is valid
+- `AreNamesEqual()` - Checks if two graph names are equal (case-insensitive)
+- `HasNameChanged()` - Checks if the name has changed
+- `GenerateUniqueName()` - Generates a unique graph name with counter
+- `SanitizeName()` - Sanitizes a graph name by removing invalid characters
+- `IsNameTooLong()` - Checks if a graph name exceeds maximum length
+- `TruncateName()` - Truncates a graph name to maximum length
+- `FormatName()` - Formats a graph name with prefix and suffix
+- `IncrementNameCount()` - Increments the name change count
+- `IsValidControllerId()` - Validates a controller ID
+- `GenerateControllerId()` - Generates a controller ID
 
-### Layer C: Extensions (Day07ReverseExtensions)
+### Layer C: Extensions (Day08NamedGraphExtensions)
 Public API that combines data and operations:
-- `Initialize()` - Creates reverse time control
-- `Dispose()` - Cleans up control
-- `UpdateTimeTracking()` - Updates accumulated time
-- `SetCurrentSpeed()` - Sets current speed for tracking
-- `IsReversing()` - Checks if time is flowing backward
-- `IsForward()` - Checks if time is flowing forward
-- `IsStopped()` - Checks if time is stopped
-- `GetAccumulatedTime()` - Gets accumulated time
-- `SetWrapLimit()` - Sets time wrapping limit
-- `ClampSpeed()` - Clamps speed within bounds
-- `GetSpeedMagnitude()` - Gets speed magnitude
-- `GetSpeedDirection()` - Gets direction as integer
-- `GetDirectionSymbol()` - Gets direction symbol (>>, <<, ||)
-- `GetNormalizedProgress()` - Gets normalized time progress
-- `SetReverseEnabled()` - Enables/disables reverse time
-- `SetTimeWrappingEnabled()` - Enables/disables time wrapping
-- `ResetTime()` - Resets accumulated time to zero
-- `IsNearWrapLimit()` - Checks if near wrap limit
-- `LogReverseInfo()` - Debug logging
+- `Initialize()` - Creates named graph handle
+- `Dispose()` - Cleans up named graph handle
+- `SetName()` - Sets a new name for the graph
+- `GetName()` - Gets the current name of the graph
+- `GetPreviousName()` - Gets the previous name of the graph
+- `HasNameChanged()` - Checks if the graph name has changed
+- `GetNameChangeCount()` - Gets the number of name changes
+- `SetFormattedName()` - Sets a formatted name with prefix and suffix
+- `SetUniqueName()` - Sets a unique name with counter
+- `RenameWithCounter()` - Renames the graph with a counter
+- `IsValidControl()` - Checks if the named graph is valid
+- `IsNameSet()` - Checks if the graph name is set
+- `GetControllerId()` - Gets the controller ID
+- `LogNamedGraphInfo()` - Debug logging
+- `ResetControllerIdCounter()` - Resets the controller ID counter
 
 ## Key Concepts
 
-### Negative Speed
-- Speed values < 0 indicate reverse time flow
-- Speed values > 0 indicate forward time flow
-- Speed values ≈ 0 indicate stopped time
-- The magnitude of negative speed determines reverse playback rate
+### Graph Naming
+- PlayableGraphs can be named for easier identification in the Profiler
+- Names are sanitized to remove invalid characters
+- Names are truncated to a maximum length (128 characters)
+- Names are case-insensitive when comparing
 
-### Time Wrapping
-- Time can wrap within a specified limit (e.g., 10 seconds)
-- Wrapping occurs from +limit to -limit and vice versa
-- Useful for creating cyclic or looping behaviors
-- Can be enabled/disabled independently
+### Name Sanitization
+- Invalid characters are replaced with underscores
+- Leading/trailing whitespace is removed
+- Empty names after sanitization become "UnnamedGraph"
+- Invalid characters: `< > : " / \ | ? *`
 
-### Accumulated Time
-- Tracks total time elapsed, including negative values
-- Can go negative when time is reversing
-- Wraps around when time wrapping is enabled
-- Useful for tracking total playback time regardless of direction
+### Dynamic Renaming
+- Graph names can be updated dynamically based on state
+- Useful for showing current playback state in the Profiler
+- Can combine state information (playing/paused, forward/reverse)
+- Name changes are tracked with a counter
 
-### Direction Transitions
-- Forward → Reverse: Speed changed from positive to negative
-- Reverse → Forward: Speed changed from negative to positive
-- These transitions can be detected for triggering events
+### Name Change Tracking
+- Previous name is stored for reference
+- Number of name changes is tracked
+- Useful for debugging and auditing
+- Can be reset for testing purposes
 
 ## Usage Example
 
 ```csharp
-// Initialize graph and previous days' components
+// Initialize graph
 Day01GraphHandle graphHandle;
 graphHandle.Initialize("MyGraph");
 
-// Initialize speed control
-Day05SpeedData speedData;
-speedData.Initialize(in graphHandle.Graph, "SpeedControl", 1.0f, true, 2.0f);
+// Initialize named graph
+Day08NamedGraphData namedGraphData;
+namedGraphData.Initialize(in graphHandle.Graph, "MyPlayableGraph");
 
-// Initialize reverse time control
-Day07ReverseData reverseData;
-reverseData.Initialize(in graphHandle.Graph, "ReverseTimeControl", true, true);
+// Get the current name
+string currentName = namedGraphData.GetName();
+Debug.Log($"Graph name: {currentName}");
 
-// Set wrap limit to 10 seconds
-reverseData.SetWrapLimit(10.0);
+// Set a new name
+namedGraphData.SetName("UpdatedGraphName");
 
-// Update time tracking (call in Update)
-reverseData.UpdateTimeTracking(Time.deltaTime);
-
-// Update speed tracking
-reverseData.SetCurrentSpeed(speedData.GetCurrentSpeed());
-
-// Check if reversing
-if (reverseData.IsReversing())
+// Check if name has changed
+if (namedGraphData.HasNameChanged())
 {
-    Debug.Log("Time is flowing backward!");
+    Debug.Log($"Name changed from: {namedGraphData.GetPreviousName()}");
+    Debug.Log($"Name change count: {namedGraphData.GetNameChangeCount()}");
 }
 
-// Check if forward
-if (reverseData.IsForward())
-{
-    Debug.Log("Time is flowing forward!");
-}
+// Set a formatted name with prefix and suffix
+namedGraphData.SetFormattedName("Prefix", "BaseName", "Suffix");
+// Result: "Prefix_BaseName_Suffix"
 
-// Get accumulated time
-double totalTime = reverseData.GetAccumulatedTime();
-Debug.Log($"Accumulated time: {totalTime:F2}s");
+// Set a unique name with counter
+namedGraphData.SetUniqueName("MyGraph", 5);
+// Result: "MyGraph_5"
 
-// Clamp speed to allow reverse playback
-float clampedSpeed = reverseData.ClampSpeed(-2.0f, 2.0f, targetSpeed);
-speedData.SetTargetSpeed(clampedSpeed);
+// Dynamic renaming based on state
+string stateName = playStateData.IsPlaying() ? "Playing" : "Paused";
+string directionName = reverseData.IsReversing() ? "Reverse" : "Forward";
+string dynamicName = $"MyGraph_{stateName}_{directionName}";
+namedGraphData.SetName(dynamicName);
 
-// Get normalized progress (0.0 to 1.0)
-float progress = reverseData.GetNormalizedProgress();
-
-// Get direction symbol
-string direction = reverseData.GetDirectionSymbol(); // ">>", "<<", or "||"
+// Log named graph info
+namedGraphData.LogNamedGraphInfo("Current Graph State");
 ```
 
 ## Visual Feedback
-Day 07 adds visual feedback to represent reverse time:
+Day 08 adds visual feedback to represent graph naming:
+- **Named graph**: Cyan color
 - **Forward time**: Green color
 - **Reverse time**: Magenta color
 - **Paused**: Red color
-- **GUI Controls**: On-screen toggle button for reverse mode
-- **Status Display**: Shows direction, accumulated time, and speed
+- **GUI Controls**: Displays graph name and controller ID
+- **Gizmos**: Shows graph name in Scene view
+
+## Profiler Integration
+Named graphs appear in the Unity Profiler with their assigned names:
+1. Open Unity Profiler (Window > Analysis > Profiler)
+2. Enable the Profiler module
+3. Play the game
+4. Look for your graph name in the Profiler timeline
+5. Named graphs are easier to identify and debug
 
 ## Previous Days
 - **Day 01**: Created and destroyed PlayableGraph
@@ -164,22 +159,22 @@ Day 07 adds visual feedback to represent reverse time:
 - **Day 04**: Added the update cycle using ProcessFrame
 - **Day 05**: Implemented SetSpeed manipulation for playback control
 - **Day 06**: Added PlayState control for playing and stopping the graph
+- **Day 07**: Implemented reverse time functionality with negative speed
 
 ## Testing
 Run the Unity Test Runner to verify:
-- Reverse time control initializes correctly
-- Negative speed values work correctly
-- Time wrapping functions as expected
-- Direction transitions are detected properly
-- Accumulated time tracks correctly
+- Named graph initializes correctly
+- Graph names are sanitized properly
+- Name changes are tracked correctly
+- Dynamic renaming works as expected
+- Controller IDs are assigned correctly
 - Complete integration with previous days
 
 ## Notes
-- Day 07 builds upon all previous days (01-06)
-- Reverse time requires speed control (Day 05) to be initialized
-- Time wrapping is independent of reverse time enablement
-- Use UpdateTimeTracking() in your Update loop to track accumulated time
-- Use SetCurrentSpeed() to update direction tracking
-- Direction changes are useful for triggering events
-- Negative speeds can be clamped using ClampSpeed()
-- Time wrapping creates cyclic behavior within the specified limit
+- Day 08 builds upon all previous days (01-07)
+- Graph naming is essential for debugging in the Profiler
+- Names are automatically sanitized and truncated
+- Use meaningful names for better debugging experience
+- Dynamic renaming can show runtime state in the Profiler
+- Name changes are tracked for auditing purposes
+- Controller IDs help identify multiple named graphs
