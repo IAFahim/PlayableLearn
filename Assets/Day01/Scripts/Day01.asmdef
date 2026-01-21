@@ -1,7 +1,15 @@
 {
     "name": "Day01",
     "references": [
-        "PlayableLearn.Core"
+        "Unity.Animation.Rigging",
+        "Unity.Burst",
+        "Unity.Collections",
+        "Unity.Mathematics",
+        "Unity.Playables",
+        "UnityEngine.AnimationModule",
+        "UnityEngine.AudioModule",
+        "UnityEngine.CoreModule",
+        "UnityEngine.DirectorModule"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
