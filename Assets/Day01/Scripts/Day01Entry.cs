@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Playables;
 
 namespace PlayableLearn.Day01
 {
@@ -9,39 +8,32 @@ namespace PlayableLearn.Day01
     /// </summary>
     public class Day01Entry : MonoBehaviour
     {
-        // 1. DATA
+        // LAYER A: Data
         [SerializeField]
-        private Day01GraphLifecycleState _graphState;
+        private GraphHandle _graphHandle;
 
-        // 2. INITIALIZATION
+        // LAYER C: Adapter Calls
         private void OnEnable()
         {
-            _graphState.InitializeEngine(gameObject.name);
-            _graphState.Play();
-
-            Debug.Log($"[Day 01] Graph Created: {_graphState.MainGraphHandle.GetEditorName()}");
+            _graphHandle.Initialize(gameObject.name);
+            Debug.Log($"[Day 01] Engine Started. Graph Valid: {_graphHandle.IsActive}");
         }
 
-        // 3. CLEANUP (Crucial!)
         private void OnDisable()
         {
-            _graphState.DisposeEngine();
-            Debug.Log("[Day 01] Graph Destroyed");
+            _graphHandle.Dispose();
+            Debug.Log("[Day 01] Engine Stopped.");
         }
 
-        // 4. VISUALIZATION
         private void Update()
         {
-            if (_graphState.IsCreated && _graphState.MainGraphHandle.IsValid())
+            // PURE VIEW LOGIC
+            // We ask the handle for data. We do not touch the inner graph.
+            if (_graphHandle.TryGetTime(out float graphTime))
             {
-                // This proves the graph is alive and updating its own time
-                // Don't call this variable "t". Call it what it is.
-                double accumulatedTime = _graphState.MainGraphHandle.GetTimeUpdateMode() == DirectorUpdateMode.GameTime
-                    ? Time.time
-                    : _graphState.MainGraphHandle.GetRootPlayable(0).GetTime(); // (Won't work yet as no root, but concept stands)
-
-                // Simple oscillation to show activity in Inspector
-                transform.localScale = Vector3.one * (1.0f + Mathf.Sin((float)Time.time * 2f) * 0.2f);
+                // Visual feedback: Pulse size based on Graph Time
+                float scale = 1.0f + Mathf.Sin(graphTime * 3.0f) * 0.25f;
+                transform.localScale = Vector3.one * scale;
             }
         }
     }
