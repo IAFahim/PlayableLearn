@@ -1,0 +1,5 @@
+{
+    "name": "Day01",
+    "references": ["PlayableLearn.Core"],
+    "autoReferenced": true
+}
