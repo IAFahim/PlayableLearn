@@ -2,42 +2,42 @@
 
 ### Sprint 1: The Heartbeat (Foundations)
 *Goal: Understand the Graph lifecycle without touching an Animation Clip yet.*
-- [x] **Day 01:** The Empty Graph. (Creating/Destroying the `PlayableGraph`). `Day01.asmdef`, `Day01Entry.cs`, `Day01GraphHandle.cs`, `Day01GraphHandleExtensions.cs`, `GraphOps.cs`
-- [ ] **Day 02:** Check Old day and add The Output. (Connecting a `ScriptPlayableOutput` to talk to the console). `Day02.asmdef`, `Day02Entry.cs`, `Day02OutputHandle.cs`, `Day02OutputHandleExtensions.cs`, `ScriptOutputOps.cs`
-- [ ] **Day 03:** Check Old day and add The First Node. (Creating a `ScriptPlayable` and linking it). `Day03.asmdef`, `Day03Entry.cs`, `Day03NodeHandle.cs`, `Day03NodeHandleExtensions.cs`, `ScriptPlayableOps.cs`, `Day03EmptyBehaviour.cs`
-- [ ] **Day 04:** Check Old day and add The Update Cycle. (Using `ProcessFrame` to rotate a generic Cube). `Day04.asmdef`, `Day04Entry.cs`, `Day04RotatorBehaviour.cs`, `Day04RotatorData.cs`, `RotatorLogic.cs`, `Day04RotatorExtensions.cs`
-- [ ] **Day 05:** Check Old day and add Time Dilation. (Manipulating `SetSpeed` manually). `Day05.asmdef`, `Day05Entry.cs`, `Day05SpeedData.cs`, `SpeedOps.cs`, `Day05SpeedExtensions.cs`
-- [ ] **Day 06:** Check Old day and add The Pause Button. (Playing/Stopping the graph programmatically). `Day06.asmdef`, `Day06Entry.cs`, `Day06PlayStateData.cs`, `PlayStateOps.cs`, `Day06PlayStateExtensions.cs`
-- [ ] **Day 07:** Check Old day and add The Reverse Time. (Negative speed and time wrapping). `Day07.asmdef`, `Day07Entry.cs`, `Day07ReverseData.cs`, `ReverseTimeOps.cs`, `Day07ReverseExtensions.cs`
-- [ ] **Day 08:** Check Old day and add The Director Name. (Naming graphs for the Profiler—crucial for debugging). `Day08.asmdef`, `Day08Entry.cs`, `Day08NamedGraphData.cs`, `GraphNamingOps.cs`, `Day08NamedGraphExtensions.cs`
-- [ ] **Day 09:** Check Old day and add The Graph Visualizer. (Installing the package and seeing our nodes). `Day09.asmdef`, `Day09Entry.cs`, `Day09VisualizerSetup.cs`
-- [ ] **Day 10:** Check Old day and add The Cleanup. (Proper `IDisposable` patterns for Playables). `Day10.asmdef`, `Day10Entry.cs`, `Day10DisposableGraph.cs`, `Day10DisposableGraphExtensions.cs`, `DisposalOps.cs`
+- [x] **Day 01:** The Empty Graph. (Creating/Destroying the `PlayableGraph`). `Day01.asmdef`, `Day01Entry.cs`, `Day01GraphHandle.cs`, `Day01GraphHandleExtensions.cs`, `GraphOps.cs, README.md`
+- [ ] **Day 02:** Check Old day and add The Output. (Connecting a `ScriptPlayableOutput` to talk to the console). `Day02.asmdef`, `Day02Entry.cs`, `Day02OutputHandle.cs`, `Day02OutputHandleExtensions.cs`, `ScriptOutputOps.cs, README.md`
+- [ ] **Day 03:** Check Old day and add The First Node. (Creating a `ScriptPlayable` and linking it). `Day03.asmdef`, `Day03Entry.cs`, `Day03NodeHandle.cs`, `Day03NodeHandleExtensions.cs`, `ScriptPlayableOps.cs`, `Day03EmptyBehaviour.cs, README.md`
+- [ ] **Day 04:** Check Old day and add The Update Cycle. (Using `ProcessFrame` to rotate a generic Cube). `Day04.asmdef`, `Day04Entry.cs`, `Day04RotatorBehaviour.cs`, `Day04RotatorData.cs`, `RotatorLogic.cs`, `Day04RotatorExtensions.cs, README.md`
+- [ ] **Day 05:** Check Old day and add Time Dilation. (Manipulating `SetSpeed` manually). `Day05.asmdef`, `Day05Entry.cs`, `Day05SpeedData.cs`, `SpeedOps.cs`, `Day05SpeedExtensions.cs, README.md`
+- [ ] **Day 06:** Check Old day and add The Pause Button. (Playing/Stopping the graph programmatically). `Day06.asmdef`, `Day06Entry.cs`, `Day06PlayStateData.cs`, `PlayStateOps.cs`, `Day06PlayStateExtensions.cs, README.md`
+- [ ] **Day 07:** Check Old day and add The Reverse Time. (Negative speed and time wrapping). `Day07.asmdef`, `Day07Entry.cs`, `Day07ReverseData.cs`, `ReverseTimeOps.cs`, `Day07ReverseExtensions.cs, README.md`
+- [ ] **Day 08:** Check Old day and add The Director Name. (Naming graphs for the Profiler—crucial for debugging). `Day08.asmdef`, `Day08Entry.cs`, `Day08NamedGraphData.cs`, `GraphNamingOps.cs`, `Day08NamedGraphExtensions.cs, README.md`
+- [ ] **Day 09:** Check Old day and add The Graph Visualizer. (Installing the package and seeing our nodes). `Day09.asmdef`, `Day09Entry.cs`, `Day09VisualizerSetup.cs, README.md`
+- [ ] **Day 10:** Check Old day and add The Cleanup. (Proper `IDisposable` patterns for Playables). `Day10.asmdef`, `Day10Entry.cs`, `Day10DisposableGraph.cs`, `Day10DisposableGraphExtensions.cs`, `DisposalOps.cs, README.md`
 
 ### Sprint 2: The Puppeteer (Basic Animation)
 *Goal: Controlling an Animator without the Animator Controller state machine.*
-- [ ] **Day 11:** Check Old day and add The Output Hook. (Connecting `AnimationPlayableOutput` to an Animator). `Day11.asmdef`, `Day11Entry.cs`, `Day11AnimOutputHandle.cs`, `Day11AnimOutputExtensions.cs`, `AnimOutputOps.cs`
-- [ ] **Day 12:** Check Old day and add The Clip Player. (Wrapping `AnimationClipPlayable`). `Day12.asmdef`, `Day12Entry.cs`, `Day12ClipHandle.cs`, `Day12ClipExtensions.cs`, `ClipPlayableOps.cs`
-- [ ] **Day 13:** Check Old day and add The Mixer. (Introduction to `AnimationMixerPlayable`). `Day13.asmdef`, `Day13Entry.cs`, `Day13MixerHandle.cs`, `Day13MixerExtensions.cs`, `MixerOps.cs`
-- [ ] **Day 14:** Check Old day and add Hard Swapping. (Disconnecting input 0 and connecting input 1). `Day14.asmdef`, `Day14Entry.cs`, `Day14SwapData.cs`, `SwapConnectionOps.cs`, `Day14SwapExtensions.cs`
-- [ ] **Day 15:** Check Old day and add Weighted Blending. (Setting input weights 0.5/0.5). `Day15.asmdef`, `Day15Entry.cs`, `Day15BlendData.cs`, `WeightBlendOps.cs`, `Day15BlendExtensions.cs`
-- [ ] **Day 16:** Check Old day and add The Crossfade Logic. (Math for lerping weights over time). `Day16.asmdef`, `Day16Entry.cs`, `Day16CrossfadeData.cs`, `CrossfadeOps.cs`, `Day16CrossfadeExtensions.cs`, `Day16CrossfadeBehaviour.cs`
-- [ ] **Day 17:** Check Old day and add Layering. (Introduction to `AnimationLayerMixerPlayable`). `Day17.asmdef`, `Day17Entry.cs`, `Day17LayerHandle.cs`, `Day17LayerExtensions.cs`, `LayerMixerOps.cs`
-- [ ] **Day 18:** Check Old day and add Masking. (Applying AvatarMasks to layers via code). `Day18.asmdef`, `Day18Entry.cs`, `Day18MaskData.cs`, `MaskingOps.cs`, `Day18MaskExtensions.cs`
-- [ ] **Day 19:** Check Old day and add Root Motion. (Reading root motion from the graph). `Day19.asmdef`, `Day19Entry.cs`, `Day19RootMotionData.cs`, `RootMotionOps.cs`, `Day19RootMotionExtensions.cs`
-- [ ] **Day 20:** Check Old day and add Additive Mixing. (Breathing animations on top of Idle). `Day20.asmdef`, `Day20Entry.cs`, `Day20AdditiveData.cs`, `AdditiveMixOps.cs`, `Day20AdditiveExtensions.cs`
+- [ ] **Day 11:** Check Old day and add The Output Hook. (Connecting `AnimationPlayableOutput` to an Animator). `Day11.asmdef`, `Day11Entry.cs`, `Day11AnimOutputHandle.cs`, `Day11AnimOutputExtensions.cs`, `AnimOutputOps.cs, README.md`
+- [ ] **Day 12:** Check Old day and add The Clip Player. (Wrapping `AnimationClipPlayable`). `Day12.asmdef`, `Day12Entry.cs`, `Day12ClipHandle.cs`, `Day12ClipExtensions.cs`, `ClipPlayableOps.cs, README.md`
+- [ ] **Day 13:** Check Old day and add The Mixer. (Introduction to `AnimationMixerPlayable`). `Day13.asmdef`, `Day13Entry.cs`, `Day13MixerHandle.cs`, `Day13MixerExtensions.cs`, `MixerOps.cs, README.md`
+- [ ] **Day 14:** Check Old day and add Hard Swapping. (Disconnecting input 0 and connecting input 1). `Day14.asmdef`, `Day14Entry.cs`, `Day14SwapData.cs`, `SwapConnectionOps.cs`, `Day14SwapExtensions.cs, README.md`
+- [ ] **Day 15:** Check Old day and add Weighted Blending. (Setting input weights 0.5/0.5). `Day15.asmdef`, `Day15Entry.cs`, `Day15BlendData.cs`, `WeightBlendOps.cs`, `Day15BlendExtensions.cs, README.md`
+- [ ] **Day 16:** Check Old day and add The Crossfade Logic. (Math for lerping weights over time). `Day16.asmdef`, `Day16Entry.cs`, `Day16CrossfadeData.cs`, `CrossfadeOps.cs`, `Day16CrossfadeExtensions.cs`, `Day16CrossfadeBehaviour.cs, README.md`
+- [ ] **Day 17:** Check Old day and add Layering. (Introduction to `AnimationLayerMixerPlayable`). `Day17.asmdef`, `Day17Entry.cs`, `Day17LayerHandle.cs`, `Day17LayerExtensions.cs`, `LayerMixerOps.cs, README.md`
+- [ ] **Day 18:** Check Old day and add Masking. (Applying AvatarMasks to layers via code). `Day18.asmdef`, `Day18Entry.cs`, `Day18MaskData.cs`, `MaskingOps.cs`, `Day18MaskExtensions.cs, README.md`
+- [ ] **Day 19:** Check Old day and add Root Motion. (Reading root motion from the graph). `Day19.asmdef`, `Day19Entry.cs`, `Day19RootMotionData.cs`, `RootMotionOps.cs`, `Day19RootMotionExtensions.cs, README.md`
+- [ ] **Day 20:** Check Old day and add Additive Mixing. (Breathing animations on top of Idle). `Day20.asmdef`, `Day20Entry.cs`, `Day20AdditiveData.cs`, `AdditiveMixOps.cs`, `Day20AdditiveExtensions.cs, README.md`
 
 ### Sprint 3: The Synthesizer (Audio & Sync)
 *Goal: Frame-perfect audio synchronization.*
-- [ ] **Day 21:** Check Old day and add The Audio Output. (Binding `AudioPlayableOutput` to AudioSource). `Day21.asmdef`, `Day21Entry.cs`, `Day21AudioOutputHandle.cs`, `Day21AudioOutputExtensions.cs`, `AudioOutputOps.cs`
-- [ ] **Day 22:** Check Old day and add The Clip Provider. (`AudioClipPlayable`). `Day22.asmdef`, `Day22Entry.cs`, `Day22AudioClipHandle.cs`, `Day22AudioClipExtensions.cs`, `AudioClipOps.cs`
-- [ ] **Day 23:** Check Old day and add The Audio Mixer. (Blending two music tracks via graph weights). `Day23.asmdef`, `Day23Entry.cs`, `Day23AudioMixerHandle.cs`, `Day23AudioMixerExtensions.cs`, `AudioMixerOps.cs`
-- [ ] **Day 24:** Check Old day and add Syncing Audio to Animation. (Ensuring footsteps match sound). `Day24.asmdef`, `Day24Entry.cs`, `Day24SyncData.cs`, `AudioSyncOps.cs`, `Day24SyncExtensions.cs`, `Day24SyncBehaviour.cs`
-- [ ] **Day 25:** Check Old day and add Graph Time vs. DSP Time. (Understanding audio drift). `Day25.asmdef`, `Day25Entry.cs`, `Day25DriftData.cs`, `DspDriftOps.cs`, `Day25DriftExtensions.cs`
-- [ ] **Day 26:** Check Old day and add Speed Pithcing. (Slowing down the graph slows down the audio). `Day26.asmdef`, `Day26Entry.cs`, `Day26PitchData.cs`, `PitchSpeedOps.cs`, `Day26PitchExtensions.cs`
-- [ ] **Day 27:** Check Old day and add Scrubbing Audio. (Setting time manually triggers sound correctly). `Day27.asmdef`, `Day27Entry.cs`, `Day27ScrubData.cs`, `AudioScrubOps.cs`, `Day27ScrubExtensions.cs`
-- [ ] **Day 28:** Check Old day and add Multiple Outputs. (One graph driving Audio AND Animation). `Day28.asmdef`, `Day28Entry.cs`, `Day28DualOutputHandle.cs`, `Day28DualOutputExtensions.cs`, `DualOutputOps.cs`
-- [ ] **Day 29:** Check Old day and add The Master Mixer. (Controlling volume via graph weights). `Day29.asmdef`, `Day29Entry.cs`, `Day29VolumeData.cs`, `MasterVolumeOps.cs`, `Day29VolumeExtensions.cs`
-- [ ] **Day 30:** Check Old day and add Audio Visualization. (Reading output data from the graph). `Day30.asmdef`, `Day30Entry.cs`, `Day30VisualizationData.cs`, `AudioVisualizationOps.cs`, `Day30VisualizationExtensions.cs`
+- [ ] **Day 21:** Check Old day and add The Audio Output. (Binding `AudioPlayableOutput` to AudioSource). `Day21.asmdef`, `Day21Entry.cs`, `Day21AudioOutputHandle.cs`, `Day21AudioOutputExtensions.cs`, `AudioOutputOps.cs, README.md`
+- [ ] **Day 22:** Check Old day and add The Clip Provider. (`AudioClipPlayable`). `Day22.asmdef`, `Day22Entry.cs`, `Day22AudioClipHandle.cs`, `Day22AudioClipExtensions.cs`, `AudioClipOps.cs, README.md`
+- [ ] **Day 23:** Check Old day and add The Audio Mixer. (Blending two music tracks via graph weights). `Day23.asmdef`, `Day23Entry.cs`, `Day23AudioMixerHandle.cs`, `Day23AudioMixerExtensions.cs`, `AudioMixerOps.cs, README.md`
+- [ ] **Day 24:** Check Old day and add Syncing Audio to Animation. (Ensuring footsteps match sound). `Day24.asmdef`, `Day24Entry.cs`, `Day24SyncData.cs`, `AudioSyncOps.cs`, `Day24SyncExtensions.cs`, `Day24SyncBehaviour.cs, README.md`
+- [ ] **Day 25:** Check Old day and add Graph Time vs. DSP Time. (Understanding audio drift). `Day25.asmdef`, `Day25Entry.cs`, `Day25DriftData.cs`, `DspDriftOps.cs`, `Day25DriftExtensions.cs, README.md`
+- [ ] **Day 26:** Check Old day and add Speed Pithcing. (Slowing down the graph slows down the audio). `Day26.asmdef`, `Day26Entry.cs`, `Day26PitchData.cs`, `PitchSpeedOps.cs`, `Day26PitchExtensions.cs, README.md`
+- [ ] **Day 27:** Check Old day and add Scrubbing Audio. (Setting time manually triggers sound correctly). `Day27.asmdef`, `Day27Entry.cs`, `Day27ScrubData.cs`, `AudioScrubOps.cs`, `Day27ScrubExtensions.cs, README.md`
+- [ ] **Day 28:** Check Old day and add Multiple Outputs. (One graph driving Audio AND Animation). `Day28.asmdef`, `Day28Entry.cs`, `Day28DualOutputHandle.cs`, `Day28DualOutputExtensions.cs`, `DualOutputOps.cs, README.md`
+- [ ] **Day 29:** Check Old day and add The Master Mixer. (Controlling volume via graph weights). `Day29.asmdef`, `Day29Entry.cs`, `Day29VolumeData.cs`, `MasterVolumeOps.cs`, `Day29VolumeExtensions.cs, README.md`
+- [ ] **Day 30:** Check Old day and add Audio Visualization. (Reading output data from the graph). `Day30.asmdef`, `Day30Entry.cs`, `Day30VisualizationData.cs`, `AudioVisualizationOps.cs`, `Day30VisualizationExtensions.cs, README.md`
 
 ### Sprint 4: The Architect (Complex Structures)
 *Goal: Building a reusable tree structure.*
