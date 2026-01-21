@@ -1,61 +1,179 @@
-# PlayableLearn - Day 10: The Cleanup
+# PlayableLearn - Day 11: The Output Hook
 
 ## Overview
-Day 10 introduces proper IDisposable patterns for PlayableGraph and related resources. This ensures deterministic cleanup, prevents memory leaks, and follows C# best practices for resource management.
+Day 11 introduces **AnimationPlayableOutput** - the bridge that connects a PlayableGraph to an **Animator** component. This is the critical "Output Hook" that makes PlayableGraphs actually drive animation in Unity.
 
 ## What You'll Learn
-- How to implement IDisposable pattern for PlayableGraph
-- Proper resource cleanup and disposal patterns
-- Deterministic destruction of Playable resources
-- Memory leak prevention in Playable systems
-- Best practices for managing native resources in Unity
+- The critical role of AnimationPlayableOutput in driving animation
+- How to connect PlayableGraph outputs to Animator components
+- The difference between AnimationPlayableOutput and ScriptPlayableOutput
+- Understanding the "Output Hook" pattern
+- Why outputs are essential for making PlayableGraphs useful
+- Managing Animator connections in Playable systems
 
 ## Files Structure
 ```
-Assets/Day10/Scripts/
-├── Day10.asmdef                          # Assembly definition
-├── Day10Entry.cs                         # MonoBehaviour entry point
-├── Day10DisposableGraph.cs               # Data layer: IDisposable wrapper
-├── Day10DisposableGraphExtensions.cs     # Adapter layer: Disposal operations
-└── DisposalOps.cs                         # Operations layer: Burst-compiled disposal ops
+Assets/Day11/Scripts/
+├── Day11.asmdef                          # Assembly definition
+├── AnimOutputOps.cs                      # Operations layer: Burst-compiled animation output ops
+├── Day11AnimOutputHandle.cs              # Data layer: Animation output handle
+├── Day11AnimOutputExtensions.cs          # Extensions layer: Animation output management
+└── Day11Entry.cs                         # MonoBehaviour entry point
+
+Assets/Day11/Tests/
+├── Day11Tests.asmdef                     # Test assembly definition
+└── Day11Tests.cs                         # Comprehensive unit tests
 ```
 
 ## The Three-Layer Architecture
 
-### Layer A: Data (Day10DisposableGraph)
-Pure data structure implementing IDisposable:
-- `PlayableGraph Graph` - The raw Unity Engine handle
-- `bool IsActive` - Local flag to track if graph is active
-- `bool IsDisposed` - Tracks if Dispose has been called
-- `int GraphId` - Debugging identifier
-- `Dispose()` - IDisposable implementation for cleanup
+### Layer A: Data (Day11AnimOutputHandle)
+Pure data structure representing AnimationPlayableOutput:
+- `PlayableGraph Graph` - The graph that owns this output
+- `PlayableOutput Output` - The raw Unity output handle
+- `Animator Animator` - The Animator component this output drives
+- `bool IsActive` - Local flag to track if output is active
+- `int OutputId` - Debugging identifier
 
-### Layer B: Operations (DisposalOps)
-Burst-compiled static methods for disposal operations:
-- `DisposeGraph()` - Safely destroys a PlayableGraph
-- `DisposePlayable()` - Safely destroys a Playable
-- `DisposeOutput()` - Safely destroys a PlayableOutput
-- `CanDisposeGraph()` - Checks if graph can be disposed
-- `CanDisposePlayable()` - Checks if playable can be disposed
-- `CanDisposeOutput()` - Checks if output can be disposed
+### Layer B: Operations (AnimOutputOps)
+Burst-compiled static methods for animation output operations:
+- `Create()` - Creates AnimationPlayableOutput from graph
+- `Destroy()` - Destroys the output
+- `IsValid()` - Checks if output is valid
+- `GetOutputType()` - Returns output type enum
+- `GetOutputInfo()` - Combined validity and type check
 
-### Layer C: Extensions (Day10DisposableGraphExtensions)
-Public API for disposable graph management:
-- `Initialize()` - Creates a new disposable graph
-- `Dispose()` - Disposes the graph using standard pattern
-- `IsValid()` - Checks if graph is valid and ready for use
-- `IsDisposedGraph()` - Checks if graph has been disposed
-- `Reset()` - Resets the graph for potential reuse
-- `LogState()` - Logs diagnostic information
-- `ResetIdCounter()` - Resets the ID counter for testing
+### Layer C: Extensions (Day11AnimOutputExtensions)
+Public API for animation output management:
+- `Initialize()` - Creates output and connects to Animator
+- `Dispose()` - Cleans up output resources
+- `LogToConsole()` - Debug output logging
+- `TryGetAnimator()` - Retrieves connected Animator
+- `SetAnimatorTarget()` - Changes Animator target
+- `TryGetPlayableOutput()` - Gets PlayableOutput for connections
+- `IsValidOutput()` - Checks if output is valid and active
 
 ## Key Concepts
 
-### IDisposable Pattern
-The IDisposable pattern is a C# standard for managing resources that need explicit cleanup:
-- Implements `System.IDisposable` interface
-- `Dispose()` method releases native resources
-- Prevents memory leaks from unmanaged resources
+### The Output Hook
+The "Output Hook" is what makes a PlayableGraph useful:
+- Without an output, a graph processes nodes but nothing sees the result
+- With AnimationPlayableOutput, the graph drives an Animator
+- The Animator updates the animated object's transforms
+- This is the bridge between PlayableGraph and Unity's animation system
+
+### AnimationPlayableOutput vs ScriptPlayableOutput
+- **AnimationPlayableOutput**: Specifically for driving animation via Animator
+- **ScriptPlayableOutput**: General-purpose output (Day 2) for console output and custom logic
+- Both are outputs, but serve different purposes
+- AnimationPlayableOutput is the "real" output used in production animation systems
+
+### Animator Connection
+- AnimationPlayableOutput MUST have an Animator to work
+- The output drives the Animator's animation playback
+- Multiple outputs can exist on a single graph
+- Each output can connect to different components
+
+### Output-Lifecycle Management
+- Outputs must be created before connecting playables
+- Outputs should be disposed when the graph is destroyed
+- Output cleanup happens in reverse order of creation
+- Proper disposal prevents resource leaks
+
+## Usage Example
+
+```csharp
+// Create the graph
+Day10DisposableGraph disposableGraph;
+disposableGraph.Initialize("MyAnimationGraph");
+
+// Get or create an Animator component
+Animator animator = GetComponent<Animator>();
+
+// Create AnimationPlayableOutput and connect to Animator
+Day11AnimOutputHandle animOutputHandle;
+animOutputHandle.Initialize(in disposableGraph.Graph, "MyOutput", animator);
+
+// Create a playable node (e.g., rotator from Day 4)
+Day04RotatorData rotatorData;
+rotatorData.Initialize(in disposableGraph.Graph, "Rotator", transform, 90f, Vector3.up);
+
+// Connect the playable to the output
+if (animOutputHandle.TryGetPlayableOutput(out PlayableOutput output))
+{
+    rotatorData.ConnectToOutput(in output);
+}
+
+// Clean up when done
+rotatorData.Dispose();
+animOutputHandle.Dispose();
+disposableGraph.Dispose();
+```
+
+## Integration with Previous Days
+
+Day 11 integrates all features from Days 1-10:
+- **Day 01**: Graph creation and management
+- **Day 02**: Output concepts (ScriptPlayableOutput for comparison)
+- **Day 03**: Node creation and linking
+- **Day 04**: Rotation logic and behavior
+- **Day 05**: Speed control
+- **Day 06**: PlayState management
+- **Day 07**: Reverse time
+- **Day 08**: Graph naming
+- **Day 09**: Visualizer
+- **Day 10**: IDisposable pattern
+
+## Testing
+
+Run the Unity Test Runner to verify:
+- AnimationPlayableOutput creates correctly
+- Animator connection works properly
+- Output type identification is accurate
+- Resource disposal works correctly
+- Integration with all previous days
+
+## Visual Feedback
+
+Day 11 adds visual feedback for output type:
+- **AnimationPlayableOutput**: Cyan color
+- **ScriptPlayableOutput**: Yellow color
+- **GUI Controls**: Displays output type and Animator status
+- **Gizmos**: Shows output type and Animator connection in Scene view
+
+## Key Differences from Day 2
+
+### Day 2 (ScriptPlayableOutput)
+- General-purpose output for console output
+- No component connection required
+- Demonstrated output concepts
+
+### Day 11 (AnimationPlayableOutput)
+- Specifically for animation playback
+- **Requires** an Animator component
+- Actually drives the animation system
+- The production output type for real animation
+
+## Previous Days
+- **Day 01**: Created and destroyed PlayableGraph
+- **Day 02**: Added ScriptPlayableOutput for console communication
+- **Day 03**: Created and linked the first ScriptPlayable node
+- **Day 04**: Implemented the update cycle with ProcessFrame
+- **Day 05**: Added time dilation with SetSpeed
+- **Day 06**: Implemented PlayState control for play/pause
+- **Day 07**: Added reverse time and time wrapping
+- **Day 08**: Implemented graph naming for profiler visibility
+- **Day 09**: Added PlayableGraph visualization
+- **Day 10**: Implemented IDisposable patterns
+
+## Notes
+- Day 11 completes the foundational PlayableGraph knowledge
+- AnimationPlayableOutput is essential for real animation systems
+- The Output Hook is what makes PlayableGraphs useful
+- Animator component is required for AnimationPlayableOutput
+- Multiple outputs can coexist in a single graph
+- Proper disposal prevents resource leaks
+- Understanding outputs is critical for Playable development
 - Enables deterministic cleanup (vs. garbage collection)
 
 ### Deterministic Cleanup
