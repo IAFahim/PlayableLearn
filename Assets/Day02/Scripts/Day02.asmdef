@@ -1,15 +1,10 @@
 {
     "name": "Day02",
     "references": [
-        "Unity.Animation.Rigging",
+        "Day01",
         "Unity.Burst",
         "Unity.Collections",
-        "Unity.Mathematics",
-        "Unity.Playables",
-        "UnityEngine.AnimationModule",
-        "UnityEngine.AudioModule",
-        "UnityEngine.CoreModule",
-        "UnityEngine.DirectorModule"
+        "Unity.Mathematics"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -15,13 +15,17 @@ namespace PlayableLearn.Day01
         // LAYER C: Adapter Calls
         private void OnEnable()
         {
-            day01GraphHandle.Initialize(gameObject.name);
+            var handle = day01GraphHandle;
+            handle.Initialize(gameObject.name);
+            day01GraphHandle = handle;
             Debug.Log($"[Day 01] Engine Started. Graph Valid: {day01GraphHandle.IsActive}");
         }
 
         private void OnDisable()
         {
-            day01GraphHandle.Dispose();
+            var handle = day01GraphHandle;
+            handle.Dispose();
+            day01GraphHandle = handle;
             Debug.Log("[Day 01] Engine Stopped.");
         }
 

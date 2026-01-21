@@ -53,6 +53,7 @@ namespace PlayableLearn.Day02
         /// <summary>
         /// Logs the output information to the console.
         /// This is the main feature for Day 02 - demonstrating output communication.
+        /// Layer C (Extensions) is where Debug.Log belongs - NOT in Burst Ops.
         /// </summary>
         public static void LogToConsole(this in Day02OutputHandle handle, string outputName)
         {
@@ -62,21 +63,29 @@ namespace PlayableLearn.Day02
                 return;
             }
 
-            ScriptOutputOps.LogToConsole(in handle.Output, in outputName);
+            ScriptOutputOps.GetOutputInfo(in handle.Output, out OutputType type, out bool isValid);
+
+            if (!isValid)
+            {
+                Debug.LogWarning($"[OutputHandle] Output '{outputName}' is not valid.");
+                return;
+            }
+
+            Debug.Log($"[ScriptOutput] Name: {outputName}, Type: {type}, IsPlayableOutput: {isValid}");
         }
 
         /// <summary>
-        /// Gets the output type as a string.
+        /// Gets the output type as an enum.
         /// </summary>
-        public static bool TryGetOutputType(this in Day02OutputHandle handle, out string outputType)
+        public static bool TryGetOutputType(this in Day02OutputHandle handle, out OutputType outputType)
         {
             if (!handle.IsActive || !ScriptOutputOps.IsValid(in handle.Output))
             {
-                outputType = "Invalid";
+                outputType = OutputType.Null;
                 return false;
             }
 
-            outputType = ScriptOutputOps.GetOutputType(in handle.Output);
+            ScriptOutputOps.GetOutputType(in handle.Output, out outputType);
             return true;
         }
 

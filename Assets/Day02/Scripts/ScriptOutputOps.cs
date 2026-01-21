@@ -44,50 +44,41 @@ namespace PlayableLearn.Day02
         }
 
         /// <summary>
-        /// Gets the output type as a string for logging.
-        /// Since this is a ScriptPlayableOutput, we know the type is "ScriptOutput".
+        /// Gets the output type as an enum for identification.
+        /// Since this is a ScriptPlayableOutput, we know the type.
+        /// Uses out parameter per protocol - no return values from Ops.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string GetOutputType(in PlayableOutput output)
+        public static void GetOutputType(in PlayableOutput output, out OutputType result)
         {
             if (!output.IsOutputValid())
             {
-                return "Null";
-            }
-
-            // PlayableOutput doesn't expose a type property directly
-            // Since we're creating ScriptPlayableOutput, we know the type
-            return "ScriptOutput";
-        }
-
-        /// <summary>
-        /// Logs the output information to console.
-        /// This is the main functionality for Day 02 - talking to the console.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void LogToConsole(in PlayableOutput output, in string outputName)
-        {
-            if (!output.IsOutputValid())
-            {
-                DebugLogger.Log($"[ScriptOutput] Output '{outputName}' is not valid.");
+                result = OutputType.Null;
                 return;
             }
 
-            string outputType = GetOutputType(in output);
-            DebugLogger.Log($"[ScriptOutput] Name: {outputName}, Type: {outputType}, IsPlayableOutput: {output.IsOutputValid()}");
+            // Since we're creating ScriptPlayableOutput, we know the type
+            result = OutputType.ScriptOutput;
         }
 
         /// <summary>
-        /// Simple debug logger that writes to console.
-        /// Using a separate logger to maintain Burst compatibility where possible.
+        /// Checks if the output is valid and returns both validity and type.
+        /// Combined operation for efficiency.
         /// </summary>
-        private static class DebugLogger
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void GetOutputInfo(in PlayableOutput output, out OutputType type, out bool isValid)
         {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public static void Log(in string message)
-            {
-                UnityEngine.Debug.Log(message);
-            }
+            isValid = output.IsOutputValid();
+            GetOutputType(in output, out type);
         }
+    }
+
+    /// <summary>
+    /// Output type enumeration for Burst-safe type checking.
+    /// </summary>
+    public enum OutputType
+    {
+        Null,
+        ScriptOutput
     }
 }
