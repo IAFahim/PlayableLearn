@@ -1,5 +1,15 @@
 {
     "name": "Day01",
-    "references": ["PlayableLearn.Core"],
-    "autoReferenced": true
+    "references": [
+        "PlayableLearn.Core"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

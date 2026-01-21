@@ -4,22 +4,16 @@ using UnityEngine.Playables;
 namespace PlayableLearn.Day01
 {
     /// <summary>
-    /// Layer B: Logic
-    /// This is the "Brain" node. It sits in the graph and monitors the playback.
-    /// It does not touch GameObjects. It only touches Data.
+    /// Layer B: The Logic
+    /// The "Brain" node that sits in the graph and monitors playback.
+    /// For Day 01, just existing is enough - future days will add math here.
     /// </summary>
-    public sealed class PlaybackMonitorLogic : PlayableBehaviour
+    public class Day01_Logic : PlayableBehaviour
     {
-        private float _timeActive;
-
-        // Called every frame the graph evaluates
         public override void PrepareFrame(Playable playable, FrameData info)
         {
-            // Simple logic: Track how long we've been running
-            _timeActive += info.deltaTime;
+            // The logic: Just existing is enough for Day 1
+            // In future days, we will do math here.
         }
-
-        // Public query for the Adapter to read
-        public float GetTotalRuntime() => _timeActive;
     }
 }

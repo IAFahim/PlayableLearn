@@ -5,35 +5,27 @@ using UnityEngine.Playables;
 namespace PlayableLearn.Day01
 {
     /// <summary>
-    /// Layer C: The Adapter
-    /// Connects the raw graph nodes together.
+    /// Layer C: The Binder (Adapter)
+    /// Extension method that connects the raw graph nodes together.
     /// </summary>
     public static class Day01_Binder
     {
-        public static ScriptPlayable<PlaybackMonitorLogic> CreateSimpleGraph(
+        public static ScriptPlayable<Day01_Logic> CreateLessonGraph(
             this PlayableGraph graph,
-            AnimationConfig data,
-            Animator outputTarget)
+            AnimationClip clip,
+            Animator target)
         {
-            // 1. Create the Animation Node (The Muscle)
-            var clipNode = AnimationClipPlayable.Create(graph, data.Clip);
-            clipNode.SetSpeed(data.Speed);
+            var output = AnimationPlayableOutput.Create(graph, "AnimOut", target);
 
-            // 2. Create the Logic Node (The Brain)
-            var logicNode = ScriptPlayable<PlaybackMonitorLogic>.Create(graph);
+            var clipPlayable = AnimationClipPlayable.Create(graph, clip);
+            var logicPlayable = ScriptPlayable<Day01_Logic>.Create(graph);
 
-            // 3. Connect Muscle -> Brain
-            // The Logic Node wraps the Clip Node.
-            // Input 0 of LogicNode receives the animation stream.
-            logicNode.AddInput(clipNode, 0, 1.0f);
+            // Wrap the clip in logic
+            logicPlayable.AddInput(clipPlayable, 0, 1.0f);
 
-            // 4. Create the Output (The Socket)
-            var output = AnimationPlayableOutput.Create(graph, "MeshOutput", outputTarget);
+            output.SetSourcePlayable(logicPlayable);
 
-            // 5. Connect Brain -> Socket
-            output.SetSourcePlayable(logicNode);
-
-            return logicNode;
+            return logicPlayable;
         }
     }
 }

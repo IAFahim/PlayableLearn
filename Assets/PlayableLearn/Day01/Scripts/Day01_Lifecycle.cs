@@ -4,68 +4,64 @@ using UnityEngine.Playables;
 namespace PlayableLearn.Day01
 {
     /// <summary>
-    /// The Main Component. The only thing you put on the object.
+    /// The Main Component - The only thing you put on the object.
+    /// Now with procedural animation generation and visual debugging.
     /// </summary>
     [RequireComponent(typeof(Animator))]
     public class Day01_Lifecycle : MonoBehaviour
     {
-        [Header("Layer A: Data")]
-        public AnimationConfig Config;
-
-        [Header("Debug View")]
-        [SerializeField] private float _runtimeTimer;
-
         private PlayableGraph _graph;
-        private ScriptPlayable<PlaybackMonitorLogic> _logicNode;
 
         void Start()
         {
-            // 0. Safety: Generate a clip if the user was lazy (Magic!)
-            if (Config.Clip == null)
-            {
-                Debug.LogWarning("No Clip assigned! Generating a procedural spin.");
-                Config.Clip = GenerateProceduralClip();
-                Config.Speed = 1.0f;
-            }
+            // 1. Procedural Animation Clip (No assets needed!)
+            var clip = CreateProceduralClip();
 
-            // 1. Create the Graph Container
-            _graph = PlayableGraph.Create($"Day01_{gameObject.name}");
+            // 2. Build Graph
+            _graph = PlayableGraph.Create("Day01_Graph");
+            _graph.CreateLessonGraph(clip, GetComponent<Animator>());
 
-            // 2. Build the Graph (Using our Layer C Adapter)
-            // We pass 'this.Config' (Data) and get back the Logic Node
-            _logicNode = _graph.CreateSimpleGraph(Config, GetComponent<Animator>());
-
-            // 3. Press Play
+            // 3. Play
             _graph.Play();
-        }
-
-        void Update()
-        {
-            // Read data from the Logic Layer
-            if (_logicNode.IsValid())
-            {
-                _runtimeTimer = _logicNode.GetBehaviour().GetTotalRuntime();
-            }
         }
 
         void OnDestroy()
         {
-            // MANDATORY: Clean up memory
             if (_graph.IsValid()) _graph.Destroy();
         }
 
-        // Helper to make the lesson "Just Work"
-        private AnimationClip GenerateProceduralClip()
+        /// <summary>
+        /// Generates a simple "Floating" animation code-side.
+        /// No AnimationClip asset required - pure procedural magic.
+        /// </summary>
+        private AnimationClip CreateProceduralClip()
         {
-            AnimationClip clip = new AnimationClip { name = "ProceduralSpin" };
+            var clip = new AnimationClip { name = "CodeGeneratedFloat" };
             clip.legacy = false;
 
-            // Create a curve for Y rotation 0 -> 360
-            AnimationCurve curve = AnimationCurve.Linear(0, 0, 2.0f, 360f);
-            clip.SetCurve("", typeof(Transform), "localEulerAngles.y", curve);
-            clip.wrapMode = WrapMode.Loop;
+            // Animate Y position with a Sine wave approximation
+            var curve = new AnimationCurve();
+            for(float t=0; t<=2.0f; t+=0.1f)
+            {
+                curve.AddKey(t, Mathf.Sin(t * Mathf.PI) * 1.0f);
+            }
 
+            clip.SetCurve("", typeof(Transform), "localPosition.y", curve);
+            clip.wrapMode = WrapMode.Loop;
             return clip;
+        }
+
+        /// <summary>
+        /// 200 IQ Visual Debugging - Shows graph status in-game.
+        /// </summary>
+        void OnGUI()
+        {
+            GUI.color = Color.green;
+            GUILayout.BeginArea(new Rect(20, 20, 300, 100));
+            GUILayout.Label("<b>DAY 01: GRAPH ACTIVE</b>");
+            GUILayout.Label($"Graph Valid: {_graph.IsValid()}");
+            GUILayout.Label($"Output Count: {_graph.GetOutputCount()}");
+            GUILayout.EndArea();
         }
     }
 }
