@@ -1,7 +1,194 @@
-# PlayableLearn - Day 08: The Director Name
+# PlayableLearn - Day 09: The Graph Visualizer
 
 ## Overview
-Day 08 introduces Graph Naming functionality for debugging in the Unity Profiler. This demonstrates how to assign meaningful names to PlayableGraphs, making them easier to identify and debug in the Unity Profiler window.
+Day 09 introduces the GBG PlayableGraph Monitor - a powerful visualization tool that allows developers to see their PlayableGraph structure in real-time. This enables visual debugging of node connections, port data, and graph state.
+
+## What You'll Learn
+- How to set up the GBG PlayableGraph Monitor package
+- Visualizing PlayableGraph structure and node connections
+- Configuring visualizer settings (detail level, color scheme, refresh rate)
+- Using the visualizer for debugging and optimization
+- Understanding graph topology through visualization
+
+## Files Structure
+```
+Assets/Day09/Scripts/
+├── Day09.asmdef                    # Assembly definition
+├── Day09Entry.cs                   # MonoBehaviour entry point
+└── Day09VisualizerSetup.cs         # Visualizer setup and configuration
+```
+
+## The Three-Layer Architecture
+
+### Layer A: Data (Day09VisualizerData)
+Pure data structure with no logic:
+- `PlayableGraph Graph` - The graph being visualized
+- `bool IsActive` - Whether the visualizer is active
+- `bool AutoRefresh` - Auto-refresh state
+- `float RefreshInterval` - Refresh rate in seconds
+- `VisualizationDetailLevel DetailLevel` - Amount of detail shown
+- `VisualizerColorScheme ColorScheme` - Visual color scheme
+- `bool ShowPortDetails` - Show/hide port information
+- `bool ShowConnections` - Show/hide node connections
+
+### Layer B: Operations (VisualizerOps)
+Static methods for visualizer operations:
+- `IsValidForVisualization()` - Checks if graph can be visualized
+- `IsVisualizerAvailable()` - Checks if monitor package is available
+- `GetDefaultRefreshInterval()` - Gets refresh rate for detail level
+- `CalculateWindowSize()` - Calculates appropriate window size
+- `ShouldAutoRefresh()` - Determines if refresh is needed
+- `UpdateRefreshTime()` - Updates last refresh timestamp
+
+### Layer C: Extensions (Day09VisualizerExtensions)
+Public API for visualizer management:
+- `Initialize()` - Sets up the visualizer with configuration
+- `SetAutoRefresh()` - Enables/disables auto-refresh
+- `SetRefreshInterval()` - Changes refresh rate
+- `SetDetailLevel()` - Adjusts visualization detail
+- `SetColorScheme()` - Changes color scheme
+- `TogglePortDetails()` - Shows/hides port information
+- `ToggleConnections()` - Shows/hides connections
+- `ForceRefresh()` - Triggers immediate refresh
+- `Dispose()` - Cleans up visualizer
+
+## Key Concepts
+
+### GBG PlayableGraph Monitor
+The GBG PlayableGraph Monitor is a Unity package that provides real-time visualization of PlayableGraph structures. It shows:
+- **Nodes**: All playables in the graph
+- **Connections**: How nodes are linked together
+- **Ports**: Input and output ports with data types
+- **State**: Runtime information about each node
+
+### Visualization Detail Levels
+- **Minimal**: Basic node structure only
+- **Basic**: Nodes + connections + port info
+- **Detailed**: All above + runtime values
+- **Verbose**: Everything including internal state
+
+### Color Schemes
+- **Default**: Standard coloring
+- **Dark**: Optimized for dark editor themes
+- **Light**: Optimized for light editor themes
+- **High Contrast**: Enhanced visibility
+
+### Auto-Refresh
+The visualizer can automatically refresh at configurable intervals:
+- Minimal detail: 1.0 second
+- Basic detail: 0.5 seconds
+- Detailed: 0.25 seconds
+- Verbose: 0.1 seconds
+
+## Usage Example
+
+```csharp
+// Initialize graph
+Day01GraphHandle graphHandle;
+graphHandle.Initialize("MyGraph");
+
+// Initialize visualizer
+Day09VisualizerData visualizerData;
+visualizerData.Initialize(in graphHandle.Graph, 
+    VisualizationDetailLevel.Basic, 
+    VisualizerColorScheme.Default);
+
+// Update visualizer every frame
+void Update()
+{
+    visualizerData.UpdateVisualizer();
+}
+
+// Cleanup
+void OnDisable()
+{
+    visualizerData.Dispose();
+    graphHandle.Dispose();
+}
+```
+
+## GBG PlayableGraph Monitor Package
+The visualizer requires the `com.greenbamboogames.playablegraphmonitor` package. This is already installed in the project via OpenUPM.
+
+### Installation
+The package is configured in `Packages/manifest.json`:
+```json
+{
+  "dependencies": {
+    "com.greenbamboogames.playablegraphmonitor": "2.6.3"
+  },
+  "scopedRegistries": [
+    {
+      "name": "package.openupm.com",
+      "url": "https://package.openupm.com",
+      "scopes": [
+        "com.greenbamboogames.playablegraphmonitor"
+      ]
+    }
+  ]
+}
+```
+
+## Visualizer Features
+
+### Real-Time Graph Inspection
+- See all nodes in your PlayableGraph
+- View connections between nodes
+- Inspect port configurations
+- Monitor playable states
+
+### Debugging Capabilities
+- Identify broken connections
+- Check port compatibility
+- Verify graph topology
+- Track playable lifecycle
+
+### Performance Monitoring
+- Observe graph complexity
+- Identify bottlenecks
+- Check connection counts
+- Monitor memory usage
+
+## Integration with Previous Days
+
+Day 09 integrates all features from Days 1-8:
+- **Day 01**: Graph creation and management
+- **Day 02**: Output handling
+- **Day 03**: Node creation
+- **Day 04**: Rotation logic
+- **Day 05**: Speed control
+- **Day 06**: PlayState management
+- **Day 07**: Reverse time
+- **Day 08**: Graph naming
+
+## Previous Days
+- **Day 01**: Created and destroyed PlayableGraph
+- **Day 02**: Added ScriptPlayableOutput for console communication
+- **Day 03**: Created and linked the first ScriptPlayable node
+- **Day 04**: Implemented the update cycle with ProcessFrame
+- **Day 05**: Added time dilation with SetSpeed
+- **Day 06**: Implemented PlayState control for play/pause
+- **Day 07**: Added reverse time and time wrapping
+- **Day 08**: Implemented graph naming for profiler visibility
+
+## Next Steps
+- **Day 10**: Will add animation clip integration
+
+## Testing
+Run the Unity Test Runner to verify:
+- Visualizer initialization succeeds
+- Configuration settings apply correctly
+- Auto-refresh works at specified intervals
+- Detail levels adjust appropriately
+- Package availability is detected
+- Cleanup disposes resources properly
+
+## Notes
+- The visualizer is editor-only (not available in builds)
+- Auto-refresh can impact performance with high detail levels
+- The GBG package provides additional features beyond Day 09 scope
+- Visualizer window can be docked in the Unity editor
+- Graph topology is visible even when graph is not playing
 
 ## What You'll Learn
 - How to name PlayableGraphs for Profiler visibility
