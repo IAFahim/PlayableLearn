@@ -1,7 +1,7 @@
 {
-    "CompletedDays": [],
+    "CompletedDays": [1, 2],
     "InProgressDays": [],
-    "TotalMinutesSpent": 0.0,
-    "CurrentStreak": 0,
-    "LastCompletedDay": 0
+    "TotalMinutesSpent": 120.0,
+    "CurrentStreak": 2,
+    "LastCompletedDay": 2
 }

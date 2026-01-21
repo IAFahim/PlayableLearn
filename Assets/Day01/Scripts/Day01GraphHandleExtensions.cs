@@ -1,11 +1,10 @@
 using UnityEngine;
-using UnityEngine.Playables;
 
 namespace PlayableLearn.Day01
 {
-    public static class GraphHandleExtensions
+    public static class Day01GraphHandleExtensions
     {
-        public static void Initialize(ref this GraphHandle handle, string ownerName)
+        public static void Initialize(ref this Day01GraphHandle handle, string ownerName)
         {
             if (handle.IsActive)
             {
@@ -25,7 +24,7 @@ namespace PlayableLearn.Day01
             GraphOps.Play(in handle.Graph);
         }
 
-        public static void Dispose(ref this GraphHandle handle)
+        public static void Dispose(ref this Day01GraphHandle handle)
         {
             if (!handle.IsActive) return;
 
@@ -39,7 +38,7 @@ namespace PlayableLearn.Day01
         /// For Day 01, returns Unity game time since graph uses GameTime mode.
         /// returns true if graph is running, false otherwise.
         /// </summary>
-        public static bool TryGetTime(in this GraphHandle handle, out float time)
+        public static bool TryGetTime(in this Day01GraphHandle handle, out float time)
         {
             if (!handle.IsActive || !GraphOps.IsRunning(in handle.Graph))
             {

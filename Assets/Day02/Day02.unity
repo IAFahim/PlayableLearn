@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 1592794271}
   - component: {fileID: 1592794270}
   m_Layer: 0
-  m_Name: Day01
+  m_Name: Day02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -219,12 +219,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 1592794267}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f68f9867bf8d4f73ae3dc3c75b326ce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Day01::PlayableLearn.Day01.Day01Entry
+  m_Script: {fileID: 11500000, guid: 1f68f9867bf8d4f73ae3dc3c75b326cf, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Day02::PlayableLearn.Day02.Day02Entry
   _graphHandle:
     IsActive: 0
     GraphId: 0
+  _consoleOutput:
+    IsActive: 0
+    MessageIntervalSeconds: 1
+    LastMessageTime: 0
+    MessagePrefixId: 0
+  _messageInterval: 1
+  _messagePrefix: Day02
 --- !u!1 &1669365050
 GameObject:
   m_ObjectHideFlags: 0

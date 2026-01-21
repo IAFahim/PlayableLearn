@@ -10,7 +10,7 @@ namespace PlayableLearn.Day01
     /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct GraphHandle
+    public struct Day01GraphHandle
     {
         // The raw Unity Engine handle.
         public PlayableGraph Graph;
