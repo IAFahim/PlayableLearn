@@ -1,0 +1,22 @@
+{
+    "name": "Day06",
+    "references": [
+        "Day01",
+        "Day02",
+        "Day03",
+        "Day04",
+        "Day05",
+        "Unity.Burst",
+        "Unity.Collections",
+        "Unity.Mathematics"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

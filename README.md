@@ -1,69 +1,89 @@
-# PlayableLearn - Day 03: The First Node
+# PlayableLearn - Day 06: The Pause Button
 
 ## Overview
-Day 03 introduces the creation and linking of the first ScriptPlayable node. This demonstrates how to create nodes in the PlayableGraph and connect them to outputs.
+Day 06 introduces PlayState control for programmatically playing and stopping the PlayableGraph. This demonstrates how to control the graph's execution state at runtime.
 
 ## What You'll Learn
-- How to create a ScriptPlayable node
-- Understanding PlayableBehaviour
-- Linking nodes to outputs
-- The relationship between Graph, Output, and Nodes
+- How to check and control PlayableGraph play state
+- Understanding PlayState (Playing vs Paused)
+- Playing and stopping graphs programmatically
+- Detecting state transitions
+- Auto-play functionality
+- Visualizing play state
 
 ## Files Structure
 ```
-Assets/Day03/Scripts/
-├── Day03.asmdef                    # Assembly definition
-├── Day03Entry.cs                   # MonoBehaviour entry point
-├── Day03NodeHandle.cs              # Data layer: Node handle
-├── Day03NodeHandleExtensions.cs    # Adapter layer: Node operations
-├── ScriptPlayableOps.cs            # Operations layer: Burst-compiled node ops
-└── Day03EmptyBehaviour.cs          # Empty PlayableBehaviour for demonstration
+Assets/Day06/Scripts/
+├── Day06.asmdef                        # Assembly definition
+├── Day06Entry.cs                       # MonoBehaviour entry point
+├── Day06PlayStateData.cs               # Data layer: PlayState control handle
+├── Day06PlayStateExtensions.cs         # Adapter layer: PlayState operations
+└── PlayStateOps.cs                     # Operations layer: Burst-compiled play state ops
 ```
 
 ## The Three-Layer Architecture
 
-### Layer A: Data (Day03NodeHandle)
+### Layer A: Data (Day06PlayStateData)
 Pure data structure with no logic:
-- `PlayableGraph Graph` - The owning graph
-- `Playable Node` - The raw Unity Playable
+- `PlayableGraph Graph` - The graph being controlled
 - `bool IsActive` - Local state tracking
-- `int NodeId` - Debug identifier
+- `int ControllerId` - Debug identifier
+- `PlayState CurrentState` - Current play state
+- `PlayState PreviousState` - Previous play state (for change detection)
+- `bool AutoPlayOnStart` - Whether to auto-play on initialization
+- `bool IsGraphValid` - Whether the graph is valid
 
-### Layer B: Operations (ScriptPlayableOps)
-Burst-compiled static methods for node operations:
-- `Create<T>()` - Creates a ScriptPlayable with specified behaviour
-- `Destroy()` - Destroys a playable node
-- `IsValid()` - Checks if playable is valid
-- `Connect()` - Connects playables together
-- `SetSource()` - Sets playable as output source
-- `GetBehaviour()` - Retrieves the behaviour instance
+### Layer B: Operations (PlayStateOps)
+Burst-compiled static methods for play state operations:
+- `IsPlaying()` - Checks if state is Playing
+- `IsPaused()` - Checks if state is Paused
+- `DidStateChange()` - Detects state transitions
+- `IsTransitionToPause()` - Checks if transitioning to paused
+- `IsTransitionToPlay()` - Checks if transitioning to playing
+- `GetToggledState()` - Toggles between play and pause
+- `IsValidTransition()` - Validates state transitions
+- `CalculateProgress()` - Returns progress value (1.0 for playing, 0.0 for paused)
 
-### Layer C: Extensions (Day03NodeHandleExtensions)
+### Layer C: Extensions (Day06PlayStateExtensions)
 Public API that combines data and operations:
-- `Initialize()` - Creates a new node
-- `Dispose()` - Cleans up the node
-- `ConnectToOutput()` - Links node to output
-- `IsValidNode()` - Validation check
-- `LogToConsole()` - Debug logging
+- `Initialize()` - Creates PlayState control
+- `Dispose()` - Cleans up control
+- `Play()` - Starts the graph
+- `Pause()` - Stops the graph
+- `TogglePlayPause()` - Toggles between play and pause
+- `UpdateState()` - Updates current state from graph
+- `IsPlaying()` - Checks if graph is playing
+- `IsPaused()` - Checks if graph is paused
+- `JustPaused()` - Detects pause transition
+- `JustStartedPlaying()` - Detects play transition
+- `GetStateString()` - Gets state as string
+- `GetProgress()` - Gets progress for UI
+- `LogStateInfo()` - Debug logging
 
 ## Key Concepts
 
-### ScriptPlayable
-A `ScriptPlayable` is a type of Playable that uses a `PlayableBehaviour` for its logic. Unlike other playable types (AnimationClipPlayable, AudioMixerPlayable, etc.), ScriptPlayables allow you to define custom behavior.
+### PlayState
+The `PlayState` enum represents the execution state of a PlayableGraph:
+- `PlayState.Playing` - Graph is actively evaluating
+- `PlayState.Paused` - Graph is stopped/paused
 
-### PlayableBehaviour
-The `PlayableBehaviour` class is where your custom logic goes:
-- `OnBehaviourPlay()` - Called when the playable starts
-- `OnBehaviourPause()` - Called when the playable pauses
-- `PrepareFrame()` - Called every frame for updates
-- `OnPlayableDestroy()` - Called when the playable is destroyed
+### Graph Control Methods
+Unity provides methods to control graph execution:
+- `graph.Play()` - Starts or resumes graph evaluation
+- `graph.Stop()` - Pauses graph evaluation
+- `graph.GetGraphPlayState()` - Gets current play state
 
-### Node Linking
-Nodes must be linked to outputs to have any effect:
-1. Create a graph
-2. Create an output from the graph
-3. Create a node from the graph
-4. Set the node as the output's source
+### State Transitions
+Tracking state changes is important for synchronization:
+- Playing → Paused: Graph was stopped
+- Paused → Playing: Graph was started
+- These transitions can be detected by comparing PreviousState and CurrentState
+
+### Auto-Play
+Graphs can be configured to automatically start playing:
+- Useful for animations that should start immediately
+- Can be controlled via `AutoPlayOnStart` parameter
+- Default behavior is to auto-play
 
 ## Usage Example
 
@@ -72,33 +92,69 @@ Nodes must be linked to outputs to have any effect:
 Day01GraphHandle graphHandle;
 graphHandle.Initialize("MyGraph");
 
-// Initialize output
-Day02OutputHandle outputHandle;
-outputHandle.Initialize(in graphHandle.Graph, "MyOutput");
+// Initialize PlayState control with auto-play
+Day06PlayStateData playStateData;
+playStateData.Initialize(in graphHandle.Graph, "MyPlayStateControl", autoPlayOnStart: true);
 
-// Initialize node
-Day03NodeHandle nodeHandle;
-nodeHandle.Initialize(in graphHandle.Graph, "MyNode");
+// Check if playing
+if (playStateData.IsPlaying())
+{
+    Debug.Log("Graph is playing");
+}
 
-// Link node to output
-nodeHandle.ConnectToOutput(in outputHandle.Output);
+// Pause the graph
+playStateData.Pause();
+
+// Resume the graph
+playStateData.Play();
+
+// Toggle play/pause
+playStateData.TogglePlayPause();
+
+// Update state tracking (call in Update)
+playStateData.UpdateState();
+
+// Check for transitions
+if (playStateData.JustPaused())
+{
+    Debug.Log("Graph just paused!");
+}
+
+if (playStateData.JustStartedPlaying())
+{
+    Debug.Log("Graph just started playing!");
+}
 ```
+
+## Visual Feedback
+Day 06 adds visual feedback to represent play state:
+- **Playing**: Green color
+- **Paused**: Red color
+- **GUI Controls**: On-screen Play/Pause button
+- **Status Display**: Shows current state and speed
 
 ## Previous Days
 - **Day 01**: Created and destroyed PlayableGraph
 - **Day 02**: Added ScriptPlayableOutput for console communication
+- **Day 03**: Created and linked the first ScriptPlayable node
+- **Day 04**: Added the update cycle using ProcessFrame
+- **Day 05**: Implemented SetSpeed manipulation for playback control
 
 ## Next Steps
-- **Day 04**: Will add the update cycle using ProcessFrame
+- **Day 07**: Will add reverse time functionality with negative speed
 
 ## Testing
 Run the Unity Test Runner to verify:
-- Node creation succeeds
-- Node connects to output correctly
-- Node disposal cleans up resources
-- Port information is accurate
+- PlayState control initializes correctly
+- Auto-play works as expected
+- Play/Pause/Toggle operations work correctly
+- State transitions are detected properly
+- Complete integration with previous days
 
 ## Notes
-- Day 03 uses an empty behaviour to prove nodes can be created and linked
-- Future days will add actual logic to the behaviours
-- The graph structure is: Graph → Output → Node
+- Day 06 builds upon all previous days (01-05)
+- PlayState control is independent of speed control (Day 05)
+- The graph can be playing at any speed (including 0) while in Playing state
+- Paused state (Stop()) is different from speed 0
+- Use UpdateState() in your Update loop to track state changes
+- State transitions are useful for triggering events when play state changes
