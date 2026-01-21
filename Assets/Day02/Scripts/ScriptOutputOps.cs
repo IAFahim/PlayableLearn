@@ -26,11 +26,11 @@ namespace PlayableLearn.Day02
         /// Destroys the given output.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Destroy(in PlayableOutput output)
+        public static void Destroy(in PlayableGraph graph, in PlayableOutput output)
         {
-            if (output.IsValid())
+            if (output.IsOutputValid() && graph.IsValid())
             {
-                output.Destroy();
+                graph.DestroyOutput(output);
             }
         }
 
@@ -40,21 +40,24 @@ namespace PlayableLearn.Day02
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsValid(in PlayableOutput output)
         {
-            return output.IsValid();
+            return output.IsOutputValid();
         }
 
         /// <summary>
         /// Gets the output type as a string for logging.
+        /// Since this is a ScriptPlayableOutput, we know the type is "ScriptOutput".
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string GetOutputType(in PlayableOutput output)
         {
-            if (!output.IsValid())
+            if (!output.IsOutputValid())
             {
                 return "Null";
             }
 
-            return output.GetOutputType().ToString();
+            // PlayableOutput doesn't expose a type property directly
+            // Since we're creating ScriptPlayableOutput, we know the type
+            return "ScriptOutput";
         }
 
         /// <summary>
@@ -64,7 +67,7 @@ namespace PlayableLearn.Day02
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void LogToConsole(in PlayableOutput output, in string outputName)
         {
-            if (!output.IsValid())
+            if (!output.IsOutputValid())
             {
                 DebugLogger.Log($"[ScriptOutput] Output '{outputName}' is not valid.");
                 return;

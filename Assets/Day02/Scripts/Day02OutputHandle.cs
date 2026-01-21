@@ -12,6 +12,9 @@ namespace PlayableLearn.Day02
     [StructLayout(LayoutKind.Sequential)]
     public struct Day02OutputHandle
     {
+        // The graph that owns this output (needed for destruction).
+        public PlayableGraph Graph;
+
         // The raw Unity Engine handle.
         public PlayableOutput Output;
 

@@ -26,6 +26,7 @@ namespace PlayableLearn.Day02
 
             if (ScriptOutputOps.IsValid(in handle.Output))
             {
+                handle.Graph = graph;
                 handle.IsActive = true;
                 handle.OutputId = outputName.GetHashCode();
                 Debug.Log($"[OutputHandle] Created output: {outputName}");
@@ -43,7 +44,7 @@ namespace PlayableLearn.Day02
         {
             if (!handle.IsActive) return;
 
-            ScriptOutputOps.Destroy(in handle.Output);
+            ScriptOutputOps.Destroy(in handle.Graph, in handle.Output);
             handle.IsActive = false;
             handle.OutputId = 0;
             Debug.Log("[OutputHandle] Output disposed.");
