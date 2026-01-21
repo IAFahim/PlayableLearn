@@ -3,8 +3,8 @@
 ### Sprint 1: The Heartbeat (Foundations)
 *Goal: Understand the Graph lifecycle without touching an Animation Clip yet.*
 - [x] **Day 01:** The Empty Graph. (Creating/Destroying the `PlayableGraph`). `Day01.asmdef`, `Day01Entry.cs`, `Day01GraphHandle.cs`, `Day01GraphHandleExtensions.cs`, `GraphOps.cs, README.md`
-- [ ] **Day 02:** Check Old day and add The Output. (Connecting a `ScriptPlayableOutput` to talk to the console). `Day02.asmdef`, `Day02Entry.cs`, `Day02OutputHandle.cs`, `Day02OutputHandleExtensions.cs`, `ScriptOutputOps.cs, README.md`
-- [ ] **Day 03:** Check Old day and add The First Node. (Creating a `ScriptPlayable` and linking it). `Day03.asmdef`, `Day03Entry.cs`, `Day03NodeHandle.cs`, `Day03NodeHandleExtensions.cs`, `ScriptPlayableOps.cs`, `Day03EmptyBehaviour.cs, README.md`
+- [x] **Day 02:** Check Old day and add The Output. (Connecting a `ScriptPlayableOutput` to talk to the console). `Day02.asmdef`, `Day02Entry.cs`, `Day02OutputHandle.cs`, `Day02OutputHandleExtensions.cs`, `ScriptOutputOps.cs, README.md`
+- [x] **Day 03:** Check Old day and add The First Node. (Creating a `ScriptPlayable` and linking it). `Day03.asmdef`, `Day03Entry.cs`, `Day03NodeHandle.cs`, `Day03NodeHandleExtensions.cs`, `ScriptPlayableOps.cs`, `Day03EmptyBehaviour.cs, README.md`
 - [ ] **Day 04:** Check Old day and add The Update Cycle. (Using `ProcessFrame` to rotate a generic Cube). `Day04.asmdef`, `Day04Entry.cs`, `Day04RotatorBehaviour.cs`, `Day04RotatorData.cs`, `RotatorLogic.cs`, `Day04RotatorExtensions.cs, README.md`
 - [ ] **Day 05:** Check Old day and add Time Dilation. (Manipulating `SetSpeed` manually). `Day05.asmdef`, `Day05Entry.cs`, `Day05SpeedData.cs`, `SpeedOps.cs`, `Day05SpeedExtensions.cs, README.md`
 - [ ] **Day 06:** Check Old day and add The Pause Button. (Playing/Stopping the graph programmatically). `Day06.asmdef`, `Day06Entry.cs`, `Day06PlayStateData.cs`, `PlayStateOps.cs`, `Day06PlayStateExtensions.cs, README.md`
