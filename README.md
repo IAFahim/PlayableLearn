@@ -1,4 +1,241 @@
-# PlayableLearn - Day 09: The Graph Visualizer
+# PlayableLearn - Day 10: The Cleanup
+
+## Overview
+Day 10 introduces proper IDisposable patterns for PlayableGraph and related resources. This ensures deterministic cleanup, prevents memory leaks, and follows C# best practices for resource management.
+
+## What You'll Learn
+- How to implement IDisposable pattern for PlayableGraph
+- Proper resource cleanup and disposal patterns
+- Deterministic destruction of Playable resources
+- Memory leak prevention in Playable systems
+- Best practices for managing native resources in Unity
+
+## Files Structure
+```
+Assets/Day10/Scripts/
+├── Day10.asmdef                          # Assembly definition
+├── Day10Entry.cs                         # MonoBehaviour entry point
+├── Day10DisposableGraph.cs               # Data layer: IDisposable wrapper
+├── Day10DisposableGraphExtensions.cs     # Adapter layer: Disposal operations
+└── DisposalOps.cs                         # Operations layer: Burst-compiled disposal ops
+```
+
+## The Three-Layer Architecture
+
+### Layer A: Data (Day10DisposableGraph)
+Pure data structure implementing IDisposable:
+- `PlayableGraph Graph` - The raw Unity Engine handle
+- `bool IsActive` - Local flag to track if graph is active
+- `bool IsDisposed` - Tracks if Dispose has been called
+- `int GraphId` - Debugging identifier
+- `Dispose()` - IDisposable implementation for cleanup
+
+### Layer B: Operations (DisposalOps)
+Burst-compiled static methods for disposal operations:
+- `DisposeGraph()` - Safely destroys a PlayableGraph
+- `DisposePlayable()` - Safely destroys a Playable
+- `DisposeOutput()` - Safely destroys a PlayableOutput
+- `CanDisposeGraph()` - Checks if graph can be disposed
+- `CanDisposePlayable()` - Checks if playable can be disposed
+- `CanDisposeOutput()` - Checks if output can be disposed
+
+### Layer C: Extensions (Day10DisposableGraphExtensions)
+Public API for disposable graph management:
+- `Initialize()` - Creates a new disposable graph
+- `Dispose()` - Disposes the graph using standard pattern
+- `IsValid()` - Checks if graph is valid and ready for use
+- `IsDisposedGraph()` - Checks if graph has been disposed
+- `Reset()` - Resets the graph for potential reuse
+- `LogState()` - Logs diagnostic information
+- `ResetIdCounter()` - Resets the ID counter for testing
+
+## Key Concepts
+
+### IDisposable Pattern
+The IDisposable pattern is a C# standard for managing resources that need explicit cleanup:
+- Implements `System.IDisposable` interface
+- `Dispose()` method releases native resources
+- Prevents memory leaks from unmanaged resources
+- Enables deterministic cleanup (vs. garbage collection)
+
+### Deterministic Cleanup
+- Resources are released immediately when Dispose is called
+- No reliance on garbage collection timing
+- Prevents resource leaks in long-running applications
+- Essential for PlayableGraph which holds native resources
+
+### Disposal Safety
+- Checks if graph is valid before disposal
+- Prevents double-disposal scenarios
+- Tracks disposal state with IsDisposed flag
+- Safe to call Dispose multiple times (idempotent)
+
+### Memory Leak Prevention
+- PlayableGraph holds native C++ resources
+- Without proper disposal, resources leak until GC
+- IDisposable ensures timely cleanup
+- Critical for systems with frequent graph creation/destruction
+
+## Usage Example
+
+```csharp
+// Using the disposable pattern
+Day10DisposableGraph disposableGraph;
+disposableGraph.Initialize("MyDisposableGraph");
+
+// Use the graph
+if (disposableGraph.IsValid())
+{
+    // Work with the graph
+    PlayableGraph graph = disposableGraph.Graph;
+    // ... do work ...
+}
+
+// Dispose when done
+disposableGraph.Dispose();
+
+// Verify disposal
+if (disposableGraph.IsDisposedGraph())
+{
+    Debug.Log("Graph properly disposed");
+}
+
+// Reset for potential reuse
+disposableGraph.Reset();
+```
+
+## Integration with Legacy Code
+
+Day 10 provides both IDisposable and legacy patterns:
+
+```csharp
+// Using IDisposable pattern (recommended)
+if (useDisposablePattern)
+{
+    InitializeDisposableGraph();
+    // ... use graph ...
+    CleanupDisposableGraph(); // Calls Dispose()
+}
+
+// Using legacy pattern
+else
+{
+    InitializeGraph();
+    // ... use graph ...
+    CleanupGraph(); // Calls GraphOps.Destroy()
+}
+```
+
+## Disposal Best Practices
+
+### 1. Always Dispose When Done
+```csharp
+void OnDisable()
+{
+    if (disposableGraph.IsValid())
+    {
+        disposableGraph.Dispose();
+    }
+}
+```
+
+### 2. Check Validity Before Use
+```csharp
+if (disposableGraph.IsValid())
+{
+    // Safe to use
+    PlayableGraph graph = disposableGraph.Graph;
+}
+```
+
+### 3. Handle Double-Dispose Gracefully
+```csharp
+// Dispose is safe to call multiple times
+disposableGraph.Dispose();
+disposableGraph.Dispose(); // No error on second call
+```
+
+### 4. Validate After Disposal
+```csharp
+disposableGraph.Dispose();
+Debug.Assert(disposableGraph.IsDisposedGraph(), "Graph should be disposed");
+Debug.Assert(!disposableGraph.IsValid(), "Disposed graph should not be valid");
+```
+
+## Visual Feedback
+Day 10 adds visual feedback for disposal state:
+- **Active graph**: Yellow color (disposable pattern active)
+- **Disposed graph**: Gray color (graph has been disposed)
+- **GUI Controls**: Displays disposal status and validity
+- **Gizmos**: Shows disposal state in Scene view
+
+## Comparison with Previous Days
+
+### Day 01 (Legacy Pattern)
+```csharp
+Day01GraphHandle graphHandle;
+graphHandle.Initialize("MyGraph");
+// ... use ...
+graphHandle.Dispose(); // Calls GraphOps.Destroy()
+```
+
+### Day 10 (IDisposable Pattern)
+```csharp
+Day10DisposableGraph disposableGraph;
+disposableGraph.Initialize("MyGraph");
+// ... use ...
+disposableGraph.Dispose(); // Implements IDisposable
+```
+
+## Integration with Previous Days
+
+Day 10 integrates all features from Days 1-9:
+- **Day 01**: Graph creation and disposal
+- **Day 02**: Output disposal
+- **Day 03**: Node disposal
+- **Day 04**: Rotation logic
+- **Day 05**: Speed control
+- **Day 06**: PlayState management
+- **Day 07**: Reverse time
+- **Day 08**: Graph naming
+- **Day 09**: Visualizer
+
+## Testing
+Run the Unity Test Runner to verify:
+- Disposable graph initializes correctly
+- Dispose properly releases resources
+- Double-disposal is handled gracefully
+- IsValid returns correct state after disposal
+- IsDisposedGraph tracks disposal state
+- Reset allows graph reuse
+- Integration with all previous days
+
+## Notes
+- Day 10 builds upon all previous days (01-09)
+- IDisposable is the recommended pattern for production code
+- Legacy pattern (Day 01) is still supported for backward compatibility
+- Always dispose PlayableGraph to prevent memory leaks
+- Use IsValid() before accessing graph after potential disposal
+- Disposal is deterministic (happens immediately, not on GC)
+- Consider using `using` statement for scoped graphs (future enhancement)
+
+## Previous Days
+- **Day 01**: Created and destroyed PlayableGraph
+- **Day 02**: Added ScriptPlayableOutput for console communication
+- **Day 03**: Created and linked the first ScriptPlayable node
+- **Day 04**: Implemented the update cycle with ProcessFrame
+- **Day 05**: Added time dilation with SetSpeed
+- **Day 06**: Implemented PlayState control for play/pause
+- **Day 07**: Added reverse time and time wrapping
+- **Day 08**: Implemented graph naming for profiler visibility
+- **Day 09**: Added PlayableGraph visualization
+
+---
+
+# PlayableLearn - Day 09: The Graph Visualizer (Archived)
+
+## Overview
+Day 09 introduces the GBG PlayableGraph Monitor - a powerful visualization tool that allows developers to see their PlayableGraph structure in real-time. This enables visual debugging of node connections, port data, and graph state.
 
 ## Overview
 Day 09 introduces the GBG PlayableGraph Monitor - a powerful visualization tool that allows developers to see their PlayableGraph structure in real-time. This enables visual debugging of node connections, port data, and graph state.

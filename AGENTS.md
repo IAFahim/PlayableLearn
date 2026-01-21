@@ -9,9 +9,9 @@
 - [x] **Day 05:** Check Old day and add Time Dilation. (Manipulating `SetSpeed` manually). `Day05.asmdef`, `Day05Entry.cs`, `Day05SpeedData.cs`, `SpeedOps.cs`, `Day05SpeedExtensions.cs, README.md`
 - [x] **Day 06:** Check Old day and add The Pause Button. (Playing/Stopping the graph programmatically). `Day06.asmdef`, `Day06Entry.cs`, `Day06PlayStateData.cs`, `PlayStateOps.cs`, `Day06PlayStateExtensions.cs, README.md`
 - [x] **Day 07:** Check Old day and add The Reverse Time. (Negative speed and time wrapping). `Day07.asmdef`, `Day07Entry.cs`, `Day07ReverseData.cs`, `ReverseTimeOps.cs`, `Day07ReverseExtensions.cs, README.md`
-- [ ] **Day 08:** Check Old day and add The Director Name. (Naming graphs for the Profiler—crucial for debugging). `Day08.asmdef`, `Day08Entry.cs`, `Day08NamedGraphData.cs`, `GraphNamingOps.cs`, `Day08NamedGraphExtensions.cs, README.md`
-- [ ] **Day 09:** Check Old day and add The Graph Visualizer. (Installing the package and seeing our nodes). `Day09.asmdef`, `Day09Entry.cs`, `Day09VisualizerSetup.cs, README.md`
-- [ ] **Day 10:** Check Old day and add The Cleanup. (Proper `IDisposable` patterns for Playables). `Day10.asmdef`, `Day10Entry.cs`, `Day10DisposableGraph.cs`, `Day10DisposableGraphExtensions.cs`, `DisposalOps.cs, README.md`
+- [x] **Day 08:** Check Old day and add The Director Name. (Naming graphs for the Profiler—crucial for debugging). `Day08.asmdef`, `Day08Entry.cs`, `Day08NamedGraphData.cs`, `GraphNamingOps.cs`, `Day08NamedGraphExtensions.cs, README.md`
+- [x] **Day 09:** Check Old day and add The Graph Visualizer. (Installing the package and seeing our nodes). `Day09.asmdef`, `Day09Entry.cs`, `Day09VisualizerSetup.cs, README.md`
+- [x] **Day 10:** Check Old day and add The Cleanup. (Proper `IDisposable` patterns for Playables). `Day10.asmdef`, `Day10Entry.cs`, `Day10DisposableGraph.cs`, `Day10DisposableGraphExtensions.cs`, `DisposalOps.cs`, `README.md`
 
 ### Sprint 2: The Puppeteer (Basic Animation)
 *Goal: Controlling an Animator without the Animator Controller state machine.*

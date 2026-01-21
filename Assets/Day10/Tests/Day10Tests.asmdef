@@ -1,0 +1,29 @@
+{
+    "name": "Day10Tests",
+    "references": [
+        "Day01",
+        "Day02",
+        "Day03",
+        "Day04",
+        "Day05",
+        "Day06",
+        "Day07",
+        "Day08",
+        "Day09",
+        "Day10",
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner",
+        "nunit.framework.dll"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
