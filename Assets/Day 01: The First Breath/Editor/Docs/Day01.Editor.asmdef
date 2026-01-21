@@ -1,0 +1,16 @@
+{
+    "name": "Day01.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:4980a0b066e741aab5716542a254f726"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
