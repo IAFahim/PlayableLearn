@@ -15,9 +15,9 @@
 
 ### Sprint 2: The Puppeteer (Basic Animation)
 *Goal: Controlling an Animator without the Animator Controller state machine.*
-- [ ] **Day 11:** Check Old day and add The Output Hook. (Connecting `AnimationPlayableOutput` to an Animator). `Day11.asmdef`, `Day11Entry.cs`, `Day11AnimOutputHandle.cs`, `Day11AnimOutputExtensions.cs`, `AnimOutputOps.cs, README.md`
-- [ ] **Day 12:** Check Old day and add The Clip Player. (Wrapping `AnimationClipPlayable`). `Day12.asmdef`, `Day12Entry.cs`, `Day12ClipHandle.cs`, `Day12ClipExtensions.cs`, `ClipPlayableOps.cs, README.md`
-- [ ] **Day 13:** Check Old day and add The Mixer. (Introduction to `AnimationMixerPlayable`). `Day13.asmdef`, `Day13Entry.cs`, `Day13MixerHandle.cs`, `Day13MixerExtensions.cs`, `MixerOps.cs, README.md`
+- [x] **Day 11:** Check Old day and add The Output Hook. (Connecting `AnimationPlayableOutput` to an Animator). `Day11.asmdef`, `Day11Entry.cs`, `Day11AnimOutputHandle.cs`, `Day11AnimOutputExtensions.cs`, `AnimOutputOps.cs, README.md`
+- [x] **Day 12:** Check Old day and add The Clip Player. (Wrapping `AnimationClipPlayable`). `Day12.asmdef`, `Day12Entry.cs`, `Day12ClipHandle.cs`, `Day12ClipExtensions.cs`, `ClipPlayableOps.cs, README.md`
+- [x] **Day 13:** Check Old day and add The Mixer. (Introduction to `AnimationMixerPlayable`). `Day13.asmdef`, `Day13Entry.cs`, `Day13MixerHandle.cs`, `Day13MixerExtensions.cs`, `MixerOps.cs, README.md`
 - [ ] **Day 14:** Check Old day and add Hard Swapping. (Disconnecting input 0 and connecting input 1). `Day14.asmdef`, `Day14Entry.cs`, `Day14SwapData.cs`, `SwapConnectionOps.cs`, `Day14SwapExtensions.cs, README.md`
 - [ ] **Day 15:** Check Old day and add Weighted Blending. (Setting input weights 0.5/0.5). `Day15.asmdef`, `Day15Entry.cs`, `Day15BlendData.cs`, `WeightBlendOps.cs`, `Day15BlendExtensions.cs, README.md`
 - [ ] **Day 16:** Check Old day and add The Crossfade Logic. (Math for lerping weights over time). `Day16.asmdef`, `Day16Entry.cs`, `Day16CrossfadeData.cs`, `CrossfadeOps.cs`, `Day16CrossfadeExtensions.cs`, `Day16CrossfadeBehaviour.cs, README.md`

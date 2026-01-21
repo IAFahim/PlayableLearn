@@ -1,0 +1,35 @@
+{
+    "name": "Day12Tests",
+    "references": [
+        "Day01",
+        "Day02",
+        "Day03",
+        "Day04",
+        "Day05",
+        "Day06",
+        "Day07",
+        "Day08",
+        "Day09",
+        "Day10",
+        "Day11",
+        "Day12",
+        "NUnit.framework",
+        "Unity.Burst",
+        "Unity.Collections",
+        "Unity.Mathematics",
+        "Unity.TestRunner"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
