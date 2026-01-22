@@ -188,13 +188,17 @@ namespace PlayableLearn.Day10
             // Update play state tracking
             if (playStateData.IsValidControl())
             {
-                playStateData.UpdateState();
+                var playState = playStateData;
+                playState.UpdateState();
+                playStateData = playState;
             }
 
             // Update reverse time control
             if (reverseData.IsValidReverseControl())
             {
-                reverseData.UpdateTimeTracking(Time.deltaTime);
+                var reverse = reverseData;
+                reverse.UpdateTimeTracking(Time.deltaTime);
+                reverseData = reverse;
             }
 
             // Update speed control with reverse time support
@@ -204,9 +208,11 @@ namespace PlayableLearn.Day10
                     ? reverseData.ClampSpeed(minSpeed, maxSpeed, targetSpeed)
                     : targetSpeed;
 
-                if (math.abs(clampedSpeed - speedData.TargetSpeed) > 0.01f)
+                if (math.abs(clampedSpeed - speedData.GetTargetSpeed()) > 0.01f)
                 {
-                    speedData.SetTargetSpeed(clampedSpeed);
+                    var speed = speedData;
+                    speed.SetTargetSpeed(clampedSpeed);
+                    speedData = speed;
                 }
             }
 

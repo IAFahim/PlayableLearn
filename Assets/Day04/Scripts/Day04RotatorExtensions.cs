@@ -44,8 +44,6 @@ namespace PlayableLearn.Day04
                 data.IsActive = true;
                 data.NodeId = nodeName.GetHashCode();
                 data.TargetTransform = target;
-                data.RotationSpeed = rotationSpeed;
-                data.RotationAxis = rotationAxis;
 
                 Debug.Log($"[RotatorData] Created rotator: {nodeName}, Speed: {rotationSpeed}°/s, Axis: {rotationAxis}");
             }
@@ -155,7 +153,16 @@ namespace PlayableLearn.Day04
             }
 
             string targetName = data.TargetTransform != null ? data.TargetTransform.name : "None";
-            Debug.Log($"[Rotator] Name: {rotatorName}, Target: {targetName}, Speed: {data.RotationSpeed}°/s, Axis: {data.RotationAxis}");
+
+            // Note: Rotation speed and axis are now queried from the Behaviour
+            if (data.Node.TryGetBehaviour(out Day04RotatorBehaviour behaviour))
+            {
+                Debug.Log($"[Rotator] Name: {rotatorName}, Target: {targetName}, Speed: {behaviour.RotationSpeed}°/s, Axis: {behaviour.RotationAxis}");
+            }
+            else
+            {
+                Debug.LogWarning($"[Rotator] Name: {rotatorName}, Target: {targetName}, Speed: <N/A>, Axis: <N/A> (Behaviour not available)");
+            }
         }
     }
 }

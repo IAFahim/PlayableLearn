@@ -24,6 +24,12 @@ namespace PlayableLearn.Day05
         // Track current speed for interpolation
         private float currentSpeed;
 
+        // Track the last applied speed to avoid redundant SetSpeed calls
+        private double lastAppliedSpeed;
+
+        // Flag to track if speed needs to be applied
+        private bool speedNeedsUpdate = true;
+
         /// <summary>
         /// Called when the playable is started.
         /// Initialize our speed state.
@@ -31,6 +37,8 @@ namespace PlayableLearn.Day05
         public override void OnBehaviourPlay(Playable playable, FrameData info)
         {
             currentSpeed = SpeedMultiplier;
+            lastAppliedSpeed = double.NaN; // Force initial SetSpeed call
+            speedNeedsUpdate = true;
         }
 
         /// <summary>
@@ -81,8 +89,15 @@ namespace PlayableLearn.Day05
 
             // Apply the speed to the playable using SetSpeed
             // This is the core time dilation operation!
+            // Only call SetSpeed when the speed actually changes to avoid redundant calls
             SpeedOps.CalculateSpeedFactor(currentSpeed, out double speedFactor);
-            playable.SetSpeed(speedFactor);
+
+            if (speedNeedsUpdate || !double.IsNaN(lastAppliedSpeed) && math.abs(lastAppliedSpeed - speedFactor) > 1e-6)
+            {
+                playable.SetSpeed(speedFactor);
+                lastAppliedSpeed = speedFactor;
+                speedNeedsUpdate = false;
+            }
 
             // Log state changes for debugging (only when speed changes significantly)
             if (math.abs(currentSpeed - SpeedMultiplier) > 0.01f)
@@ -127,6 +142,7 @@ namespace PlayableLearn.Day05
             SpeedMultiplier = speed;
             TargetSpeed = speed;
             currentSpeed = speed;
+            speedNeedsUpdate = true; // Flag that speed needs to be applied
         }
 
         /// <summary>

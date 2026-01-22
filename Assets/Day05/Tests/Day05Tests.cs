@@ -84,9 +84,18 @@ namespace PlayableLearn.Day05.Tests
             // Assert
             Assert.IsTrue(speedData.IsActive, "Speed control should be active after initialization");
             Assert.IsTrue(speedData.IsValidSpeedControl(), "Speed control should be valid");
-            Assert.AreEqual(speedMultiplier, speedData.SpeedMultiplier, 0.001f, "Speed multiplier should match");
-            Assert.AreEqual(enableTimeDilation, speedData.EnableTimeDilation, "Time dilation enabled should match");
-            Assert.AreEqual(interpolationSpeed, speedData.InterpolationSpeed, 0.001f, "Interpolation speed should match");
+
+            // Note: Speed properties are now stored in the Behaviour, not the Data struct
+            if (speedData.Node.TryGetBehaviour(out Day05SpeedBehaviour behaviour))
+            {
+                Assert.AreEqual(speedMultiplier, behaviour.SpeedMultiplier, 0.001f, "Speed multiplier should match");
+                Assert.AreEqual(enableTimeDilation, behaviour.EnableTimeDilation, "Time dilation enabled should match");
+                Assert.AreEqual(interpolationSpeed, behaviour.InterpolationSpeed, 0.001f, "Interpolation speed should match");
+            }
+            else
+            {
+                Assert.Fail("Behaviour should be available");
+            }
         }
 
         [Test]
@@ -100,8 +109,17 @@ namespace PlayableLearn.Day05.Tests
 
             // Assert
             Assert.IsTrue(speedData.IsActive, "Speed control should be active");
-            Assert.AreEqual(1.0f, speedData.SpeedMultiplier, 0.001f, "Default speed should be 1.0");
-            Assert.IsTrue(speedData.EnableTimeDilation, "Time dilation should be enabled by default");
+
+            // Note: Speed properties are now stored in the Behaviour, not the Data struct
+            if (speedData.Node.TryGetBehaviour(out Day05SpeedBehaviour behaviour))
+            {
+                Assert.AreEqual(1.0f, behaviour.SpeedMultiplier, 0.001f, "Default speed should be 1.0");
+                Assert.IsTrue(behaviour.EnableTimeDilation, "Time dilation should be enabled by default");
+            }
+            else
+            {
+                Assert.Fail("Behaviour should be available");
+            }
         }
 
         [Test]
@@ -130,7 +148,8 @@ namespace PlayableLearn.Day05.Tests
             speedData.SetTargetSpeed(newTargetSpeed);
 
             // Assert
-            Assert.AreEqual(newTargetSpeed, speedData.TargetSpeed, 0.001f, "Target speed should be updated");
+            // Note: Target speed is now stored in the Behaviour, not the Data struct
+            Assert.AreEqual(newTargetSpeed, speedData.GetTargetSpeed(), 0.001f, "Target speed should be updated");
         }
 
         [Test]
@@ -145,8 +164,16 @@ namespace PlayableLearn.Day05.Tests
             speedData.SetSpeedImmediate(newSpeed);
 
             // Assert
-            Assert.AreEqual(newSpeed, speedData.SpeedMultiplier, 0.001f, "Speed multiplier should be updated immediately");
-            Assert.AreEqual(newSpeed, speedData.TargetSpeed, 0.001f, "Target speed should also be updated");
+            // Note: Speed properties are now stored in the Behaviour, not the Data struct
+            if (speedData.Node.TryGetBehaviour(out Day05SpeedBehaviour behaviour))
+            {
+                Assert.AreEqual(newSpeed, behaviour.SpeedMultiplier, 0.001f, "Speed multiplier should be updated immediately");
+                Assert.AreEqual(newSpeed, behaviour.TargetSpeed, 0.001f, "Target speed should also be updated");
+            }
+            else
+            {
+                Assert.Fail("Behaviour should be available");
+            }
         }
 
         [Test]
@@ -160,13 +187,28 @@ namespace PlayableLearn.Day05.Tests
             speedData.SetTimeDilationEnabled(false);
 
             // Assert
-            Assert.IsFalse(speedData.EnableTimeDilation, "Time dilation should be disabled");
+            // Note: EnableTimeDilation is now stored in the Behaviour, not the Data struct
+            if (speedData.Node.TryGetBehaviour(out Day05SpeedBehaviour behaviour))
+            {
+                Assert.IsFalse(behaviour.EnableTimeDilation, "Time dilation should be disabled");
+            }
+            else
+            {
+                Assert.Fail("Behaviour should be available");
+            }
 
             // Act - Enable again
             speedData.SetTimeDilationEnabled(true);
 
             // Assert
-            Assert.IsTrue(speedData.EnableTimeDilation, "Time dilation should be enabled");
+            if (speedData.Node.TryGetBehaviour(out Day05SpeedBehaviour behaviour2))
+            {
+                Assert.IsTrue(behaviour2.EnableTimeDilation, "Time dilation should be enabled");
+            }
+            else
+            {
+                Assert.Fail("Behaviour should be available");
+            }
         }
 
         [Test]

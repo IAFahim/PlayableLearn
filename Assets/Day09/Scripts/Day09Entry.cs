@@ -177,19 +177,25 @@ namespace PlayableLearn.Day09
             // Update visualizer
             if (visualizerData.IsValidVisualizer())
             {
-                visualizerData.UpdateVisualizer();
+                var visualizer = visualizerData;
+                visualizer.UpdateVisualizer();
+                visualizerData = visualizer;
             }
 
             // Update play state tracking
             if (playStateData.IsValidControl())
             {
-                playStateData.UpdateState();
+                var playState = playStateData;
+                playState.UpdateState();
+                playStateData = playState;
             }
 
             // Update reverse time control
             if (reverseData.IsValidReverseControl())
             {
-                reverseData.UpdateTimeTracking(Time.deltaTime);
+                var reverse = reverseData;
+                reverse.UpdateTimeTracking(Time.deltaTime);
+                reverseData = reverse;
             }
 
             // Update speed control with reverse time support
@@ -199,9 +205,11 @@ namespace PlayableLearn.Day09
                     ? reverseData.ClampSpeed(minSpeed, maxSpeed, targetSpeed)
                     : targetSpeed;
 
-                if (Mathf.Abs(clampedSpeed - speedData.TargetSpeed) > 0.01f)
+                if (Mathf.Abs(clampedSpeed - speedData.GetTargetSpeed()) > 0.01f)
                 {
-                    speedData.SetTargetSpeed(clampedSpeed);
+                    var speed = speedData;
+                    speed.SetTargetSpeed(clampedSpeed);
+                    speedData = speed;
                 }
             }
 
@@ -239,7 +247,9 @@ namespace PlayableLearn.Day09
                 // Force refresh button
                 if (GUI.Button(new Rect(startX, currentY, buttonWidth, buttonHeight), "Refresh Now"))
                 {
-                    visualizerData.ForceRefresh();
+                    var v = visualizerData;
+                    v.ForceRefresh();
+                    visualizerData = v;
                 }
                 currentY += buttonHeight + padding;
 
@@ -247,22 +257,28 @@ namespace PlayableLearn.Day09
                 string autoRefreshText = $"Auto-Refresh: {(visualizerData.AutoRefresh ? "ON" : "OFF")}";
                 if (GUI.Button(new Rect(startX, currentY, buttonWidth, buttonHeight), autoRefreshText))
                 {
-                    visualizerData.SetAutoRefresh(!visualizerData.AutoRefresh);
+                    var v = visualizerData;
+                    v.SetAutoRefresh(!visualizerData.AutoRefresh);
+                    visualizerData = v;
                 }
                 currentY += buttonHeight + padding;
 
                 // Toggle details
-                if (GUI.Button(new Rect(startX, currentY, buttonWidth, buttonHeight), 
+                if (GUI.Button(new Rect(startX, currentY, buttonWidth, buttonHeight),
                     visualizerData.ShowPortDetails ? "Hide Ports" : "Show Ports"))
                 {
-                    visualizerData.TogglePortDetails();
+                    var v = visualizerData;
+                    v.TogglePortDetails();
+                    visualizerData = v;
                 }
                 currentY += buttonHeight + padding;
 
-                if (GUI.Button(new Rect(startX, currentY, buttonWidth, buttonHeight), 
+                if (GUI.Button(new Rect(startX, currentY, buttonWidth, buttonHeight),
                     visualizerData.ShowConnections ? "Hide Connections" : "Show Connections"))
                 {
-                    visualizerData.ToggleConnections();
+                    var v = visualizerData;
+                    v.ToggleConnections();
+                    visualizerData = v;
                 }
                 currentY += buttonHeight + padding;
             }

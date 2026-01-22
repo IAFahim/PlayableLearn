@@ -43,10 +43,6 @@ namespace PlayableLearn.Day05
                 data.Graph = graph;
                 data.IsActive = true;
                 data.NodeId = nodeName.GetHashCode();
-                data.SpeedMultiplier = speedMultiplier;
-                data.EnableTimeDilation = enableTimeDilation;
-                data.TargetSpeed = speedMultiplier;
-                data.InterpolationSpeed = interpolationSpeed;
 
                 Debug.Log($"[SpeedData] Created speed control: {nodeName}, Speed: {speedMultiplier}x, Enabled: {enableTimeDilation}");
             }
@@ -66,8 +62,6 @@ namespace PlayableLearn.Day05
             ScriptPlayableOps.Destroy(in data.Graph, in data.Node);
             data.IsActive = false;
             data.NodeId = 0;
-            data.SpeedMultiplier = 1.0f;
-            data.EnableTimeDilation = false;
             Debug.Log("[SpeedData] Speed control node disposed.");
         }
 
@@ -112,8 +106,19 @@ namespace PlayableLearn.Day05
             }
 
             behaviour.SetTargetSpeed(targetSpeed);
-            data.TargetSpeed = targetSpeed;
             Debug.Log($"[SpeedData] Target speed set to: {targetSpeed}x");
+        }
+
+        /// <summary>
+        /// Gets the target speed (queried from the Behaviour).
+        /// </summary>
+        public static float GetTargetSpeed(this in Day05SpeedData data)
+        {
+            if (!data.IsActive || !data.Node.TryGetBehaviour(out Day05SpeedBehaviour behaviour))
+            {
+                return 1.0f; // Default fallback
+            }
+            return behaviour.TargetSpeed;
         }
 
         /// <summary>
@@ -128,8 +133,6 @@ namespace PlayableLearn.Day05
             }
 
             behaviour.SetSpeedImmediate(speed);
-            data.SpeedMultiplier = speed;
-            data.TargetSpeed = speed;
             Debug.Log($"[SpeedData] Speed immediately set to: {speed}x");
         }
 
@@ -145,7 +148,6 @@ namespace PlayableLearn.Day05
             }
 
             behaviour.EnableTimeDilation = enabled;
-            data.EnableTimeDilation = enabled;
             Debug.Log($"[SpeedData] Time dilation {(enabled ? "enabled" : "disabled")}");
         }
 
@@ -161,7 +163,6 @@ namespace PlayableLearn.Day05
             }
 
             behaviour.InterpolationSpeed = interpolationSpeed;
-            data.InterpolationSpeed = interpolationSpeed;
             Debug.Log($"[SpeedData] Interpolation speed set to: {interpolationSpeed}");
         }
 
@@ -248,7 +249,14 @@ namespace PlayableLearn.Day05
                                data.IsFastForward() ? "Fast Forward" :
                                data.IsSlowMotion() ? "Slow Motion" : "Normal";
 
-            Debug.Log($"[SpeedControl] Name: {controlName}, Speed: {currentSpeed:F2}x, State: {speedState}, Enabled: {data.EnableTimeDilation}");
+            // Note: EnableTimeDilation is now stored in the Behaviour, not the Data struct
+            bool enabled = false;
+            if (data.Node.TryGetBehaviour(out Day05SpeedBehaviour behaviour))
+            {
+                enabled = behaviour.EnableTimeDilation;
+            }
+
+            Debug.Log($"[SpeedControl] Name: {controlName}, Speed: {currentSpeed:F2}x, State: {speedState}, Enabled: {enabled}");
         }
     }
 }

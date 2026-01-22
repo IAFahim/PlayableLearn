@@ -1,14 +1,12 @@
 using UnityEngine.Playables;
-using Unity.Burst;
 using System.Runtime.CompilerServices;
 
 namespace PlayableLearn.Day10
 {
     /// <summary>
-    /// Burst-compiled operations for proper resource cleanup and disposal.
+    /// Operations for proper resource cleanup and disposal.
     /// Provides safe disposal patterns for PlayableGraph and related resources.
     /// </summary>
-    [BurstCompile]
     public static class DisposalOps
     {
         /// <summary>

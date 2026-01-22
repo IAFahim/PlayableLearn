@@ -91,8 +91,17 @@ namespace PlayableLearn.Day04.Tests
             Assert.IsTrue(rotatorData.IsActive, "Rotator should be active after initialization");
             Assert.IsTrue(rotatorData.IsValidRotator(), "Rotator should be valid");
             Assert.AreEqual(targetTransform, rotatorData.TargetTransform, "Target transform should match");
-            Assert.AreEqual(rotationSpeed, rotatorData.RotationSpeed, 0.001f, "Rotation speed should match");
-            Assert.AreEqual(rotationAxis, rotatorData.RotationAxis, "Rotation axis should match");
+
+            // Note: Rotation speed and axis are now stored in the Behaviour, not the Data struct
+            if (rotatorData.Node.TryGetBehaviour(out Day04RotatorBehaviour behaviour))
+            {
+                Assert.AreEqual(rotationSpeed, behaviour.RotationSpeed, 0.001f, "Rotation speed should match");
+                Assert.AreEqual(rotationAxis, behaviour.RotationAxis, "Rotation axis should match");
+            }
+            else
+            {
+                Assert.Fail("Behaviour should be available");
+            }
         }
 
         [Test]
@@ -240,7 +249,15 @@ namespace PlayableLearn.Day04.Tests
             rotatorData.SetRotationSpeed(newSpeed);
 
             // Assert
-            Assert.AreEqual(newSpeed, rotatorData.RotationSpeed, 0.001f, "Rotation speed should be updated");
+            // Note: Rotation speed is now stored in the Behaviour, not the Data struct
+            if (rotatorData.Node.TryGetBehaviour(out Day04RotatorBehaviour behaviour))
+            {
+                Assert.AreEqual(newSpeed, behaviour.RotationSpeed, 0.001f, "Rotation speed should be updated");
+            }
+            else
+            {
+                Assert.Fail("Behaviour should be available");
+            }
         }
 
         [Test]
@@ -255,7 +272,15 @@ namespace PlayableLearn.Day04.Tests
             rotatorData.SetRotationAxis(newAxis);
 
             // Assert
-            Assert.AreEqual(newAxis, rotatorData.RotationAxis, "Rotation axis should be updated");
+            // Note: Rotation axis is now stored in the Behaviour, not the Data struct
+            if (rotatorData.Node.TryGetBehaviour(out Day04RotatorBehaviour behaviour))
+            {
+                Assert.AreEqual(newAxis, behaviour.RotationAxis, "Rotation axis should be updated");
+            }
+            else
+            {
+                Assert.Fail("Behaviour should be available");
+            }
         }
 
         [Test]

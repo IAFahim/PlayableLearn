@@ -41,7 +41,8 @@ namespace PlayableLearn.Day10
         }
 
         /// <summary>
-        /// Disposes the graph using the standard Dispose pattern.
+        /// Disposes the graph using the ref extension pattern.
+        /// This is the ONLY correct way to dispose a Day10DisposableGraph.
         /// </summary>
         public static void Dispose(ref this Day10DisposableGraph disposableGraph)
         {
@@ -50,7 +51,7 @@ namespace PlayableLearn.Day10
                 return;
             }
 
-            disposableGraph.Dispose();
+            disposableGraph.DisposeInternal();
             Debug.Log($"[DisposableGraph] Disposed graph (ID: {disposableGraph.GraphId})");
         }
 
@@ -78,7 +79,7 @@ namespace PlayableLearn.Day10
             if (disposableGraph.IsActive && !disposableGraph.IsDisposed)
             {
                 Debug.LogWarning("[DisposableGraph] Resetting an active graph. Use Dispose() first.");
-                disposableGraph.Dispose();
+                disposableGraph.DisposeInternal();
             }
 
             disposableGraph = new Day10DisposableGraph
