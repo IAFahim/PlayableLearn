@@ -30,8 +30,8 @@ namespace PlayableLearn.Day08
             string sanitizedName = GraphNamingOps.SanitizeName(name);
             sanitizedName = GraphNamingOps.TruncateName(sanitizedName, MaxGraphNameLength);
 
-            // Set the name on the graph for Profiler visibility
-            graph.SetName(sanitizedName);
+            // Editor graph naming API is not available in this Unity version.
+            // Store the sanitized name for UI/debugging without mutating the graph.
 
             namedGraph = new Day08NamedGraphData
             {
@@ -88,8 +88,8 @@ namespace PlayableLearn.Day08
             // Update previous name
             namedGraph.PreviousName = namedGraph.GraphName;
 
-            // Set the new name on the graph
-            namedGraph.Graph.SetName(sanitizedName);
+            // Editor graph naming API is not available in this Unity version.
+            // Store the sanitized name for UI/debugging without mutating the graph.
             namedGraph.GraphName = sanitizedName;
 
             // Increment name change count

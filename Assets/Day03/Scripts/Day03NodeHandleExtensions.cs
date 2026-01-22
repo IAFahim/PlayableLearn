@@ -6,6 +6,28 @@ namespace PlayableLearn.Day03
     public static class Day03NodeHandleExtensions
     {
         /// <summary>
+        /// Gets the ScriptPlayable behaviour, if the node is a ScriptPlayable.
+        /// </summary>
+        public static bool TryGetBehaviour<T>(this in Playable playable, out T behaviour) where T : PlayableBehaviour, new()
+        {
+            if (!playable.IsValid())
+            {
+                behaviour = null;
+                return false;
+            }
+
+            var scriptPlayable = (ScriptPlayable<T>)playable;
+            if (!scriptPlayable.IsValid())
+            {
+                behaviour = null;
+                return false;
+            }
+
+            behaviour = scriptPlayable.GetBehaviour();
+            return behaviour != null;
+        }
+
+        /// <summary>
         /// Initializes a new ScriptPlayable node with the Day03EmptyBehaviour.
         /// </summary>
         public static void Initialize(ref this Day03NodeHandle handle, in PlayableGraph graph, string nodeName)

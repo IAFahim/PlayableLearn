@@ -326,7 +326,7 @@ namespace PlayableLearn.Day07
         {
             if (!data.IsActive || !data.IsTimeWrappingActive()) return false;
 
-            double distanceToLimit = data.WrapLimit - math.abs(data.AccumulatedTime);
+            double distanceToLimit = data.WrapLimit - System.Math.Abs(data.AccumulatedTime);
             return distanceToLimit <= threshold;
         }
     }

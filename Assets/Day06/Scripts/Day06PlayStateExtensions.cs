@@ -33,7 +33,7 @@ namespace PlayableLearn.Day06
             data.AutoPlayOnStart = autoPlayOnStart;
 
             // Get current state
-            data.CurrentState = graph.GetGraphPlayState();
+            data.CurrentState = graph.IsPlaying() ? PlayState.Playing : PlayState.Paused;
             data.PreviousState = data.CurrentState;
 
             // Auto-play if requested
@@ -160,7 +160,7 @@ namespace PlayableLearn.Day06
                 return;
             }
 
-            PlayState newState = data.Graph.GetGraphPlayState();
+            PlayState newState = data.Graph.IsPlaying() ? PlayState.Playing : PlayState.Paused;
 
             // Check for state change
             if (PlayStateOps.DidStateChange(data.CurrentState, newState))

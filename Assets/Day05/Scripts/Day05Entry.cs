@@ -78,7 +78,7 @@ namespace PlayableLearn.Day05
         {
             // PURE VIEW LOGIC
             // Update target speed from inspector
-            if (speedData.IsValidSpeedControl() && math.abs(targetSpeed - speedData.TargetSpeed) > 0.01f)
+            if (speedData.IsValidSpeedControl() && Mathf.Abs(targetSpeed - speedData.TargetSpeed) > 0.01f)
             {
                 speedData.SetTargetSpeed(targetSpeed);
             }

@@ -21,14 +21,14 @@ namespace PlayableLearn.Day01
             handle.GraphId = graphName.GetHashCode(); // Store ID, not string
 
             // Auto-play for Day 01
-            GraphOps.Play(in handle.Graph);
+            GraphOps.Play(ref handle.Graph);
         }
 
         public static void Dispose(ref this Day01GraphHandle handle)
         {
             if (!handle.IsActive) return;
 
-            GraphOps.Destroy(in handle.Graph);
+            GraphOps.Destroy(ref handle.Graph);
             handle.IsActive = false;
             handle.GraphId = 0;
         }
@@ -40,7 +40,8 @@ namespace PlayableLearn.Day01
         /// </summary>
         public static bool TryGetTime(in this Day01GraphHandle handle, out float time)
         {
-            if (!handle.IsActive || !GraphOps.IsRunning(in handle.Graph))
+            var day01GraphHandle = handle;
+            if (!day01GraphHandle.IsActive || !GraphOps.IsRunning(ref day01GraphHandle.Graph))
             {
                 time = 0;
                 return false;

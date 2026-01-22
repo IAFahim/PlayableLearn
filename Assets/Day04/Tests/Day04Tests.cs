@@ -4,6 +4,7 @@ using UnityEngine.Playables;
 using Unity.Mathematics;
 using PlayableLearn.Day01;
 using PlayableLearn.Day02;
+using PlayableLearn.Day03;
 using PlayableLearn.Day04;
 
 namespace PlayableLearn.Day04.Tests

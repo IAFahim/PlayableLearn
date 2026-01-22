@@ -103,7 +103,7 @@ namespace PlayableLearn.Day05
         /// <summary>
         /// Sets a new target speed for smooth transition.
         /// </summary>
-        public static void SetTargetSpeed(this in Day05SpeedData data, float targetSpeed)
+        public static void SetTargetSpeed(ref this Day05SpeedData data, float targetSpeed)
         {
             if (!data.IsActive || !data.Node.TryGetBehaviour(out Day05SpeedBehaviour behaviour))
             {
@@ -119,7 +119,7 @@ namespace PlayableLearn.Day05
         /// <summary>
         /// Immediately sets the speed without interpolation.
         /// </summary>
-        public static void SetSpeedImmediate(this in Day05SpeedData data, float speed)
+        public static void SetSpeedImmediate(ref this Day05SpeedData data, float speed)
         {
             if (!data.IsActive || !data.Node.TryGetBehaviour(out Day05SpeedBehaviour behaviour))
             {
@@ -136,7 +136,7 @@ namespace PlayableLearn.Day05
         /// <summary>
         /// Enables or disables time dilation.
         /// </summary>
-        public static void SetTimeDilationEnabled(this in Day05SpeedData data, bool enabled)
+        public static void SetTimeDilationEnabled(ref this Day05SpeedData data, bool enabled)
         {
             if (!data.IsActive || !data.Node.TryGetBehaviour(out Day05SpeedBehaviour behaviour))
             {
@@ -152,7 +152,7 @@ namespace PlayableLearn.Day05
         /// <summary>
         /// Sets the interpolation speed for smooth transitions.
         /// </summary>
-        public static void SetInterpolationSpeed(this in Day05SpeedData data, float interpolationSpeed)
+        public static void SetInterpolationSpeed(ref this Day05SpeedData data, float interpolationSpeed)
         {
             if (!data.IsActive || !data.Node.TryGetBehaviour(out Day05SpeedBehaviour behaviour))
             {

@@ -20,7 +20,7 @@ namespace PlayableLearn.Day01
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Destroy(in PlayableGraph graph)
+        public static void Destroy(ref PlayableGraph graph)
         {
             if (graph.IsValid())
             {
@@ -29,13 +29,13 @@ namespace PlayableLearn.Day01
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Play(in PlayableGraph graph)
+        public static void Play(ref PlayableGraph graph)
         {
             if (graph.IsValid()) graph.Play();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Stop(in PlayableGraph graph)
+        public static void Stop(ref PlayableGraph graph)
         {
             if (graph.IsValid()) graph.Stop();
         }
@@ -45,7 +45,7 @@ namespace PlayableLearn.Day01
         /// For Day 01, we don't have nodes yet, so we check validity.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsRunning(in PlayableGraph graph)
+        public static bool IsRunning(ref PlayableGraph graph)
         {
             return graph.IsValid();
         }

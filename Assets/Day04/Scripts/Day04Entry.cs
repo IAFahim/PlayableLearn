@@ -131,7 +131,8 @@ namespace PlayableLearn.Day04
             if (rotatorData.Node.TryGetBehaviour(out Day04RotatorBehaviour behaviour))
             {
                 Debug.Log($"[Day 04] Behaviour Type: {behaviour.GetType().Name}");
-                Debug.Log($"[Day 04] Target Transform: {behaviour.TargetTransform != null ? behaviour.TargetTransform.name : "None"}");
+                string targetName = behaviour.TargetTransform != null ? behaviour.TargetTransform.name : "None";
+                Debug.Log($"[Day 04] Target Transform: {targetName}");
                 Debug.Log($"[Day 04] Rotation Speed: {behaviour.RotationSpeed}°/s");
                 Debug.Log($"[Day 04] Rotation Axis: {behaviour.RotationAxis}");
             }

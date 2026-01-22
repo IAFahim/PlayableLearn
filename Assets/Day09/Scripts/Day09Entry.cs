@@ -199,7 +199,7 @@ namespace PlayableLearn.Day09
                     ? reverseData.ClampSpeed(minSpeed, maxSpeed, targetSpeed)
                     : targetSpeed;
 
-                if (math.abs(clampedSpeed - speedData.TargetSpeed) > 0.01f)
+                if (Mathf.Abs(clampedSpeed - speedData.TargetSpeed) > 0.01f)
                 {
                     speedData.SetTargetSpeed(clampedSpeed);
                 }
@@ -314,7 +314,7 @@ namespace PlayableLearn.Day09
                 {
                     float currentSpeed = speedData.GetCurrentSpeed();
                     string direction = currentSpeed < 0 ? "<<" : (currentSpeed > 0 ? ">>" : "||");
-                    string speedText = $"Speed: {direction} {math.abs(currentSpeed):F2}x";
+                    string speedText = $"Speed: {direction} {Mathf.Abs(currentSpeed):F2}x";
                     GUI.Label(new Rect(startX, speedY, buttonWidth * 2, buttonHeight), speedText);
                 }
             }
@@ -376,7 +376,7 @@ namespace PlayableLearn.Day09
                 visualizerData.SetAutoRefresh(false);
             }
 
-            if (math.abs(refreshInterval - 0.5f) > 0.01f)
+            if (Mathf.Abs(refreshInterval - 0.5f) > 0.01f)
             {
                 visualizerData.SetRefreshInterval(refreshInterval);
             }
@@ -574,7 +574,7 @@ namespace PlayableLearn.Day09
                 float currentSpeed = speedData.GetCurrentSpeed();
                 float pulseSpeed = visualizerData.IsValidVisualizer() && visualizerData.AutoRefresh 
                     ? visualizerData.RefreshInterval 
-                    : math.abs(currentSpeed);
+                    : Mathf.Abs(currentSpeed);
                 float pulse = 1.0f + Mathf.Sin(Time.time * pulseSpeed * 3.0f) * 0.05f;
                 transform.localScale = Vector3.one * pulse;
             }

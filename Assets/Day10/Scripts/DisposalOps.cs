@@ -41,15 +41,11 @@ namespace PlayableLearn.Day10
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void DisposeOutput(in PlayableOutput output)
         {
-            if (output.IsValid())
+            // PlayableOutput is managed by the graph lifecycle.
+            // No explicit disposal API exists, so we validate via the handle.
+            if (PlayableOutputExtensions.IsOutputValid(output))
             {
-                // Note: PlayableOutput is automatically destroyed when the graph is destroyed,
-                // but we can mark it for cleanup here if needed
-                var graph = output.GetGraph();
-                if (graph.IsValid())
-                {
-                    // Output is tied to graph lifecycle
-                }
+                // Output is tied to graph lifecycle.
             }
         }
 
@@ -77,7 +73,7 @@ namespace PlayableLearn.Day10
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool CanDisposeOutput(in PlayableOutput output)
         {
-            return output.IsValid();
+            return PlayableOutputExtensions.IsOutputValid(output);
         }
     }
 }

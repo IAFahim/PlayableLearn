@@ -59,7 +59,7 @@ namespace PlayableLearn.Day05
         public static bool ShouldApplyTimeDilation(bool enableTimeDilation, float speedMultiplier)
         {
             // Only apply if enabled and speed is not approximately 1.0
-            return enableTimeDilation && !math.abs(speedMultiplier - 1.0f) < 1e-6f;
+            return enableTimeDilation && math.abs(speedMultiplier - 1.0f) >= 1e-6f;
         }
 
         /// <summary>

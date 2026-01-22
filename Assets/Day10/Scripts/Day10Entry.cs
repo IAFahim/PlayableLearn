@@ -303,7 +303,7 @@ namespace PlayableLearn.Day10
                 {
                     float currentSpeed = speedData.GetCurrentSpeed();
                     string direction = currentSpeed < 0 ? "<<" : (currentSpeed > 0 ? ">>" : "||");
-                    string speedText = $"Speed: {direction} {math.abs(currentSpeed):F2}x";
+                    string speedText = $"Speed: {direction} {Mathf.Abs(currentSpeed):F2}x";
                     GUI.Label(new Rect(startX, speedY, buttonWidth * 2, buttonHeight), speedText);
                 }
             }
