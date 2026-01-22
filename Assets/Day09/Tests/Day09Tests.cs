@@ -631,9 +631,11 @@ namespace PlayableLearn.Day09.Tests
             }
 
             // Cleanup
-            foreach (var visualizer in visualizers)
+            for (int i = 0; i < visualizers.Length; i++)
             {
-                visualizer.Dispose();
+                var v = visualizers[i];
+                v.Dispose();
+                visualizers[i] = v;
             }
         }
 

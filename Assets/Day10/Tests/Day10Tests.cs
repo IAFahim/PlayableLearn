@@ -52,42 +52,58 @@ namespace PlayableLearn.Day10.Tests
             // Clean up in reverse order
             if (visualizerData.IsActive)
             {
-                visualizerData.Dispose();
+                var temp = visualizerData;
+                temp.Dispose();
+                visualizerData = temp;
             }
 
             if (namedGraphData.IsActive)
             {
-                namedGraphData.Dispose();
+                var temp = namedGraphData;
+                temp.Dispose();
+                namedGraphData = temp;
             }
 
             if (reverseData.IsActive)
             {
-                reverseData.Dispose();
+                var temp = reverseData;
+                temp.Dispose();
+                reverseData = temp;
             }
 
             if (playStateData.IsActive)
             {
-                playStateData.Dispose();
+                var temp = playStateData;
+                temp.Dispose();
+                playStateData = temp;
             }
 
             if (speedData.IsActive)
             {
-                speedData.Dispose();
+                var temp = speedData;
+                temp.Dispose();
+                speedData = temp;
             }
 
             if (rotatorData.IsActive)
             {
-                rotatorData.Dispose();
+                var temp = rotatorData;
+                temp.Dispose();
+                rotatorData = temp;
             }
 
             if (outputHandle.IsActive)
             {
-                outputHandle.Dispose();
+                var temp = outputHandle;
+                temp.Dispose();
+                outputHandle = temp;
             }
 
             if (graphHandle.IsActive)
             {
-                graphHandle.Dispose();
+                var temp = graphHandle;
+                temp.Dispose();
+                graphHandle = temp;
             }
 
             if (disposableGraph.IsActive && !disposableGraph.IsDisposed)
@@ -241,7 +257,9 @@ namespace PlayableLearn.Day10.Tests
             disposableGraph = graph;
 
             // Act
-            disposableGraph.Dispose();
+            var temp = disposableGraph;
+            temp.Dispose();
+            disposableGraph = temp;
 
             // Assert
             Assert.IsTrue(disposableGraph.IsDisposed, "Graph should be marked as disposed");
@@ -256,11 +274,17 @@ namespace PlayableLearn.Day10.Tests
             var graph = disposableGraph;
             graph.Initialize("TestDisposableGraph");
             disposableGraph = graph;
-            disposableGraph.Dispose();
+            var temp1 = disposableGraph;
+            temp1.Dispose();
+            disposableGraph = temp1;
 
             // Act & Assert
-            Assert.DoesNotThrow(() => disposableGraph.Dispose(),
-                "Disposing twice should not throw");
+            Assert.DoesNotThrow(() =>
+            {
+                var temp2 = disposableGraph;
+                temp2.Dispose();
+                disposableGraph = temp2;
+            }, "Disposing twice should not throw");
             Assert.IsTrue(disposableGraph.IsDisposed, "Graph should remain disposed");
         }
 
@@ -286,7 +310,9 @@ namespace PlayableLearn.Day10.Tests
             var graph = disposableGraph;
             graph.Initialize("TestDisposableGraph");
             disposableGraph = graph;
-            disposableGraph.Dispose();
+            var temp1 = disposableGraph;
+            temp1.Dispose();
+            disposableGraph = temp1;
 
             // Act
             bool isValid = disposableGraph.IsValid();
@@ -304,7 +330,9 @@ namespace PlayableLearn.Day10.Tests
             disposableGraph = graph;
 
             // Act
-            disposableGraph.Dispose();
+            var temp = disposableGraph;
+            temp.Dispose();
+            disposableGraph = temp;
             bool isDisposed = disposableGraph.IsDisposedGraph();
 
             // Assert
@@ -318,7 +346,9 @@ namespace PlayableLearn.Day10.Tests
             var graph = disposableGraph;
             graph.Initialize("TestDisposableGraph");
             disposableGraph = graph;
-            disposableGraph.Dispose();
+            var temp1 = disposableGraph;
+            temp1.Dispose();
+            disposableGraph = temp1;
 
             // Act
             var reset = disposableGraph;
@@ -366,8 +396,13 @@ namespace PlayableLearn.Day10.Tests
                 "Each graph should have a unique ID");
 
             // Cleanup
-            graph1.Dispose();
-            graph2.Dispose();
+            var temp1 = graph1;
+            temp1.Dispose();
+            graph1 = temp1;
+
+            var temp2 = graph2;
+            temp2.Dispose();
+            graph2 = temp2;
         }
 
         [Test]
@@ -441,8 +476,13 @@ namespace PlayableLearn.Day10.Tests
             Assert.IsNotNull(id2, "Graph should have an ID after counter reset");
 
             // Cleanup
-            graph1.Dispose();
-            graph2.Dispose();
+            var temp3 = graph1;
+            temp3.Dispose();
+            graph1 = temp3;
+
+            var temp4 = graph2;
+            temp4.Dispose();
+            graph2 = temp4;
         }
 
         #endregion
@@ -512,8 +552,13 @@ namespace PlayableLearn.Day10.Tests
             rotatorData = rotator;
 
             // Act - Dispose in reverse order
-            rotatorData.Dispose();
-            outputHandle.Dispose();
+            var tempRotator = rotatorData;
+            tempRotator.Dispose();
+            rotatorData = tempRotator;
+
+            var tempOutput = outputHandle;
+            tempOutput.Dispose();
+            outputHandle = tempOutput;
 
             var temp = disposableGraph;
             temp.Dispose();
@@ -544,7 +589,10 @@ namespace PlayableLearn.Day10.Tests
             Assert.IsTrue(visualizerData.IsValidVisualizer(), "Visualizer should be valid");
 
             // Cleanup
-            visualizerData.Dispose();
+            var tempVis = visualizerData;
+            tempVis.Dispose();
+            visualizerData = tempVis;
+
             var temp = disposableGraph;
             temp.Dispose();
             disposableGraph = temp;
