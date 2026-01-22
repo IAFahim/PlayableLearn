@@ -16,6 +16,7 @@ namespace PlayableLearn.Day06
     /// - Layer B: Operations (PlayStateOps, SpeedOps, RotatorLogic, ScriptPlayableOps)
     /// - Layer C: Extensions (Day06PlayStateExtensions, Day05SpeedExtensions, Day04RotatorExtensions, Day02OutputHandleExtensions, Day01GraphHandleExtensions)
     /// </summary>
+    [RequireComponent(typeof(Renderer))]
     public class Day06Entry : MonoBehaviour
     {
         // LAYER A: Data
@@ -74,6 +75,28 @@ namespace PlayableLearn.Day06
 
         [SerializeField]
         private Color pausedColor = Color.red;
+
+        // LAYER D: COMPONENT WRAPPER (Click-to-Test)
+        [ContextMenu("▶️ Debug: Play")]
+        private void DebugPlay()
+        {
+            playStateData.Play();
+            Debug.Log($"<color=cyan>PlayState Update:</color> {playStateData}");
+        }
+
+        [ContextMenu("⏸️ Debug: Pause")]
+        private void DebugPause()
+        {
+            playStateData.Pause();
+            Debug.Log($"<color=cyan>PlayState Update:</color> {playStateData}");
+        }
+
+        [ContextMenu("🔄 Debug: Toggle")]
+        private void DebugToggle()
+        {
+            playStateData.TogglePlayPause();
+            Debug.Log($"<color=cyan>PlayState Update:</color> {playStateData}");
+        }
 
         // LAYER C: Adapter Calls
         private void OnEnable()
@@ -243,7 +266,17 @@ namespace PlayableLearn.Day06
             // Connect rotator to speed control
             // This creates the chain: Output -> SpeedControl -> Rotator
             Playable speedPlayable = speedData.Node;
-            rotatorData.Node.AddInput(speedPlayable, 0, 1.0f);
+            Playable rotatorPlayable = rotatorData.Node;
+
+            // Ensure speed playable has at least one input
+            if (speedPlayable.GetInputCount() == 0)
+            {
+                speedPlayable.SetInputCount(1);
+            }
+
+            // Connect rotator as input to speed control
+            graphHandle.Graph.Connect(rotatorPlayable, 0, speedPlayable, 0);
+            speedPlayable.SetInputWeight(0, 1.0f);
 
             // Connect speed control to output
             PlayableOutput output = outputHandle.Output;

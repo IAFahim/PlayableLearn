@@ -35,5 +35,12 @@ namespace PlayableLearn.Day06
 
         // Whether the graph is valid
         public bool IsGraphValid;
+
+        // ⭐️ COMPACT DEBUG FORMAT
+        public override string ToString()
+        {
+            var status = IsActive ? (CurrentState == PlayState.Playing ? "▶️ PLAYING" : "⏸️ PAUSED") : "❌ INACTIVE";
+            return $"[PLAYSTATE] {status} (ID: {ControllerId})";
+        }
     }
 }
