@@ -122,27 +122,6 @@ namespace PlayableLearn.Day03
             output.SetSourcePlayable(playable, 0);
         }
 
-        /// <summary>
-        /// Gets the playable behaviour from a ScriptPlayable.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void GetBehaviour<T>(in Playable playable, out T behaviour) where T : PlayableBehaviour
-        {
-            if (!playable.IsValid())
-            {
-                behaviour = null;
-                return;
-            }
-
-            var scriptPlayable = playable.AsPlayable<T>();
-            if (!scriptPlayable.IsValid())
-            {
-                behaviour = null;
-                return;
-            }
-
-            behaviour = scriptPlayable.GetBehaviour();
-        }
     }
 
     /// <summary>
