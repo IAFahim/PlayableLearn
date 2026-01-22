@@ -11,6 +11,9 @@ namespace PlayableLearn.Day04
     ///
     /// Day 04: The Update Cycle
     /// Demonstrates using PrepareFrame (ProcessFrame) to rotate a generic cube.
+    ///
+    /// Note: Rotation speed and axis are stored in the Behaviour, not duplicated here.
+    /// This maintains a single source of truth.
     /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
@@ -28,13 +31,7 @@ namespace PlayableLearn.Day04
         // Debugging identifier.
         public int NodeId;
 
-        // The target transform to rotate.
+        // The target transform to rotate (kept here for convenience, could also be in Behaviour)
         public Transform TargetTransform;
-
-        // Rotation speed in degrees per second.
-        public float RotationSpeed;
-
-        // Rotation axis (normalized).
-        public Vector3 RotationAxis;
     }
 }

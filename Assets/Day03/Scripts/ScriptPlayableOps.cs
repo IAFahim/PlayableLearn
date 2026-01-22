@@ -1,10 +1,8 @@
 using UnityEngine.Playables;
-using Unity.Burst;
 using System.Runtime.CompilerServices;
 
 namespace PlayableLearn.Day03
 {
-    [BurstCompile]
     public static class ScriptPlayableOps
     {
         /// <summary>

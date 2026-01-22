@@ -58,6 +58,11 @@ namespace PlayableLearn.Day07
         /// <summary>
         /// Updates time tracking based on delta time.
         /// Should be called in Update().
+        ///
+        /// NOTE: This uses the provided deltaTime directly, which may not correctly reflect
+        /// the graph's actual time progression when using DirectorUpdateMode.UnscaledGameTime
+        /// or DirectorUpdateMode.DSPClock. For those modes, consider using a PlayableBehaviour's
+        /// PrepareFrame method which provides FrameData.deltaTime that respects the graph's time mode.
         /// </summary>
         public static void UpdateTimeTracking(ref this Day07ReverseData data, float deltaTime)
         {

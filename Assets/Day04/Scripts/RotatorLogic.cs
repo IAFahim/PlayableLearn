@@ -1,4 +1,3 @@
-using Unity.Burst;
 using Unity.Mathematics;
 using System.Runtime.CompilerServices;
 using UnityEngine;
@@ -7,10 +6,9 @@ using UnityEngine.Playables;
 namespace PlayableLearn.Day04
 {
     /// <summary>
-    /// Burst-compiled pure logic operations for rotator nodes.
+    /// Pure logic operations for rotator nodes.
     /// Layer B: Operations - No Debug calls, pure computation.
     /// </summary>
-    [BurstCompile]
     public static class RotatorLogic
     {
         /// <summary>

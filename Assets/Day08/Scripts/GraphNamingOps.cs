@@ -1,17 +1,15 @@
-using Unity.Burst;
 using Unity.Mathematics;
 using System.Runtime.CompilerServices;
 
 namespace PlayableLearn.Day08
 {
     /// <summary>
-    /// Burst-compiled operations for graph naming.
+    /// Operations for graph naming.
     /// Pure computation. No side effects.
     ///
     /// Day 08: The Director Name
     /// Operations for naming and managing PlayableGraph names for Profiler visibility.
     /// </summary>
-    [BurstCompile]
     public static class GraphNamingOps
     {
         /// <summary>

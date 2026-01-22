@@ -1,14 +1,12 @@
-using Unity.Burst;
 using Unity.Mathematics;
 using System.Runtime.CompilerServices;
 
 namespace PlayableLearn.Day07
 {
     /// <summary>
-    /// Burst-compiled pure logic operations for Reverse Time control.
+    /// Pure logic operations for Reverse Time control.
     /// Layer B: Operations - No Debug calls, pure computation.
     /// </summary>
-    [BurstCompile]
     public static class ReverseTimeOps
     {
         /// <summary>

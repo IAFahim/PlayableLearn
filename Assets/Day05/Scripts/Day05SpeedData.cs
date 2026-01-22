@@ -11,6 +11,9 @@ namespace PlayableLearn.Day05
     ///
     /// Day 05: Time Dilation
     /// Demonstrates manipulating SetSpeed to control playback speed of a Playable.
+    ///
+    /// Note: Speed properties are stored in the Behaviour, not duplicated here.
+    /// This maintains a single source of truth.
     /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
@@ -27,17 +30,5 @@ namespace PlayableLearn.Day05
 
         // Debugging identifier.
         public int NodeId;
-
-        // The current speed multiplier (1.0 = normal speed, 2.0 = double speed, etc.)
-        public float SpeedMultiplier;
-
-        // Whether to apply time dilation (speed modification)
-        public bool EnableTimeDilation;
-
-        // The target speed to interpolate towards (for smooth transitions)
-        public float TargetSpeed;
-
-        // Interpolation speed for smooth speed changes
-        public float InterpolationSpeed;
     }
 }

@@ -1,14 +1,12 @@
-using Unity.Burst;
 using Unity.Mathematics;
 using System.Runtime.CompilerServices;
 
 namespace PlayableLearn.Day05
 {
     /// <summary>
-    /// Burst-compiled pure logic operations for speed manipulation.
+    /// Pure logic operations for speed manipulation.
     /// Layer B: Operations - No Debug calls, pure computation.
     /// </summary>
-    [BurstCompile]
     public static class SpeedOps
     {
         /// <summary>

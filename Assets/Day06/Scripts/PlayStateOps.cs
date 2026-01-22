@@ -1,4 +1,3 @@
-using Unity.Burst;
 using Unity.Mathematics;
 using System.Runtime.CompilerServices;
 using UnityEngine.Playables;
@@ -6,10 +5,9 @@ using UnityEngine.Playables;
 namespace PlayableLearn.Day06
 {
     /// <summary>
-    /// Burst-compiled pure logic operations for PlayState control.
+    /// Pure logic operations for PlayState control.
     /// Layer B: Operations - No Debug calls, pure computation.
     /// </summary>
-    [BurstCompile]
     public static class PlayStateOps
     {
         /// <summary>
