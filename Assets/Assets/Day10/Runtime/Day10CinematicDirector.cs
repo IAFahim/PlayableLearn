@@ -10,7 +10,7 @@ namespace AV.Day10.Runtime
     /// Demonstrates a "Multi-Output" Graph.
     /// One Graph driving two completely different systems (Animation & Audio) in perfect sync.
     /// </summary>
-    public class CinematicDirector : MonoBehaviour
+    public class Day10CinematicDirector : MonoBehaviour
     {
         [Header("Components")]
         public Animator targetAnimator;

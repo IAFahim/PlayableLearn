@@ -96,7 +96,7 @@ namespace AV.Day01.Runtime
                 log += $"\n   <color=magenta><b>USER DATA</b></color>\n" +
                        $"   • {playerData}";
             }
-            var contextObj = graph.GetResolver() as UnityEngine.Object;
+            var contextObj = graph.GetResolver() as Object;
             Debug.Log(log, contextObj);
         }
     }
