@@ -1,11 +1,9 @@
-using UnityEngine;
 using UnityEngine.Timeline;
 
 namespace AV.Day02.Runtime
 {
-    [TrackColor(0.2f, 0.8f, 0.4f)]
-    [TrackBindingType(typeof(GameObject))]
-    [TrackClipType(typeof(Day02SystemClip))]
+    [TrackBindingType(typeof(Day02Component))]
+    [TrackClipType(typeof(Day02PlayableAsset))]
     public class Day02SystemTrack : TrackAsset
     {
     }
