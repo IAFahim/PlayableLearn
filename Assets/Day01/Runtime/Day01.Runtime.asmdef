@@ -2,7 +2,8 @@
     "name": "Day01.Runtime",
     "rootNamespace": "AV",
     "references": [
-        "GUID:f06555f75b070af458a003d92f9efb00"
+        "GUID:f06555f75b070af458a003d92f9efb00",
+        "GUID:7021395576b147199fffdb6b033bd8fc"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -272,7 +272,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1543cc2568c9634fb30755e1da277aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AV.Day02.Runtime.Day02ManualGraph
-  TimeScale: 1
+  TimeScale: 4.75
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
