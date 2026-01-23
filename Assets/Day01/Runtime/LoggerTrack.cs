@@ -1,6 +1,6 @@
 using UnityEngine.Timeline;
 
-namespace Day01.Scripts
+namespace AV.Day01.Runtime
 {
     [TrackColor(0.855f, 0.8623f, 0.87f)]
     [TrackClipType(typeof(LoggerClip))]

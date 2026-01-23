@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 
-namespace Day01.Scripts
+namespace AV.Day01.Runtime
 {
     [System.Serializable]
     public class LoggerClip : PlayableAsset, ITimelineClipAsset

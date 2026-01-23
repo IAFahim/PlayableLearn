@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Playables;
 
-namespace Day01.Scripts
+namespace AV.Day01.Runtime
 {
     public class LoggerBehaviour : PlayableBehaviour
     {
