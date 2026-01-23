@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.Playables;
 
@@ -6,87 +5,99 @@ namespace AV.Day01.Runtime
 {
     public class Day01LoggerPlayableBehaviour : PlayableBehaviour
     {
-        public override void OnGraphStart(Playable playable)
-        {
-            Debug.Log($"<b>[OnGraphStart]</b> {GetPlayableInfo(playable)}");
-        }
+        // Lifecycle
+        public override void OnGraphStart(Playable playable) => LogFull("OnGraphStart", playable);
+        public override void OnGraphStop(Playable playable) => LogFull("OnGraphStop", playable);
+        public override void OnPlayableCreate(Playable playable) => LogFull("OnPlayableCreate", playable);
+        public override void OnPlayableDestroy(Playable playable) => LogFull("OnPlayableDestroy", playable);
 
-        public override void OnGraphStop(Playable playable)
-        {
-            Debug.Log($"<b>[OnGraphStop]</b> {GetPlayableInfo(playable)}");
-        }
+        // Flow
+        public override void OnBehaviourPlay(Playable playable, FrameData info) =>
+            LogFull("OnBehaviourPlay", playable, info, "green");
 
-        public override void OnPlayableCreate(Playable playable)
-        {
-            Debug.Log($"<b>[OnPlayableCreate]</b> {GetPlayableInfo(playable)}");
-        }
+        public override void OnBehaviourPause(Playable playable, FrameData info) =>
+            LogFull("OnBehaviourPause", playable, info, "red");
 
-        public override void OnPlayableDestroy(Playable playable)
-        {
-            Debug.Log($"<b>[OnPlayableDestroy]</b> {GetPlayableInfo(playable)}");
-        }
+        public override void OnBehaviourDelay(Playable playable, FrameData info) =>
+            LogFull("OnBehaviourDelay", playable, info, "yellow");
 
-        public override void OnBehaviourDelay(Playable playable, FrameData info)
-        {
-            Debug.Log($"<b>[OnBehaviourDelay]</b>\n{GetPlayableInfo(playable)}\n{GetFrameInfo(info)}");
-        }
+        // Loop
+        public override void PrepareData(Playable playable, FrameData info) => LogFull("PrepareData", playable, info);
+        public override void PrepareFrame(Playable playable, FrameData info) => LogFull("PrepareFrame", playable, info);
 
-        public override void OnBehaviourPlay(Playable playable, FrameData info)
-        {
-            Debug.Log(
-                $"<color=green><b>[OnBehaviourPlay]</b></color>\n{GetPlayableInfo(playable)}\n{GetFrameInfo(info)}");
-        }
+        public override void ProcessFrame(Playable playable, FrameData info, object playerData) =>
+            LogFull("ProcessFrame", playable, info, "white", playerData);
 
-        public override void OnBehaviourPause(Playable playable, FrameData info)
-        {
-            Debug.Log(
-                $"<color=red><b>[OnBehaviourPause]</b></color>\n{GetPlayableInfo(playable)}\n{GetFrameInfo(info)}");
-        }
+        // --- Deep Dive Logger ---
 
-        public override void PrepareData(Playable playable, FrameData info)
+        private void LogFull(string method, Playable p, FrameData? f = null, string color = "white",
+            object playerData = null)
         {
-            Debug.Log($"<b>[PrepareData]</b>\n{GetPlayableInfo(playable)}\n{GetFrameInfo(info)}");
-        }
+            if (!p.IsValid())
+            {
+                Debug.Log($"<color={color}><b>[{method}]</b></color> <color=red>INVALID PLAYABLE HANDLE</color>");
+                return;
+            }
 
-        public override void PrepareFrame(Playable playable, FrameData info)
-        {
-            Debug.Log($"<b>[PrepareFrame]</b>\n{GetPlayableInfo(playable)}\n{GetFrameInfo(info)}");
-        }
-
-        public override void ProcessFrame(Playable playable, FrameData info, object playerData)
-        {
-            Debug.Log(
-                $"<b>[ProcessFrame]</b>\n{GetPlayableInfo(playable)}\n{GetFrameInfo(info)}\nPlayerData: {(playerData != null ? playerData.ToString() : "null")}");
-        }
-
-        private string GetPlayableInfo(Playable p)
-        {
-            if (!p.IsValid()) return "Playable: <color=red>[INVALID]</color>";
-
+            var graph = p.GetGraph();
             double duration = p.GetDuration();
-            string durationStr = (duration > 1e10 || Math.Abs(duration - double.MaxValue) < 1e10)
-                ? "Inf"
-                : $"{duration:F3}s";
+            string durStr = (duration > 1e10 || duration == double.MaxValue) ? "Inf" : $"{duration:F3}";
 
-            return "Playable: [" +
-                   $"Time: {p.GetTime():F3}s / {durationStr} | " +
-                   $"State: {p.GetPlayState()} | " +
-                   $"Speed: {p.GetSpeed():F2} | " +
-                   $"Inputs: {p.GetInputCount()} | " +
-                   $"Done: {p.IsDone()}]";
-        }
+            // SECTION 1: THE ENGINE (Time & Motion) - Most Important!
+            string log = $"<color={color}><b>[{method}]</b></color>\n" +
+                         $"   <color=cyan><b>TIME & STATE</b></color>\n" +
+                         $"   • <b>Global Time:</b> {p.GetTime():F3}s / {durStr}s\n" +
+                         $"   • <b>State:</b> {p.GetPlayState()} (Graph: {(graph.IsPlaying() ? "Running" : "Stopped")})\n" +
+                         $"   • <b>Speed:</b> {p.GetSpeed():F2}x";
 
-        private string GetFrameInfo(FrameData f)
-        {
-            return $"FrameData: [" +
-                   $"ID: {f.frameId} | " +
-                   $"dt: {f.deltaTime:F4}s | " +
-                   $"Weight: {f.weight:F2} | " +
-                   $"EffSpeed: {f.effectiveSpeed:F2} | " +
-                   $"EffState: {f.effectivePlayState} | " +
-                   $"Eval: {f.evaluationType} | " +
-                   $"Seek: {f.seekOccurred} | " +
-                   $"Loop: {f.timeLooped}]";
+            // SECTION 2: THE UPDATE (Frame Data) - Crucial for Logic
+            if (f.HasValue)
+            {
+                FrameData frame = f.Value;
+                log += $"\n   <color=cyan><b>FRAME DATA (Delta)</b></color>\n" +
+                       $"   • <b>DeltaTime:</b> {frame.deltaTime:F4}s\n" +
+                       $"   • <b>Frame ID:</b> {frame.frameId}\n" +
+                       $"   • <b>Effective Speed:</b> {frame.effectiveSpeed:F2}x\n" +
+                       $"   • <b>Effective State:</b> {frame.effectivePlayState}";
+            }
+
+            // SECTION 3: BLENDING (Mixer Info)
+            if (f.HasValue)
+            {
+                FrameData frame = f.Value;
+                log += $"\n   <color=orange><b>BLENDING</b></color>\n" +
+                       $"   • <b>Weight:</b> {frame.weight:F2}\n" +
+                       $"   • <b>Evaluation:</b> {frame.evaluationType}";
+            }
+
+            // SECTION 4: FLAGS & EVENTS
+            if (f.HasValue)
+            {
+                FrameData frame = f.Value;
+                string flags = "";
+                if (frame.seekOccurred) flags += "[SEEK] ";
+                if (frame.timeLooped) flags += "[LOOP] ";
+                if (p.IsDone()) flags += "[DONE] ";
+
+                if (string.IsNullOrEmpty(flags)) flags = "None";
+
+                log += $"\n   <color=yellow><b>EVENTS</b></color>\n" +
+                       $"   • <b>Flags:</b> {flags}";
+            }
+
+            // SECTION 5: IDENTITY & STRUCTURE (Static Info)
+            log += $"\n   <color=grey><b>IDENTITY & GRAPH</b></color>\n" +
+                   $"   • <b>Type:</b> {p.GetPlayableType().Name}\n" +
+                   $"   • <b>Graph:</b> {graph.GetEditorName()} (Mode: {graph.GetTimeUpdateMode()})\n" +
+                   $"   • <b>Structure:</b> {p.GetInputCount()} Inputs, {p.GetOutputCount()} Outputs";
+
+            if (playerData != null)
+            {
+                log += $"\n   <color=magenta><b>USER DATA</b></color>\n" +
+                       $"   • {playerData}";
+            }
+            var contextObj = graph.GetResolver() as UnityEngine.Object;
+            Debug.Log(log, contextObj);
         }
     }
 }

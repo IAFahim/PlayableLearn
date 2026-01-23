@@ -1,10 +1,9 @@
 {
-    "name": "Day02.Runtime",
-    "rootNamespace": "AV.Day02.Runtime",
+    "name": "Day10.Runtime",
+    "rootNamespace": "AV.Day10.Runtime",
     "references": [
         "Unity.Timeline",
-        "Unity.Mathematics",
-        "Day01.Runtime"
+        "Unity.Mathematics"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
