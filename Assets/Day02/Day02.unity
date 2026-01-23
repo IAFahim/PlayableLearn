@@ -238,7 +238,7 @@ PlayableDirector:
   serializedVersion: 3
   m_PlayableAsset: {fileID: 11400000, guid: 4f96ab9e1316bf94e83f9ac474475ef0, type: 2}
   m_InitialState: 1
-  m_WrapMode: 2
+  m_WrapMode: 1
   m_DirectorUpdateMode: 1
   m_InitialTime: 0
   m_SceneBindings: []
@@ -269,9 +269,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1159253436}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d2450926606a73419d5090214470e0f, type: 3}
+  m_Script: {fileID: 11500000, guid: b1543cc2568c9634fb30755e1da277aa, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Day02.Runtime::AV.Day02.Runtime.ManualGraphController
+  m_EditorClassIdentifier: Assembly-CSharp::AV.Day02.Runtime.Day02ManualGraph
   TimeScale: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
