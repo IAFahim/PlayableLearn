@@ -5,13 +5,13 @@ using UnityEngine.Timeline;
 namespace AV.Day01.Runtime
 {
     [System.Serializable]
-    public class LoggerPlayableAssetDay01 : PlayableAsset, ITimelineClipAsset
+    public class Day01LoggerPlayableAsset : PlayableAsset, ITimelineClipAsset
     {
-        public ClipCaps clipCaps => ClipCaps.None;
+        public ClipCaps clipCaps => ClipCaps.All;
 
         public override Playable CreatePlayable(PlayableGraph graph, GameObject owner)
         {
-            var playable = ScriptPlayable<LoggerPlayableBehaviour01>.Create(graph);
+            var playable = ScriptPlayable<Day01LoggerPlayableBehaviour>.Create(graph);
             return playable;
         }
     }

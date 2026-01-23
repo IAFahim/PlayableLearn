@@ -3,7 +3,7 @@ using UnityEngine.Playables;
 
 namespace AV.Day01.Runtime
 {
-    public class LoggerPlayableBehaviour01 : PlayableBehaviour
+    public class Day01LoggerPlayableBehaviour : PlayableBehaviour
     {
 
         public override void OnBehaviourPlay(Playable playable, FrameData info)
