@@ -1,0 +1,10 @@
+using UnityEngine.Timeline;
+
+namespace Day01.Scripts
+{
+    [TrackColor(0.855f, 0.8623f, 0.87f)]
+    [TrackClipType(typeof(LoggerClip))]
+    public class LoggerTrack : TrackAsset
+    {
+    }
+}
