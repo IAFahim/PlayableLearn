@@ -1,9 +1,144 @@
+using System;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Playables;
+using Object = UnityEngine.Object;
 
 namespace Common
 {
+    [Serializable]
+    [StructLayout(LayoutKind.Sequential)]
+    public struct LogState
+    {
+        public bool IsValid;
+        public double Duration;
+        public double Time;
+        public float Speed;
+        public PlayState State;
+
+        public override string ToString() => $"[LogState] Valid:{IsValid} Time:{Time:F2}s Speed:{Speed:F1}x"; // Debug view
+    }
+
+    public static class LogLogic
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void ValidatePlayable(Playable p, out bool isValid)
+        {
+            isValid = p.IsValid(); // Atomic validation
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void GetPlayableDuration(Playable p, out double duration, out string durationStr)
+        {
+            duration = p.GetDuration();
+            durationStr = (duration > 1e10 || duration == double.MaxValue) ? "Inf" : $"{duration:F3}"; // Atomic fetch and format
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void GetTimeAndSpeed(Playable p, out double time, out float speed)
+        {
+            time = p.GetTime();
+            speed = (float)p.GetSpeed(); // Atomic fetch
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void GetPlayState(Playable p, out PlayState state, out string stateStr)
+        {
+            state = p.GetPlayState();
+            stateStr = state.ToString(); // Atomic fetch and format
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void FormatGraphInfo(PlayableGraph graph, out string graphName, out string isPlayingStr)
+        {
+            graphName = graph.GetEditorName();
+            isPlayingStr = graph.IsPlaying() ? "Running" : "Stopped"; // Atomic fetch and format
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void FormatFrameData(FrameData frame, out string frameInfo)
+        {
+            frameInfo = $"DeltaTime: {frame.deltaTime:F4}s | FrameID: {frame.frameId} | EffectiveSpeed: {frame.effectiveSpeed:F2}x"; // Atomic format
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void FormatBlendingInfo(FrameData frame, out string blendInfo)
+        {
+            blendInfo = $"Weight: {frame.weight:F2} | Evaluation: {frame.evaluationType}"; // Atomic format
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void FormatEventFlags(Playable p, FrameData frame, out string flags)
+        {
+            flags = "";
+            if (frame.seekOccurred) flags += "[SEEK] ";
+            if (frame.timeLooped) flags += "[LOOP] ";
+            if (p.IsDone()) flags += "[DONE] ";
+            if (string.IsNullOrEmpty(flags)) flags = "None"; // Atomic format
+        }
+    }
+
+    public static class LogExtensions
+    {
+        public static bool TryLogFull(ref this LogState state, Playable p, FrameData? f, string color, object playerData, string method, out string message)
+        {
+            message = string.Empty;
+
+            LogLogic.ValidatePlayable(p, out var isValid);
+            if (!isValid)
+            {
+                message = $"<color={color}><b>[{method}]</b></color> <color=red>INVALID PLAYABLE HANDLE</color>";
+                return false; // Guard: Invalid playable
+            }
+
+            LogLogic.GetPlayableDuration(p, out var duration, out var durStr);
+            LogLogic.GetTimeAndSpeed(p, out var time, out var speed);
+            LogLogic.GetPlayState(p, out var playState, out var stateStr);
+            LogLogic.FormatGraphInfo(p.GetGraph(), out var graphName, out var isPlayingStr);
+
+            state.IsValid = isValid;
+            state.Duration = duration;
+            state.Time = time;
+            state.Speed = speed;
+            state.State = playState;
+
+            message = $"<color={color}><b>[{method}]</b></color>\n" +
+                     $"   <color=cyan><b>TIME & STATE</b></color>\n" +
+                     $"   • <b>Global Time:</b> {time:F3}s / {durStr}s\n" +
+                     $"   • <b>State:</b> {stateStr} (Graph: {isPlayingStr})\n" +
+                     $"   • <b>Speed:</b> {speed:F2}x";
+
+            if (f.HasValue)
+            {
+                FrameData frame = f.Value;
+                LogLogic.FormatFrameData(frame, out var frameInfo);
+                LogLogic.FormatBlendingInfo(frame, out var blendInfo);
+                LogLogic.FormatEventFlags(p, frame, out var flags);
+
+                message += $"\n   <color=cyan><b>FRAME DATA</b></color>\n" +
+                          $"   • {frameInfo}\n" +
+                          $"   <color=orange><b>BLENDING</b></color>\n" +
+                          $"   • {blendInfo}\n" +
+                          $"   <color=yellow><b>EVENTS</b></color>\n" +
+                          $"   • <b>Flags:</b> {flags}";
+            }
+
+            message += $"\n   <color=grey><b>IDENTITY & GRAPH</b></color>\n" +
+                      $"   • <b>Type:</b> {p.GetPlayableType().Name}\n" +
+                      $"   • <b>Graph:</b> {graphName} (Mode: {p.GetGraph().GetTimeUpdateMode()})\n" +
+                      $"   • <b>Structure:</b> {p.GetInputCount()} Inputs, {p.GetOutputCount()} Outputs";
+
+            if (playerData != null)
+            {
+                message += $"\n   <color=magenta><b>USER DATA</b></color>\n" +
+                          $"   • {playerData}";
+            }
+
+            return true; // Success
+        }
+    }
+
     public static class CommonLogger
     {
         public static void LogFull(
@@ -11,70 +146,14 @@ namespace Common
             FrameData? f = null,
             string color = "white",
             object playerData = null,
-            [CallerMemberName] string method = "" 
+            [CallerMemberName] string method = ""
         )
         {
-            if (!p.IsValid())
-            {
-                Debug.Log($"<color={color}><b>[{method}]</b></color> <color=red>INVALID PLAYABLE HANDLE</color>");
-                return;
-            }
+            var state = new LogState();
+            var success = state.TryLogFull(p, f, color, playerData, method, out var message);
 
-            var graph = p.GetGraph();
-            double duration = p.GetDuration();
-            string durStr = (duration > 1e10 || duration == double.MaxValue) ? "Inf" : $"{duration:F3}";
-
-            string log = $"<color={color}><b>[{method}]</b></color>\n" +
-                         $"   <color=cyan><b>TIME & STATE</b></color>\n" +
-                         $"   • <b>Global Time:</b> {p.GetTime():F3}s / {durStr}s\n" +
-                         $"   • <b>State:</b> {p.GetPlayState()} (Graph: {(graph.IsPlaying() ? "Running" : "Stopped")})\n" +
-                         $"   • <b>Speed:</b> {p.GetSpeed():F2}x";
-
-            if (f.HasValue)
-            {
-                FrameData frame = f.Value;
-                log += $"\n   <color=cyan><b>FRAME DATA (Delta)</b></color>\n" +
-                       $"   • <b>DeltaTime:</b> {frame.deltaTime:F4}s\n" +
-                       $"   • <b>Frame ID:</b> {frame.frameId}\n" +
-                       $"   • <b>Effective Speed:</b> {frame.effectiveSpeed:F2}x\n" +
-                       $"   • <b>Effective State:</b> {frame.effectivePlayState}";
-            }
-
-            if (f.HasValue)
-            {
-                FrameData frame = f.Value;
-                log += $"\n   <color=orange><b>BLENDING</b></color>\n" +
-                       $"   • <b>Weight:</b> {frame.weight:F2}\n" +
-                       $"   • <b>Evaluation:</b> {frame.evaluationType}";
-            }
-
-            if (f.HasValue)
-            {
-                FrameData frame = f.Value;
-                string flags = "";
-                if (frame.seekOccurred) flags += "[SEEK] ";
-                if (frame.timeLooped) flags += "[LOOP] ";
-                if (p.IsDone()) flags += "[DONE] ";
-
-                if (string.IsNullOrEmpty(flags)) flags = "None";
-
-                log += $"\n   <color=yellow><b>EVENTS</b></color>\n" +
-                       $"   • <b>Flags:</b> {flags}";
-            }
-
-            log += $"\n   <color=grey><b>IDENTITY & GRAPH</b></color>\n" +
-                   $"   • <b>Type:</b> {p.GetPlayableType().Name}\n" +
-                   $"   • <b>Graph:</b> {graph.GetEditorName()} (Mode: {graph.GetTimeUpdateMode()})\n" +
-                   $"   • <b>Structure:</b> {p.GetInputCount()} Inputs, {p.GetOutputCount()} Outputs";
-
-            if (playerData != null)
-            {
-                log += $"\n   <color=magenta><b>USER DATA</b></color>\n" +
-                       $"   • {playerData}";
-            }
-
-            var contextObj = graph.GetResolver() as Object;
-            Debug.Log(log, contextObj);
+            var contextObj = p.GetGraph().GetResolver() as Object;
+            Debug.Log(message, contextObj);
         }
     }
 }

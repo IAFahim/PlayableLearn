@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-4068112982674522621
+--- !u!114 &-6608330560915216223
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9,9 +9,46 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 22952a5570f84e1fbc7d6a52e92e53fc, type: 3}
-  m_Name: Day 01 Logger Track Asset
-  m_EditorClassIdentifier: Day01.Runtime::AV.Day01.Runtime.Day01LoggerTrackAsset
+  m_Script: {fileID: 11500000, guid: 70301c8818bba681eba9867d0c4a75f9, type: 3}
+  m_Name: Day 04 Notification Marker
+  m_EditorClassIdentifier: Day04.Runtime::AV.Day04.Runtime.Day04NotificationMarker
+  m_Time: 4.183333333333334
+  eventName: Event
+  flashColor: {r: 1, g: 1, b: 1, a: 1}
+  intensity: 1
+--- !u!114 &-3802114967468467033
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10b36dfc937f3eefca861a3b6f5a0605, type: 3}
+  m_Name: Day04AdvancedPlayableAsset
+  m_EditorClassIdentifier: Day04.Runtime::AV.Day04.Runtime.Day04AdvancedPlayableAsset
+  _state:
+    PositionX: 0
+    PositionY: 0
+    PositionZ: 0
+    ColorR: 0
+    ColorG: 0
+    ColorB: 0
+    ColorA: 0
+    CapsFlags: -1
+--- !u!114 &-3206552443675559488
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c2901e2c02fbafcd9707f770435de22, type: 3}
+  m_Name: Day 04 Advanced Track
+  m_EditorClassIdentifier: Day04.Runtime::AV.Day04.Runtime.Day04AdvancedTrack
   m_Version: 3
   m_AnimClip: {fileID: 0}
   m_Locked: 0
@@ -22,16 +59,16 @@ MonoBehaviour:
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 2.966666666666667
+    m_Start: 1.4666666666666666
     m_ClipIn: 0
-    m_Asset: {fileID: -2756655569692407381}
+    m_Asset: {fileID: -3802114967468467033}
     m_Duration: 5
     m_TimeScale: 1
-    m_ParentTrack: {fileID: -4068112982674522621}
+    m_ParentTrack: {fileID: -3206552443675559488}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 0
-    m_BlendOutDuration: 0
+    m_BlendInDuration: -1
+    m_BlendOutDuration: -1
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -87,23 +124,12 @@ MonoBehaviour:
     m_Recordable: 0
     m_PostExtrapolationMode: 0
     m_PreExtrapolationMode: 0
-    m_PostExtrapolationTime: 0
-    m_PreExtrapolationTime: 0
-    m_DisplayName: Day01LoggerPlayableAsset
+    m_PostExtrapolationTime: Infinity
+    m_PreExtrapolationTime: 1.4666666666666666
+    m_DisplayName: Day04AdvancedPlayableAsset
   m_Markers:
-    m_Objects: []
---- !u!114 &-2756655569692407381
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 17e3dab9fb5c466e8deb91e3bbc94009, type: 3}
-  m_Name: Day01LoggerPlayableAsset
-  m_EditorClassIdentifier: Day01.Runtime::AV.Day01.Runtime.Day01LoggerPlayableAsset
+    m_Objects:
+    - {fileID: -6608330560915216223}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114,11 +140,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bfda56da833e2384a9677cd3c976a436, type: 3}
-  m_Name: SphereTimeline
+  m_Name: Day04Timeline
   m_EditorClassIdentifier: Unity.Timeline::UnityEngine.Timeline.TimelineAsset
   m_Version: 0
   m_Tracks:
-  - {fileID: -4068112982674522621}
+  - {fileID: -3206552443675559488}
   m_FixedDuration: 0
   m_EditorSettings:
     m_Framerate: 60

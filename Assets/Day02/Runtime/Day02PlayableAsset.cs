@@ -1,13 +1,25 @@
+using System;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Timeline;
 
 namespace AV.Day02.Runtime
 {
-    public class Day02PlayableAsset : PlayableAsset
+    [Serializable]
+    public class Day02PlayableAsset : PlayableAsset, ITimelineClipAsset
     {
+        [SerializeField] private SimpleState _state;
+
+        public ClipCaps clipCaps => ClipCaps.All;
+
         public override Playable CreatePlayable(PlayableGraph graph, GameObject owner)
         {
-            return Playable.Create(graph);
+            var playable = ScriptPlayable<Day02SimplePlayableBehaviour>.Create(graph);
+            var behaviour = playable.GetBehaviour();
+            ((ISimpleSystem)behaviour).Initialize(_state);
+            return playable;
         }
     }
 }
