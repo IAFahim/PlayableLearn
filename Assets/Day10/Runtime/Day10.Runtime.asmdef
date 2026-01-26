@@ -1,6 +1,6 @@
 {
     "name": "Day10.Runtime",
-    "rootNamespace": "AV.Day10.Runtime",
+    "rootNamespace": "AV",
     "references": [
         "Unity.Timeline",
         "Unity.Mathematics"
