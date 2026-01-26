@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace AV.Day05.Runtime
 {
-    [CustomTimelineEditor(typeof(TweenHealthTrack))]
+    [CustomTimelineEditor(typeof(Day05TweenHealthTrack))]
     public sealed class TweenHealthTrackEditor : TweenAnimationTrackEditor
     {
         public override string DefaultTrackName => "Tween Health Track";
@@ -14,7 +14,7 @@ namespace AV.Day05.Runtime
         public override Texture2D TrackIcon => Styles.CsScriptIcon;
     }
 
-    [CustomTimelineEditor(typeof(TweenHealthClip))]
+    [CustomTimelineEditor(typeof(Day05TweenHealthClip))]
     public sealed class TweenHealthClipEditor : TweenAnimationClipEditor
     {
         public override string DefaultClipName => "Tween Health";
@@ -22,12 +22,12 @@ namespace AV.Day05.Runtime
         public override Texture2D ClipIcon => Styles.CsScriptIcon;
     }
 
-    [CustomPropertyDrawer(typeof(TweenHealthBehaviour))]
+    [CustomPropertyDrawer(typeof(Day05TweenHealthBehaviour))]
     public sealed class TweenHealthBehaviourDrawer : TweenAnimationBehaviourDrawer
     {
         private static readonly string[] Parameters =
         {
-            nameof(HealthComponent.health)
+            nameof(Day05HealthComponent.health)
         };
 
         protected override IEnumerable<string> GetPropertyNames()
