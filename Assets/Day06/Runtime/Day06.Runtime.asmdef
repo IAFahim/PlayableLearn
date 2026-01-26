@@ -3,7 +3,8 @@
     "rootNamespace": "AV",
     "references": [
         "Unity.Timeline",
-        "Unity.Mathematics"
+        "Unity.Mathematics",
+        "TweenPlayables"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
