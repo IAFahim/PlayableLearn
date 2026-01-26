@@ -19,7 +19,11 @@ namespace AV.Day03.Editor
         public int ClipCount;
         public double TotalDuration;
 
-        public override string ToString() => $"[ClipAction] Clips: {ClipCount} | Duration: {TotalDuration:F2}s"; // Debug view
+        public override string ToString()
+        {
+            return $"[ClipAction] Clips: {ClipCount} | Duration: {TotalDuration:F2}s";
+            // Debug view
+        }
     }
 
     public static class ClipActionLogic
@@ -64,7 +68,8 @@ namespace AV.Day03.Editor
             if (clip.asset == null) return false; // Guard: No asset
 
             ClipActionLogic.CalculateClipDuration(clip, out var duration);
-            message = $"<color=cyan>[Day03 Action]</color> Clip: {clip.displayName} | Start: {clip.start:F2} | Duration: {duration:F2}";
+            message =
+                $"<color=cyan>[Day03 Action]</color> Clip: {clip.displayName} | Start: {clip.start:F2} | Duration: {duration:F2}";
 
             return true; // Success
         }
@@ -149,7 +154,9 @@ namespace AV.Day03.Editor
             foreach (var clip in clips)
             {
                 var success = clip.TryDoubleSpeed(out var newSpeed);
-                if (success) Debug.Log($"<color=green>[Day03]</color> Speed doubled for {clip.displayName} (New: {newSpeed:F2}x)");
+                if (success)
+                    Debug.Log(
+                        $"<color=green>[Day03]</color> Speed doubled for {clip.displayName} (New: {newSpeed:F2}x)");
             }
 
             TimelineEditor.Refresh(RefreshReason.WindowNeedsRedraw);

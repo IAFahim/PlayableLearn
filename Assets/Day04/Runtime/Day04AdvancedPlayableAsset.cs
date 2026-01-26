@@ -17,12 +17,12 @@ namespace AV.Day04.Runtime
     {
         [SerializeField] private ClipConfigState _state;
 
-        public ClipCaps clipCaps => ((IClipConfigSystem)this).TryGetClipCaps(out var caps) ? caps : ClipCaps.None;
-
         bool IClipConfigSystem.TryGetClipCaps(out ClipCaps caps)
         {
             return _state.TryGetClipCaps(out caps);
         }
+
+        public ClipCaps clipCaps => ((IClipConfigSystem)this).TryGetClipCaps(out var caps) ? caps : ClipCaps.None;
 
         public override Playable CreatePlayable(PlayableGraph graph, GameObject owner)
         {
@@ -46,7 +46,11 @@ namespace AV.Day04.Runtime
         public float ColorA;
         public ClipCapabilitiesFlags CapsFlags;
 
-        public override string ToString() => $"[ClipConfig] Pos:({PositionX:F1},{PositionY:F1},{PositionZ:F1}) | Caps: {CapsFlags}"; // Debug view
+        public override string ToString()
+        {
+            return $"[ClipConfig] Pos:({PositionX:F1},{PositionY:F1},{PositionZ:F1}) | Caps: {CapsFlags}";
+            // Debug view
+        }
 
         [Flags]
         public enum ClipCapabilitiesFlags

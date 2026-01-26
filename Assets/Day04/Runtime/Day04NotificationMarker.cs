@@ -21,9 +21,7 @@ namespace AV.Day04.Runtime
         [SerializeField] public Color flashColor = Color.white;
         [SerializeField] public float intensity = 1.0f;
 
-        public PropertyName id => ((INotificationSystem)this).TryGetNotificationId(out var notificationId) ? notificationId : default;
-
-        private NotificationState State => new NotificationState
+        private NotificationState State => new()
         {
             EventName = eventName,
             R = flashColor.r,
@@ -32,6 +30,10 @@ namespace AV.Day04.Runtime
             A = flashColor.a,
             Intensity = intensity
         };
+
+        public PropertyName id => ((INotificationSystem)this).TryGetNotificationId(out var notificationId)
+            ? notificationId
+            : default;
 
         bool INotificationSystem.TryGetNotificationId(out PropertyName notificationId)
         {
@@ -61,7 +63,11 @@ namespace AV.Day04.Runtime
         public float A;
         public float Intensity;
 
-        public override string ToString() => $"[Notification] {EventName} ({Intensity:F1})"; // Debug view
+        public override string ToString()
+        {
+            return $"[Notification] {EventName} ({Intensity:F1})";
+            // Debug view
+        }
     }
 
     public static class NotificationLogic

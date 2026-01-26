@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using AV.Day02.Runtime;
 using UnityEngine;
 using UnityEngine.Timeline;
@@ -9,7 +10,7 @@ namespace AV.Day03.Runtime
     [TrackClipType(typeof(Day03DisplayNamePlayableAsset))]
     [TrackClipType(typeof(Day02PlayableAsset))]
     [TrackClipType(typeof(AnimationPlayableAsset))]
-    [System.ComponentModel.DisplayName("Day 03/Visual Attributes Track")]
+    [DisplayName("Day 03/Visual Attributes Track")]
     public class Day03VisualAttributesTrack : TrackAsset
     {
     }

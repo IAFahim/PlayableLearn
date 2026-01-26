@@ -1,9 +1,7 @@
 using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using UnityEditor;
 using UnityEditor.ShortcutManagement;
-using UnityEditor.Timeline;
 using UnityEditor.Timeline.Actions;
 using UnityEngine;
 
@@ -15,7 +13,11 @@ namespace AV.Day03.Editor
     {
         public bool IsEnabled;
 
-        public override string ToString() => $"[Snap] {(IsEnabled ? "ON" : "OFF")}"; // Debug view
+        public override string ToString()
+        {
+            return $"[Snap] {(IsEnabled ? "ON" : "OFF")}";
+            // Debug view
+        }
     }
 
     public static class SnapLogic

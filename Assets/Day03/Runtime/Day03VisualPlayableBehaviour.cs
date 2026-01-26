@@ -1,4 +1,3 @@
-using AV.Day02.Runtime;
 using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -21,7 +20,11 @@ namespace AV.Day03.Runtime
         public string DisplayName;
         public bool IsVisible;
 
-        public override string ToString() => $"[Visual] {DisplayName} ({(IsVisible ? "VISIBLE" : "HIDDEN")})"; // Debug view
+        public override string ToString()
+        {
+            return $"[Visual] {DisplayName} ({(IsVisible ? "VISIBLE" : "HIDDEN")})";
+            // Debug view
+        }
     }
 
     public static class VisualLogic
@@ -104,10 +107,7 @@ namespace AV.Day03.Runtime
 
         public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
-            if (playerData is GameObject go && go != null)
-            {
-                ((IVisualSystem)this).TrySetDisplayName(go.name);
-            }
+            if (playerData is GameObject go && go != null) ((IVisualSystem)this).TrySetDisplayName(go.name);
         }
     }
 }

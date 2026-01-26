@@ -1,17 +1,17 @@
 {
-    "name": "Day04.Runtime",
-    "rootNamespace": "AV.Day04.Runtime",
-    "references": [
-        "Unity.Timeline",
-        "Unity.Mathematics"
-    ],
-    "includePlatforms": [],
-    "excludePlatforms": [],
-    "allowUnsafeCode": false,
-    "overrideReferences": false,
-    "precompiledReferences": [],
-    "autoReferenced": true,
-    "defineConstraints": [],
-    "versionDefines": [],
-    "noEngineReferences": false
+  "name": "Day04.Runtime",
+  "rootNamespace": "AV.Day04.Runtime",
+  "references": [
+    "Unity.Timeline",
+    "Unity.Mathematics"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
 }

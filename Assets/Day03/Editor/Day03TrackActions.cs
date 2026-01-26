@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using UnityEditor.Timeline;
 using UnityEditor.Timeline.Actions;
 using UnityEngine;
 using UnityEngine.Timeline;
@@ -16,7 +17,11 @@ namespace AV.Day03.Editor
         public int TrackCount;
         public int ClipCount;
 
-        public override string ToString() => $"[TrackAction] Tracks: {TrackCount} | Clips: {ClipCount}"; // Debug view
+        public override string ToString()
+        {
+            return $"[TrackAction] Tracks: {TrackCount} | Clips: {ClipCount}";
+            // Debug view
+        }
     }
 
     public static class TrackActionLogic
@@ -56,7 +61,8 @@ namespace AV.Day03.Editor
             return clips.Length > 0; // Success only if clips found
         }
 
-        public static bool TryUpdateState(ref this TrackActionState state, TrackAsset track, out TrackActionState previous)
+        public static bool TryUpdateState(ref this TrackActionState state, TrackAsset track,
+            out TrackActionState previous)
         {
             previous = state;
 
@@ -96,7 +102,7 @@ namespace AV.Day03.Editor
                 }
             }
 
-            UnityEditor.Timeline.TimelineEditor.selectedClips = clipsToSelect.ToArray();
+            TimelineEditor.selectedClips = clipsToSelect.ToArray();
 
             Debug.Log($"<color=orange>[Day03]</color> Selected {clipsToSelect.Count} clips.");
             return true; // Success

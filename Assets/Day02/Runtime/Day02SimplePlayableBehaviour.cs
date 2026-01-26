@@ -20,7 +20,11 @@ namespace AV.Day02.Runtime
         public bool IsActive;
         public float ActivationTime;
 
-        public override string ToString() => $"[SimpleState] Active: {IsActive} @ {ActivationTime:F2}s"; // Debug view
+        public override string ToString()
+        {
+            return $"[SimpleState] Active: {IsActive} @ {ActivationTime:F2}s";
+            // Debug view
+        }
     }
 
     public static class SimpleLogic
@@ -28,7 +32,7 @@ namespace AV.Day02.Runtime
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void GetCurrentTime(out float time)
         {
-            time = UnityEngine.Time.time; // Atomic time fetch
+            time = Time.time; // Atomic time fetch
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

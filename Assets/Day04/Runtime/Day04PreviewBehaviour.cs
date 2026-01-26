@@ -56,7 +56,11 @@ namespace AV.Day04.Runtime
         public float OriginalZ;
         public bool HasOriginalPosition;
 
-        public override string ToString() => $"[Preview] Target:({TargetX:F1},{TargetY:F1},{TargetZ:F1}) | HasOriginal: {HasOriginalPosition}"; // Debug view
+        public override string ToString()
+        {
+            return $"[Preview] Target:({TargetX:F1},{TargetY:F1},{TargetZ:F1}) | HasOriginal: {HasOriginalPosition}";
+            // Debug view
+        }
 
         public static PreviewState Create(ClipConfigState config)
         {
@@ -83,10 +87,7 @@ namespace AV.Day04.Runtime
             var output = graph.GetOutput(0);
             var sourceObject = output.GetReferenceObject();
 
-            if (sourceObject != null)
-            {
-                obj = director.GetGenericBinding(sourceObject) as GameObject; // Atomic fetch
-            }
+            if (sourceObject != null) obj = director.GetGenericBinding(sourceObject) as GameObject; // Atomic fetch
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -104,7 +105,8 @@ namespace AV.Day04.Runtime
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void CalculateLerp(float currentX, float currentY, float currentZ, float targetX, float targetY, float targetZ, float t, out Vector3 result)
+        public static void CalculateLerp(float currentX, float currentY, float currentZ, float targetX, float targetY,
+            float targetZ, float t, out Vector3 result)
         {
             var current = new Vector3(currentX, currentY, currentZ);
             var target = new Vector3(targetX, targetY, targetZ);
@@ -120,7 +122,8 @@ namespace AV.Day04.Runtime
 
     public static class PreviewExtensions
     {
-        public static bool TryGatherProperties(ref this PreviewState state, PlayableDirector director, IPropertyCollector driver, out Transform boundTransform)
+        public static bool TryGatherProperties(ref this PreviewState state, PlayableDirector director,
+            IPropertyCollector driver, out Transform boundTransform)
         {
             boundTransform = null;
 
@@ -130,7 +133,8 @@ namespace AV.Day04.Runtime
 
             boundTransform = obj.transform;
 
-            PreviewLogic.StoreOriginalPosition(boundTransform, out state.OriginalX, out state.OriginalY, out state.OriginalZ);
+            PreviewLogic.StoreOriginalPosition(boundTransform, out state.OriginalX, out state.OriginalY,
+                out state.OriginalZ);
             state.HasOriginalPosition = true;
 
             driver.AddFromName<Transform>(obj, "m_LocalPosition");
@@ -138,7 +142,8 @@ namespace AV.Day04.Runtime
             return true; // Success
         }
 
-        public static bool TryProcessFrame(ref this PreviewState state, Playable playable, FrameData info, object playerData, out Vector3 newPosition)
+        public static bool TryProcessFrame(ref this PreviewState state, Playable playable, FrameData info,
+            object playerData, out Vector3 newPosition)
         {
             newPosition = Vector3.zero;
 
@@ -146,14 +151,15 @@ namespace AV.Day04.Runtime
             PreviewLogic.ValidateGameObject(boundObj, out var isValid);
             if (!isValid) return false; // Guard: No object
 
-            float weight = info.weight;
+            var weight = info.weight;
             PreviewLogic.ValidateWeight(weight, out var weightValid);
             if (!weightValid) return false; // Guard: Invalid weight
 
             var transform = boundObj.transform;
             PreviewLogic.StoreOriginalPosition(transform, out var currentX, out var currentY, out var currentZ);
 
-            PreviewLogic.CalculateLerp(currentX, currentY, currentZ, state.TargetX, state.TargetY, state.TargetZ, weight, out newPosition);
+            PreviewLogic.CalculateLerp(currentX, currentY, currentZ, state.TargetX, state.TargetY, state.TargetZ,
+                weight, out newPosition);
 
             transform.localPosition = newPosition;
 

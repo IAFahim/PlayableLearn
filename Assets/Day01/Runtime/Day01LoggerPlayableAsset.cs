@@ -1,10 +1,11 @@
+using System;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 
 namespace AV.Day01.Runtime
 {
-    [System.Serializable]
+    [Serializable]
     public class Day01LoggerPlayableAsset : PlayableAsset, ITimelineClipAsset
     {
         public ClipCaps clipCaps => ClipCaps.None;

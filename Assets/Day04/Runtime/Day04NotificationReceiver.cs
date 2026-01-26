@@ -15,19 +15,16 @@ namespace AV.Day04.Runtime
     {
         private ReceiverState _state;
 
-        bool IReceiverSystem.TryReceiveNotification(Playable origin, INotification notification, object context)
-        {
-            if (notification is Day04NotificationMarker marker)
-            {
-                return _state.TryProcessEvent(marker, out var message);
-            }
-
-            return false; // Guard: Wrong type
-        }
-
         void INotificationReceiver.OnNotify(Playable origin, INotification notification, object context)
         {
             ((IReceiverSystem)this).TryReceiveNotification(origin, notification, context);
+        }
+
+        bool IReceiverSystem.TryReceiveNotification(Playable origin, INotification notification, object context)
+        {
+            if (notification is Day04NotificationMarker marker) return _state.TryProcessEvent(marker, out var message);
+
+            return false; // Guard: Wrong type
         }
     }
 
@@ -38,7 +35,11 @@ namespace AV.Day04.Runtime
         public int EventCount;
         public float LastIntensity;
 
-        public override string ToString() => $"[Receiver] Events: {EventCount} | Last Intensity: {LastIntensity:F2}"; // Debug view
+        public override string ToString()
+        {
+            return $"[Receiver] Events: {EventCount} | Last Intensity: {LastIntensity:F2}";
+            // Debug view
+        }
     }
 
     public static class ReceiverLogic
@@ -60,7 +61,8 @@ namespace AV.Day04.Runtime
         public static void BuildLogMessage(string eventName, Color color, float intensity, out string message)
         {
             var colorHex = ColorUtility.ToHtmlStringRGB(color);
-            message = $"<color=#{colorHex}><b>[Day04 Event]</b> {eventName} | Intensity: {intensity:F2}</color>"; // Atomic format
+            message =
+                $"<color=#{colorHex}><b>[Day04 Event]</b> {eventName} | Intensity: {intensity:F2}</color>"; // Atomic format
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -72,7 +74,8 @@ namespace AV.Day04.Runtime
 
     public static class ReceiverExtensions
     {
-        public static bool TryProcessEvent(ref this ReceiverState state, Day04NotificationMarker marker, out string message)
+        public static bool TryProcessEvent(ref this ReceiverState state, Day04NotificationMarker marker,
+            out string message)
         {
             message = string.Empty;
 

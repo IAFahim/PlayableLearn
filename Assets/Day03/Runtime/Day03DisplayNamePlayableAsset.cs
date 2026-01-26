@@ -1,12 +1,12 @@
-using AV.Day02.Runtime;
 using System;
+using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 
 namespace AV.Day03.Runtime
 {
-    [System.ComponentModel.DisplayName("Day 03 Action Clip")]
+    [DisplayName("Day 03 Action Clip")]
     [NotKeyable]
     [Serializable]
     public class Day03DisplayNamePlayableAsset : PlayableAsset, ITimelineClipAsset

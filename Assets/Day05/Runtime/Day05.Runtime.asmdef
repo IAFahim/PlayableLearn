@@ -1,18 +1,20 @@
 {
-    "name": "Day05.Runtime",
-    "rootNamespace": "AV",
-    "references": [
-        "Unity.Timeline",
-        "Unity.Mathematics",
-        "TweenPlayables"
-    ],
-    "includePlatforms": [],
-    "excludePlatforms": [],
-    "allowUnsafeCode": false,
-    "overrideReferences": false,
-    "precompiledReferences": [],
-    "autoReferenced": true,
-    "defineConstraints": [],
-    "versionDefines": [],
-    "noEngineReferences": false
+  "name": "Day05.Runtime",
+  "rootNamespace": "AV",
+  "references": [
+    "Unity.Timeline",
+    "Unity.Mathematics",
+    "TweenPlayables",
+    "Unity.Timeline.Editor",
+    "TweenPlayables.Editor"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
 }
