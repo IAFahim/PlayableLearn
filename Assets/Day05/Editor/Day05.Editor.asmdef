@@ -1,0 +1,23 @@
+{
+    "name": "Day05.Editor",
+    "rootNamespace": "AV",
+    "references": [
+        "Unity.Timeline",
+        "Unity.Mathematics",
+        "TweenPlayables",
+        "Unity.Timeline.Editor",
+        "TweenPlayables.Editor",
+        "Day05.Runtime"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

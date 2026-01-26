@@ -4,9 +4,7 @@
   "references": [
     "Unity.Timeline",
     "Unity.Mathematics",
-    "TweenPlayables",
-    "Unity.Timeline.Editor",
-    "TweenPlayables.Editor"
+    "TweenPlayables"
   ],
   "includePlatforms": [],
   "excludePlatforms": [],
