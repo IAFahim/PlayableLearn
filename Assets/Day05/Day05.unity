@@ -242,8 +242,10 @@ PlayableDirector:
   - key: {fileID: 0}
     value: {fileID: 0}
   - key: {fileID: 0}
-    value: {fileID: 186264442}
-  - key: {fileID: -26121646482903513, guid: 47b0007a7269f683b84249c5e0dea901, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 0}
+    value: {fileID: 0}
+  - key: {fileID: -1398390881087764623, guid: 47b0007a7269f683b84249c5e0dea901, type: 2}
     value: {fileID: 186264442}
   m_ExposedReferences:
     m_References: []
@@ -258,7 +260,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c006aae252c84196a9725e8d4e104d0c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Day05.Runtime::AV.Day05.Runtime.HealthComponent
+  m_EditorClassIdentifier: Day05.Runtime::AV.Day05.Runtime.Day05HealthComponent
   health: 0
 --- !u!1 &1461156496
 GameObject:

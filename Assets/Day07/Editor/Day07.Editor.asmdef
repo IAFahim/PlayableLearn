@@ -1,10 +1,11 @@
 {
-    "name": "Day07.Runtime",
+    "name": "Day07.Editor",
     "rootNamespace": "AV",
     "references": [
-        "Unity.Timeline",
-        "Unity.Mathematics",
-        "TweenPlayables"
+        "GUID:d08941bceb06fea46b227e24644f92ab",
+        "GUID:02f771204943f4a40949438e873e3eff",
+        "GUID:f06555f75b070af458a003d92f9efb00",
+        "GUID:0aaba1b762d9745c5b24f7dffcf4e9dc"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

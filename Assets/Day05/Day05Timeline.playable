@@ -14,6 +14,50 @@ MonoBehaviour:
   m_EditorClassIdentifier: Day05.Runtime::FluxClip
   StartValue: 20
   EndValue: 100
+--- !u!114 &-4910295197860757787
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3034abd9c8a14ada8355b66490b46e27, type: 3}
+  m_Name: Day05TweenHealthClip
+  m_EditorClassIdentifier: Day05.Runtime::AV.Day05.Runtime.Day05TweenHealthClip
+  behaviour:
+    health:
+      active: 0
+      startValue: 0
+      endValue: 0
+      ease:
+        ease: 0
+        customEaseCurve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+      relative: 0
 --- !u!114 &-4683880963526520464
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -75,7 +119,7 @@ MonoBehaviour:
           m_PostInfinity: 2
           m_RotationOrder: 4
       relative: 0
---- !u!114 &-26121646482903513
+--- !u!114 &-1398390881087764623
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -86,7 +130,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 0}
   m_Name: Tween Health Track
-  m_EditorClassIdentifier: Day05.Runtime:AV.Day05.Runtime:TweenHealthTrack
+  m_EditorClassIdentifier: Day05.Runtime:AV.Day05.Runtime:Day05TweenHealthTrack
   m_Version: 3
   m_AnimClip: {fileID: 0}
   m_Locked: 0
@@ -97,85 +141,16 @@ MonoBehaviour:
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 2.9
+    m_Start: 0.75
     m_ClipIn: 0
-    m_Asset: {fileID: 9137730450017180004}
+    m_Asset: {fileID: -4910295197860757787}
     m_Duration: 5
     m_TimeScale: 1
-    m_ParentTrack: {fileID: -26121646482903513}
-    m_EaseInDuration: 0
-    m_EaseOutDuration: 0
-    m_BlendInDuration: 2.1
-    m_BlendOutDuration: -1
-    m_MixInCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_MixOutCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_BlendInCurveMode: 0
-    m_BlendOutCurveMode: 0
-    m_ExposedParameterNames: []
-    m_AnimationCurves: {fileID: 0}
-    m_Recordable: 0
-    m_PostExtrapolationMode: 0
-    m_PreExtrapolationMode: 0
-    m_PostExtrapolationTime: 0
-    m_PreExtrapolationTime: 0
-    m_DisplayName: Tween Health
-  - m_Version: 1
-    m_Start: 0
-    m_ClipIn: 0
-    m_Asset: {fileID: 1366394054310462855}
-    m_Duration: 5
-    m_TimeScale: 1
-    m_ParentTrack: {fileID: -26121646482903513}
+    m_ParentTrack: {fileID: -1398390881087764623}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
     m_BlendInDuration: -1
-    m_BlendOutDuration: 2.1
+    m_BlendOutDuration: -1
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -250,7 +225,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Timeline::UnityEngine.Timeline.TimelineAsset
   m_Version: 0
   m_Tracks:
-  - {fileID: -26121646482903513}
+  - {fileID: -1398390881087764623}
   m_FixedDuration: 0
   m_EditorSettings:
     m_Framerate: 60

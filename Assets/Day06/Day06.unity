@@ -129,6 +129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 217869597}
   - component: {fileID: 217869598}
+  - component: {fileID: 217869599}
   m_Layer: 0
   m_Name: Day06
   m_TagString: Untagged
@@ -169,59 +170,26 @@ PlayableDirector:
   m_SceneBindings:
   - key: {fileID: -8604914813596164496, guid: efbcf0dadc6e12e4b9b72fd9ea3255c4, type: 2}
     value: {fileID: 217869597}
+  - key: {fileID: 7788555876853672667, guid: efbcf0dadc6e12e4b9b72fd9ea3255c4, type: 2}
+    value: {fileID: 217869599}
   m_ExposedReferences:
     m_References: []
---- !u!1 &944502858
-GameObject:
+--- !u!114 &217869599
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 944502860}
-  - component: {fileID: 944502859}
-  m_Layer: 0
-  m_Name: Day06 a
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!320 &944502859
-PlayableDirector:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 944502858}
+  m_GameObject: {fileID: 217869596}
   m_Enabled: 1
-  serializedVersion: 3
-  m_PlayableAsset: {fileID: 11400000, guid: f8b311402f213aa43b7ad69cb24de1a8, type: 2}
-  m_InitialState: 1
-  m_WrapMode: 2
-  m_DirectorUpdateMode: 1
-  m_InitialTime: 0
-  m_SceneBindings:
-  - key: {fileID: 4739014735697467605, guid: f8b311402f213aa43b7ad69cb24de1a8, type: 2}
-    value: {fileID: 944502860}
-  m_ExposedReferences:
-    m_References: []
---- !u!4 &944502860
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 944502858}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.38886, y: -0, z: 1.55896}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c993ce095655e3a47aebd30f9c1714e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Day06.Runtime::Day06.Day06Visuals
+  glowColor: {r: 0, g: 1, b: 1, a: 1}
+  glowIntensity: 1
+  localOffset: {x: 0, y: 0, z: 0}
+  spinSpeed: 0
 --- !u!1 &1894980959
 GameObject:
   m_ObjectHideFlags: 0
@@ -339,4 +307,3 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 217869597}
-  - {fileID: 944502860}
