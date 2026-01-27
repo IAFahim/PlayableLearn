@@ -1,0 +1,8 @@
+``` puml
+@startuml
+
+concise "Attack Group 1" as AG1
+concise "Attack Group 2" as AG2
+
+@enduml
+```

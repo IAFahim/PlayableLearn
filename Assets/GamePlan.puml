@@ -1,0 +1,21 @@
+@startuml
+
+concise "Attack Group 1" as A1
+concise "Attack Group 2" as A2
+
+@0
+
+@A1
+0 is Clip1
+@100 <-> @130 : Blend
+120 is Clip2
+
+@A2
+0 is Clip1
+@80 <-> @120 : Blend
+100 is Clip2
+
+A1@60 --> A2@0 : Input
+
+@300
+@enduml
