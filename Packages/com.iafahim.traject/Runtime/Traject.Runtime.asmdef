@@ -1,0 +1,19 @@
+{
+    "name": "Traject.Runtime",
+    "rootNamespace": "AV",
+    "references": [
+        "Unity.Mathematics",
+        "Unity.Burst",
+        "Unity.Timeline",
+        "AV.Eases.Runtime"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

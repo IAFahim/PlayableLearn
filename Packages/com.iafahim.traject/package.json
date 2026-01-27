@@ -1,0 +1,34 @@
+{
+  "name": "com.iafahim.traject",
+  "version": "1.0.0",
+  "displayName": "AV.Traject Timeline Integration",
+  "description": "High-performance trajectory system for Unity Timeline with DOD architecture",
+  "unity": "2022.3",
+  "author": {
+    "name": "IAFahim",
+    "url": "https://github.com/IAFahim/AV.Traject",
+    "email": "iafahim.dev@gmail.com"
+  },
+  "keywords": [
+    "timeline",
+    "trajectory",
+    "animation",
+    "dod",
+    "playables"
+  ],
+  "dependencies": {
+    "com.unity.modules.animation": "1.0.0",
+    "com.unity.timeline": "1.7.0",
+    "com.unity.mathematics": "1.2.0"
+  },
+  "samples": [
+    {
+      "displayName": "Timeline Trajectory Samples",
+      "description": "Sample scenes showing Traject usage with Timeline",
+      "path": "Samples"
+    }
+  ],
+  "documentationUrl": "https://github.com/IAFahim/AV.Traject",
+  "licensesUrl": "https://github.com/IAFahim/AV.Traject?tab=MIT-1-ov-file",
+  "changelogUrl": "https://github.com/IAFahim/AV.Traject/blob/master/CHANGELOG.md"
+}

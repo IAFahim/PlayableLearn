@@ -1,7 +1,9 @@
 {
   "dependencies": {
-    "com.greenbamboogames.playablegraphmonitor": "2.6.3",
     "com.annulusgames.tween-playables": "https://github.com/AnnulusGames/TweenPlayables.git?path=/Assets/TweenPlayables",
+    "com.av.eases": "https://github.com/IAFahim/AV.Eases.git",
+    "com.github-glitchenzo.nugetforunity": "https://github.com/GlitchEnzo/NuGetForUnity.git?path=/src/NuGetForUnity",
+    "com.greenbamboogames.playablegraphmonitor": "2.6.3",
     "com.unity.ai.navigation": "2.0.9",
     "com.unity.collab-proxy": "2.10.2",
     "com.unity.ide.rider": "3.0.39",

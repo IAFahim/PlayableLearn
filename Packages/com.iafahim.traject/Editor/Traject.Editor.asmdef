@@ -1,0 +1,21 @@
+{
+    "name": "Traject.Editor",
+    "rootNamespace": "AV",
+    "references": [
+        "AV.Traject.Runtime",
+        "Unity.Timeline.Editor",
+        "Unity.Timeline",
+        "Traject.Runtime"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
