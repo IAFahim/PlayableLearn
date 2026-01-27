@@ -1,0 +1,17 @@
+{
+  "name": "com.annulusgames.tween-playables",
+  "displayName": "Tween Playables",
+  "version": "0.9.1",
+  "unity": "2020.1",
+  "license": "MIT",
+  "author": {
+    "name": "Annulus Games",
+    "url": "https://github.com/AnnulusGames"
+  },
+  "description": "Tween Animation Library for Unity Timeline",
+  "dependencies": {
+    "com.unity.textmeshpro": "2.0.1",
+    "com.unity.timeline": "1.2.14"
+  },
+  "_fingerprint": "3a12dd376cc38cbdba6bb0436b0f227ca848a926"
+}
