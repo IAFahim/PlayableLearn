@@ -1,10 +1,13 @@
 using System;
 using System.Text;
+using System.Linq;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.Timeline;
+using UnityEditor.Timeline.Actions;
 
 namespace TweenPlayables.Editor.Tools
 {
@@ -38,8 +41,13 @@ namespace TweenPlayables.Editor.Tools
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void FormatGroupLine(string groupName, int index, out string line)
         {
-            // Format: concise "Track Name" as T01
-            line = $"concise \"{groupName}\" as T{index:D2}"; // Atomic format with padding
+            line = $"concise \"{groupName}\" as T{index:D2}"; // Atomic format
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void ValidateSelection(IEnumerable<TrackAsset> tracks, out bool isValid)
+        {
+            isValid = tracks != null && tracks.Any(); // Atomic validation
         }
     }
 
@@ -50,7 +58,7 @@ namespace TweenPlayables.Editor.Tools
         {
             result = string.Empty; // Default
 
-            if (timeline == null) return false; // Guard: No asset
+            if (timeline == null) return false; // Guard
 
             var sb = new StringBuilder();
             
@@ -81,11 +89,11 @@ namespace TweenPlayables.Editor.Tools
             
             result = state.LastOutput; // Return data
 
-            return groupCount > 0; // Success if groups found
+            return groupCount > 0; // Success
         }
     }
 
-    // LAYER D: INTERFACE & BRIDGE
+    // LAYER D: WINDOW BRIDGE
     public interface ITimelineLogTool
     {
         bool TryAnalyze(TimelineAsset asset);
@@ -96,9 +104,8 @@ namespace TweenPlayables.Editor.Tools
     {
         [SerializeField] private TimelineAsset _targetTimeline;
         [SerializeField] private GroupLogState _state;
-        private Vector2 _scrollPos;
 
-        [MenuItem("Tools/Tween Playables/Timeline Group Logger")]
+        [MenuItem("Tools/Tween Playables/Timeline Group Logger Window")]
         public static void ShowWindow()
         {
             GetWindow<TimelineGroupLogWindow>("Group Logger");
@@ -106,7 +113,7 @@ namespace TweenPlayables.Editor.Tools
 
         private void OnGUI()
         {
-            ((ITimelineLogTool)this).DrawUI();
+            ((ITimelineLogTool)this).DrawUI(); // Explicit call
         }
 
         bool ITimelineLogTool.TryAnalyze(TimelineAsset asset)
@@ -117,29 +124,49 @@ namespace TweenPlayables.Editor.Tools
         void ITimelineLogTool.DrawUI()
         {
             EditorGUILayout.BeginVertical("box");
-            
             EditorGUILayout.LabelField("Target Timeline", EditorStyles.boldLabel);
             _targetTimeline = (TimelineAsset)EditorGUILayout.ObjectField(_targetTimeline, typeof(TimelineAsset), false);
-
-            EditorGUILayout.Space(5);
 
             if (GUILayout.Button("Generate PlantUML"))
             {
                 var success = ((ITimelineLogTool)this).TryAnalyze(_targetTimeline);
-                Debug.Log(success ? $"<color=green>GENERATED:</color> {_state}" : "FAILED: No groups or asset missing");
+                Debug.Log(success ? $"<color=green>GENERATED:</color> {_state}" : "FAILED"); // Log
             }
-
             EditorGUILayout.EndVertical();
 
             if (_state.IsGenerated)
             {
-                EditorGUILayout.Space(10);
-                EditorGUILayout.LabelField("Output:", EditorStyles.boldLabel);
-                
-                _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos, GUILayout.Height(200));
                 EditorGUILayout.TextArea(_state.LastOutput);
-                EditorGUILayout.EndScrollView();
             }
+        }
+    }
+
+    // LAYER E: ACTION BRIDGE
+    [MenuEntry("Copy PlantUML to Clipboard", priority: 1000)]
+    public class CopyPlantUMLAction : TrackAction
+    {
+        public override ActionValidity Validate(IEnumerable<TrackAsset> tracks)
+        {
+            GroupLogLogic.ValidateSelection(tracks, out var isValid); // Logic call
+            return isValid ? ActionValidity.Valid : ActionValidity.NotApplicable;
+        }
+
+        public override bool Execute(IEnumerable<TrackAsset> tracks)
+        {
+            var firstTrack = tracks.FirstOrDefault(); // Get context
+            if (firstTrack == null) return false; // Guard
+            
+            var timeline = firstTrack.timelineAsset; // Extract asset
+            var state = new GroupLogState(); // Local state
+
+            if (state.TryGeneratePuml(timeline, out var result)) // Extension call
+            {
+                EditorGUIUtility.systemCopyBuffer = result; // Unity API interaction
+                Debug.Log($"<color=cyan>[TweenPlayables]</color> PlantUML copied! ({state.GroupCount} groups)"); // Log
+                return true;
+            }
+
+            return false; // Fail
         }
     }
 }

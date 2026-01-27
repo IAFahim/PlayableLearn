@@ -15,7 +15,8 @@ concise "Attack Group 2" as A2
 @80 <-> @120 : Blend
 100 is Clip2
 
-A1@60 --> A2@0 : Input
 
 @300
 @enduml
+
+A1@60 --> A2@0 : Input
