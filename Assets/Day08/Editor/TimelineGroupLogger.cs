@@ -1,5 +1,7 @@
 using System;
 using System.Text;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -16,157 +18,180 @@ namespace TweenPlayables.Editor.Tools
     [StructLayout(LayoutKind.Sequential)]
     public struct GroupLogState
     {
-        public string LastOutput;
+        public string MarkdownContent;
+        public string AssetPath;
         public int GroupCount;
         public bool IsGenerated;
 
-        public override string ToString() => $"[LogState] Groups: {GroupCount} ({(IsGenerated ? "READY" : "EMPTY")})"; // Debug view
+        public override string ToString() => $"[LogState] Path: {AssetPath} ({GroupCount} Groups)"; 
     }
 
     // LAYER B: LOGIC
     public static class GroupLogLogic
     {
+        // PlantUML Mapping: 0-9, A-Z, a-z, -, _
+        private const string Mapper = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_";
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void FormatHeader(out string header)
+        public static void FormatPumlBlock(string content, out string result)
         {
-            header = "@startuml"; // Atomic string
+            result = $"@startuml\n\n{content}\n@enduml"; // Exact spacing
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void FormatFooter(out string footer)
+        public static void FormatTrackLine(string name, string alias, out string line)
         {
-            footer = "@enduml"; // Atomic string
+            line = $"concise \"{name}\" as {alias}"; // Atomic format
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void FormatGroupLine(string groupName, int index, out string line)
+        public static void FormatMarkdown(string path, string pumlBlock, string encodedCode, out string md)
         {
-            line = $"concise \"{groupName}\" as T{index:D2}"; // Atomic format
+            // Exact requested format
+            var urlImg = $"https://img.plantuml.biz/plantuml/svg/{encodedCode}";
+            var urlEdit = $"https://editor.plantuml.com/uml/{encodedCode}";
+
+            md = $"## File: [{path}]({path})\n\n" +
+                 $"```plantuml\n{pumlBlock}\n```\n\n" +
+                 $"[![]({urlImg})]({urlEdit})"; 
+        }
+
+        // --- ENCODING (Deflate + Custom Base64) ---
+
+        public static void EncodeUrl(string puml, out string encoded)
+        {
+            var bytes = Encoding.UTF8.GetBytes(puml); 
+            using var ms = new MemoryStream();
+            
+            // Deflate Compression (Standard PlantUML requirement)
+            using (var deflate = new DeflateStream(ms, CompressionMode.Compress)) 
+            {
+                deflate.Write(bytes, 0, bytes.Length);
+            }
+            
+            var compressed = ms.ToArray();
+            Encode64(compressed, out encoded); 
+        }
+
+        private static void Encode64(byte[] data, out string result)
+        {
+            var sb = new StringBuilder();
+            int len = data.Length;
+            
+            for (int i = 0; i < len; i += 3)
+            {
+                int b1 = data[i];
+                int b2 = (i + 1 < len) ? data[i + 1] : 0;
+                int b3 = (i + 2 < len) ? data[i + 2] : 0;
+                Append3Bytes(sb, b1, b2, b3); 
+            }
+            result = sb.ToString();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void ValidateSelection(IEnumerable<TrackAsset> tracks, out bool isValid)
+        private static void Append3Bytes(StringBuilder sb, int b1, int b2, int b3)
         {
-            isValid = tracks != null && tracks.Any(); // Atomic validation
+            int c1 = b1 >> 2;
+            int c2 = ((b1 & 0x3) << 4) | (b2 >> 4);
+            int c3 = ((b2 & 0xF) << 2) | (b3 >> 6);
+            int c4 = b3 & 0x3F;
+
+            sb.Append(Mapper[c1 & 0x3F]);
+            sb.Append(Mapper[c2 & 0x3F]);
+            sb.Append(Mapper[c3 & 0x3F]);
+            sb.Append(Mapper[c4 & 0x3F]);
         }
     }
 
     // LAYER C: EXTENSIONS
     public static class GroupLogExtensions
     {
-        public static bool TryGeneratePuml(ref this GroupLogState state, TimelineAsset timeline, out string result)
+        public static bool TryGenerate(ref this GroupLogState state, TimelineAsset timeline, out string result)
         {
             result = string.Empty; // Default
-
             if (timeline == null) return false; // Guard
 
-            var sb = new StringBuilder();
-            
-            GroupLogLogic.FormatHeader(out var header); // Get Header
-            sb.AppendLine(header); // Append
+            state.AssetPath = AssetDatabase.GetAssetPath(timeline);
 
-            int groupCount = 0;
-            int rootCount = timeline.rootTrackCount; // Cache count
-
-            for (int i = 0; i < rootCount; i++)
+            // 1. Build PUML Body
+            var sbPuml = new StringBuilder();
+            int count = 0;
+            for (int i = 0; i < timeline.rootTrackCount; i++)
             {
-                var track = timeline.GetRootTrack(i); // Access by index
-                
+                var track = timeline.GetRootTrack(i);
                 if (track is GroupTrack)
                 {
-                    groupCount++;
-                    GroupLogLogic.FormatGroupLine(track.name, groupCount, out var line); // Format
-                    sb.AppendLine(line); // Append
+                    count++;
+                    // CORRECTED: Uses T01, T02 format
+                    GroupLogLogic.FormatTrackLine(track.name, $"T{count:D2}", out var line); 
+                    sbPuml.AppendLine(line);
                 }
             }
+            state.GroupCount = count;
 
-            GroupLogLogic.FormatFooter(out var footer); // Get Footer
-            sb.AppendLine(footer); // Append
+            if (count == 0) return false; // Guard: Empty
 
-            state.GroupCount = groupCount; // State mutation
-            state.LastOutput = sb.ToString(); // State mutation
-            state.IsGenerated = true; // State mutation
+            // 2. Wrap PUML
+            GroupLogLogic.FormatPumlBlock(sbPuml.ToString(), out var fullPuml);
+
+            // 3. Encode
+            GroupLogLogic.EncodeUrl(fullPuml, out var encodedUrl);
+
+            // 4. Final Markdown
+            GroupLogLogic.FormatMarkdown(state.AssetPath, fullPuml, encodedUrl, out result);
             
-            result = state.LastOutput; // Return data
+            state.MarkdownContent = result;
+            state.IsGenerated = true;
 
-            return groupCount > 0; // Success
-        }
-    }
-
-    // LAYER D: WINDOW BRIDGE
-    public interface ITimelineLogTool
-    {
-        bool TryAnalyze(TimelineAsset asset);
-        void DrawUI();
-    }
-
-    public class TimelineGroupLogWindow : EditorWindow, ITimelineLogTool
-    {
-        [SerializeField] private TimelineAsset _targetTimeline;
-        [SerializeField] private GroupLogState _state;
-
-        [MenuItem("Tools/Tween Playables/Timeline Group Logger Window")]
-        public static void ShowWindow()
-        {
-            GetWindow<TimelineGroupLogWindow>("Group Logger");
+            return true; 
         }
 
-        private void OnGUI()
+        public static bool TrySaveToDisk(ref this GroupLogState state, out string savedPath)
         {
-            ((ITimelineLogTool)this).DrawUI(); // Explicit call
-        }
+            savedPath = string.Empty;
+            if (!state.IsGenerated) return false; // Guard
 
-        bool ITimelineLogTool.TryAnalyze(TimelineAsset asset)
-        {
-            return _state.TryGeneratePuml(asset, out _); // Forward to extension
-        }
-
-        void ITimelineLogTool.DrawUI()
-        {
-            EditorGUILayout.BeginVertical("box");
-            EditorGUILayout.LabelField("Target Timeline", EditorStyles.boldLabel);
-            _targetTimeline = (TimelineAsset)EditorGUILayout.ObjectField(_targetTimeline, typeof(TimelineAsset), false);
-
-            if (GUILayout.Button("Generate PlantUML"))
+            savedPath = System.IO.Path.ChangeExtension(state.AssetPath, ".md"); // Swap extension
+            try
             {
-                var success = ((ITimelineLogTool)this).TryAnalyze(_targetTimeline);
-                Debug.Log(success ? $"<color=green>GENERATED:</color> {_state}" : "FAILED"); // Log
+                File.WriteAllText(savedPath, state.MarkdownContent); // IO Write
+                AssetDatabase.ImportAsset(savedPath); // Refresh DB
+                return true;
             }
-            EditorGUILayout.EndVertical();
-
-            if (_state.IsGenerated)
-            {
-                EditorGUILayout.TextArea(_state.LastOutput);
-            }
+            catch { return false; }
         }
     }
 
-    // LAYER E: ACTION BRIDGE
-    [MenuEntry("Copy PlantUML to Clipboard", priority: 1000)]
-    public class CopyPlantUMLAction : TrackAction
+    // LAYER D: ACTIONS
+    [MenuEntry("Create PlantUML Markdown", priority: 1000)]
+    public class CreatePlantUMLAction : TrackAction
     {
         public override ActionValidity Validate(IEnumerable<TrackAsset> tracks)
         {
-            GroupLogLogic.ValidateSelection(tracks, out var isValid); // Logic call
-            return isValid ? ActionValidity.Valid : ActionValidity.NotApplicable;
+            return (tracks != null && tracks.Any()) ? ActionValidity.Valid : ActionValidity.NotApplicable;
         }
 
         public override bool Execute(IEnumerable<TrackAsset> tracks)
         {
-            var firstTrack = tracks.FirstOrDefault(); // Get context
-            if (firstTrack == null) return false; // Guard
-            
-            var timeline = firstTrack.timelineAsset; // Extract asset
-            var state = new GroupLogState(); // Local state
+            var track = tracks.FirstOrDefault();
+            if (track == null) return false;
 
-            if (state.TryGeneratePuml(timeline, out var result)) // Extension call
+            var timeline = track.timelineAsset;
+            var state = new GroupLogState();
+
+            if (state.TryGenerate(timeline, out _))
             {
-                EditorGUIUtility.systemCopyBuffer = result; // Unity API interaction
-                Debug.Log($"<color=cyan>[TweenPlayables]</color> PlantUML copied! ({state.GroupCount} groups)"); // Log
-                return true;
+                if (state.TrySaveToDisk(out var path))
+                {
+                    var asset = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(path);
+                    EditorGUIUtility.PingObject(asset);
+
+                    Debug.Log($"<color=cyan>[TweenPlayables]</color> Created & Pinged: {path}");
+                    return true;
+                }
             }
 
-            return false; // Fail
+            return false;
         }
     }
 }

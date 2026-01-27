@@ -19,4 +19,3 @@ concise "Attack Group 2" as A2
 @300
 @enduml
 
-A1@60 --> A2@0 : Input

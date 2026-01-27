@@ -1,4 +1,4 @@
-``` puml
+```puml
 @startuml
 
 concise "Attack Group 1" as AG1
