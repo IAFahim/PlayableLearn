@@ -4,6 +4,7 @@ concise "Attack Group 1" as A1
 concise "Attack Group 2" as A2
 
 @0
+@300
 
 @A1
 0 is Clip1
@@ -15,7 +16,5 @@ concise "Attack Group 2" as A2
 @80 <-> @120 : Blend
 100 is Clip2
 
-
-@300
 @enduml
 
