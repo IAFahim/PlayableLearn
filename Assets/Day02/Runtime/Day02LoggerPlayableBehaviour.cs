@@ -7,47 +7,47 @@ namespace AV.Day02.Runtime
     {
         public override void OnGraphStart(Playable playable)
         {
-            playable.LogFull();
+            playable.LogFull(null, "white", null, "CLIP");
         }
 
         public override void OnGraphStop(Playable playable)
         {
-            playable.LogFull();
+            playable.LogFull(null, "white", null, "CLIP");
         }
 
         public override void OnPlayableCreate(Playable playable)
         {
-            playable.LogFull();
+            playable.LogFull(null, "white", null, "CLIP");
         }
 
         public override void OnPlayableDestroy(Playable playable)
         {
-            playable.LogFull();
+            playable.LogFull(null, "white", null, "CLIP");
         }
 
         public override void OnBehaviourPlay(Playable playable, FrameData info)
         {
-            playable.LogFull(info, "green");
+            playable.LogFull(info, "green", null, "CLIP");
         }
 
         public override void OnBehaviourPause(Playable playable, FrameData info)
         {
-            playable.LogFull(info, "red");
+            playable.LogFull(info, "red", null, "CLIP");
         }
 
         public override void PrepareData(Playable playable, FrameData info)
         {
-            playable.LogFull(info, "yellow");
+            playable.LogFull(info, "yellow", null, "CLIP");
         }
 
         public override void PrepareFrame(Playable playable, FrameData info)
         {
-            playable.LogFull(info, "orange");
+            playable.LogFull(info, "orange", null, "CLIP");
         }
 
         public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
-            playable.LogFull(info, "white", playerData);
+            playable.LogFull(info, "white", playerData, "CLIP");
         }
     }
 }

@@ -121,14 +121,14 @@ namespace Common
 
     public static class LogExtensions
     {
-        public static bool TryLogFull(ref this LogState state, Playable p, FrameData? f, string color, object playerData, string method, out string message)
+        public static bool TryLogFull(ref this LogState state, Playable p, FrameData? f, string color, object playerData, string method, string role, out string message)
         {
             message = string.Empty;
 
             LogLogic.ValidatePlayable(p, out var isValid);
             if (!isValid)
             {
-                message = $"<color={color}><b>[{method}]</b></color> <color=red>INVALID PLAYABLE HANDLE</color>";
+                message = $"<color={color}><b>[{role}] {method}</b></color> <color=red>INVALID PLAYABLE HANDLE</color>";
                 return false; // Guard: Invalid playable
             }
 
@@ -143,7 +143,7 @@ namespace Common
             state.Speed = speed;
             state.State = playState;
 
-            message = $"<color={color}><b>[{method}]</b></color>\n" +
+            message = $"<color={color}><b>[{role}] {method}</b></color>\n" +
                      $"   <color=cyan><b>TIME & STATE</b></color>\n" +
                      $"   • <b>Global Time:</b> {time:F3}s / {durStr}s\n" +
                      $"   • <b>State:</b> {stateStr} (Graph: {isPlayingStr})\n" +
@@ -186,11 +186,12 @@ namespace Common
             FrameData? f = null,
             string color = "white",
             object playerData = null,
+            string role = "PLAYABLE",
             [CallerMemberName] string method = ""
         )
         {
             var state = new LogState();
-            var success = state.TryLogFull(p, f, color, playerData, method, out var message);
+            var success = state.TryLogFull(p, f, color, playerData, method, role, out var message);
 
             var contextObj = p.GetGraph().GetResolver() as Object;
             Debug.Log(message, contextObj);
