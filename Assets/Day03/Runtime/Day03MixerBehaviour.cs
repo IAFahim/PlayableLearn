@@ -1,50 +1,49 @@
 using Common;
-using UnityEngine;
 using UnityEngine.Playables;
 
-namespace AV.Day02.Runtime
+namespace AV.Day03.Runtime
 {
-    public class Day02MixerBehaviour : PlayableBehaviour
+    public class Day03MixerBehaviour : PlayableBehaviour
     {
         public override void OnGraphStart(Playable playable)
         {
-            playable.LogFull(null, "white", null, "MIXER", depth: 0);
+            playable.LogFull(null, "white", null, "MIXER", depth: 1);
         }
 
         public override void OnGraphStop(Playable playable)
         {
-            playable.LogFull(null, "white", null, "MIXER", depth: 0);
+            playable.LogFull(null, "white", null, "MIXER", depth: 1);
         }
 
         public override void OnPlayableCreate(Playable playable)
         {
-            playable.LogFull(null, "white", null, "MIXER", depth: 0);
+            playable.LogFull(null, "white", null, "MIXER", depth: 1);
         }
 
         public override void OnPlayableDestroy(Playable playable)
         {
-            playable.LogFull(null, "white", null, "MIXER", depth: 0);
+            playable.LogFull(null, "white", null, "MIXER", depth: 1);
         }
 
         public override void OnBehaviourPlay(Playable playable, FrameData info)
         {
-            playable.LogFull(info, "green", null, "MIXER", depth: 0);
+            playable.LogFull(info, "green", null, "MIXER", depth: 1);
         }
 
         public override void OnBehaviourPause(Playable playable, FrameData info)
         {
-            playable.LogFull(info, "red", null, "MIXER", depth: 0);
+            playable.LogFull(info, "red", null, "MIXER", depth: 1);
         }
 
         public override void PrepareFrame(Playable playable, FrameData info)
         {
-            playable.LogFull(info, "orange", null, "MIXER", depth: 0);
+            playable.LogFull(info, "orange", null, "MIXER", depth: 1);
         }
 
         public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
-            playable.LogFull(info, "white", playerData, "MIXER", depth: 0);
-            playable.LogMixingState(info, depth: 0);
+            playable.LogFull(info, "white", playerData, "MIXER", depth: 1);
+            playable.LogMixingState(info, depth: 1);
         }
     }
 }

@@ -121,7 +121,7 @@ namespace Common
 
     public static class LogExtensions
     {
-        public static bool TryLogFull(ref this LogState state, Playable p, FrameData? f, string color, object playerData, string method, string role, out string message)
+        public static bool TryLogFull(ref this LogState state, Playable p, FrameData? f, string color, object playerData, string method, string role, string indent, out string message)
         {
             message = string.Empty;
 
@@ -143,11 +143,12 @@ namespace Common
             state.Speed = speed;
             state.State = playState;
 
-            message = $"<color={color}><b>[{role}] {method}</b></color>\n" +
-                     $"   <color=cyan><b>TIME & STATE</b></color>\n" +
-                     $"   • <b>Global Time:</b> {time:F3}s / {durStr}s\n" +
-                     $"   • <b>State:</b> {stateStr} (Graph: {isPlayingStr})\n" +
-                     $"   • <b>Speed:</b> {speed:F2}x";
+            var prefix = string.IsNullOrEmpty(indent) ? "" : $"{indent} ";
+            message = $"<color={color}><b>{prefix}[{role}] {method}</b></color>\n" +
+                     $"{prefix}  <color=cyan><b>TIME & STATE</b></color>\n" +
+                     $"{prefix}  • <b>Global Time:</b> {time:F3}s / {durStr}s\n" +
+                     $"{prefix}  • <b>State:</b> {stateStr} (Graph: {isPlayingStr})\n" +
+                     $"{prefix}  • <b>Speed:</b> {speed:F2}x";
 
             if (f.HasValue)
             {
@@ -156,23 +157,23 @@ namespace Common
                 LogLogic.FormatBlendingInfo(frame, out var blendInfo);
                 LogLogic.FormatEventFlags(p, frame, out var flags);
 
-                message += $"\n   <color=cyan><b>FRAME DATA</b></color>\n" +
-                          $"   • {frameInfo}\n" +
-                          $"   <color=orange><b>BLENDING</b></color>\n" +
-                          $"   • {blendInfo}\n" +
-                          $"   <color=yellow><b>EVENTS</b></color>\n" +
-                          $"   • <b>Flags:</b> {flags}";
+                message += $"\n{prefix}  <color=cyan><b>FRAME DATA</b></color>\n" +
+                          $"{prefix}  • {frameInfo}\n" +
+                          $"{prefix}  <color=orange><b>BLENDING</b></color>\n" +
+                          $"{prefix}  • {blendInfo}\n" +
+                          $"{prefix}  <color=yellow><b>EVENTS</b></color>\n" +
+                          $"{prefix}  • <b>Flags:</b> {flags}";
             }
 
-            message += $"\n   <color=grey><b>IDENTITY & GRAPH</b></color>\n" +
-                      $"   • <b>Type:</b> {p.GetPlayableType().Name}\n" +
-                      $"   • <b>Graph:</b> {graphName} (Mode: {p.GetGraph().GetTimeUpdateMode()})\n" +
-                      $"   • <b>Structure:</b> {p.GetInputCount()} Inputs, {p.GetOutputCount()} Outputs";
+            message += $"\n{prefix}  <color=grey><b>IDENTITY & GRAPH</b></color>\n" +
+                      $"{prefix}  • <b>Type:</b> {p.GetPlayableType().Name}\n" +
+                      $"{prefix}  • <b>Graph:</b> {graphName} (Mode: {p.GetGraph().GetTimeUpdateMode()})\n" +
+                      $"{prefix}  • <b>Structure:</b> {p.GetInputCount()} Inputs, {p.GetOutputCount()} Outputs";
 
             if (playerData != null)
             {
-                message += $"\n   <color=magenta><b>USER DATA</b></color>\n" +
-                          $"   • {playerData}";
+                message += $"\n{prefix}  <color=magenta><b>USER DATA</b></color>\n" +
+                          $"{prefix}  • {playerData}";
             }
 
             return true; // Success
@@ -181,30 +182,41 @@ namespace Common
 
     public static class CommonLogger
     {
+        private static readonly string[] IndentMap = new string[]
+        {
+            "",           // 0 depth
+            "│",        // 1 depth - single clip
+            "│  │",     // 2 depth - nested
+            "│  │  │"   // 3+ depth
+        };
+
         public static void LogFull(
             this Playable p,
             FrameData? f = null,
             string color = "white",
             object playerData = null,
             string role = "PLAYABLE",
+            int depth = 0,
             [CallerMemberName] string method = ""
         )
         {
             var state = new LogState();
-            var success = state.TryLogFull(p, f, color, playerData, method, role, out var message);
+            var indent = depth < IndentMap.Length ? IndentMap[depth] : new string(' ', depth * 2);
+            var success = state.TryLogFull(p, f, color, playerData, method, role, indent, out var message);
 
             var contextObj = p.GetGraph().GetResolver() as Object;
             Debug.Log(message, contextObj);
         }
 
-        public static void LogMixingState(this Playable p, FrameData frame)
+        public static void LogMixingState(this Playable p, FrameData frame, int depth = 0)
         {
             LogLogic.GetMixingState(p, frame, out var hasActiveMixing, out var mixInfo);
 
             if (hasActiveMixing)
             {
+                var indent = depth < IndentMap.Length ? IndentMap[depth] : new string(' ', depth * 2);
                 var contextObj = p.GetGraph().GetResolver() as Object;
-                Debug.Log($"<color=yellow>{mixInfo}</color>", contextObj);
+                Debug.Log($"<color=yellow>{indent}{mixInfo}</color>", contextObj);
             }
         }
     }
