@@ -77,6 +77,46 @@ namespace Common
             if (p.IsDone()) flags += "[DONE] ";
             if (string.IsNullOrEmpty(flags)) flags = "None"; // Atomic format
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void GetMixingState(Playable p, FrameData frame, out bool hasActiveMixing, out string mixInfo)
+        {
+            hasActiveMixing = false;
+            mixInfo = string.Empty;
+
+            var inputCount = p.GetInputCount();
+            if (inputCount == 0) return;
+
+            var activeInputCount = 0; // Count active inputs instead of just checking existence
+
+            for (int i = 0; i < inputCount; i++)
+            {
+                var input = p.GetInput(i);
+                if (input.IsValid() && p.GetInputWeight(i) > 0f)
+                {
+                    activeInputCount++;
+                }
+            }
+
+            hasActiveMixing = activeInputCount > 1; // Only true when 2+ inputs are active
+
+            if (hasActiveMixing)
+            {
+                mixInfo = $"[MIXING @ {frame.frameId}] Active Inputs: ";
+                for (int i = 0; i < inputCount; i++)
+                {
+                    var input = p.GetInput(i);
+                    if (input.IsValid())
+                    {
+                        var weight = p.GetInputWeight(i);
+                        if (weight > 0f)
+                        {
+                            mixInfo += $"#{i}({weight:F2}) ";
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public static class LogExtensions
@@ -154,6 +194,17 @@ namespace Common
 
             var contextObj = p.GetGraph().GetResolver() as Object;
             Debug.Log(message, contextObj);
+        }
+
+        public static void LogMixingState(this Playable p, FrameData frame)
+        {
+            LogLogic.GetMixingState(p, frame, out var hasActiveMixing, out var mixInfo);
+
+            if (hasActiveMixing)
+            {
+                var contextObj = p.GetGraph().GetResolver() as Object;
+                Debug.Log($"<color=yellow>{mixInfo}</color>", contextObj);
+            }
         }
     }
 }
