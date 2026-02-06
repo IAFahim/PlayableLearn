@@ -43,7 +43,7 @@ MonoBehaviour:
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
     m_BlendInDuration: -1
-    m_BlendOutDuration: 0.833333333333333
+    m_BlendOutDuration: 2.75
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -103,7 +103,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: Day02LoggerPlayableAsset
   - m_Version: 1
-    m_Start: 4.166666666666667
+    m_Start: 2.25
     m_ClipIn: 0
     m_Asset: {fileID: 2708422062189044994}
     m_Duration: 5
@@ -111,29 +111,11 @@ MonoBehaviour:
     m_ParentTrack: {fileID: -1772739602574539389}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 0.833333333333333
+    m_BlendInDuration: 2.75
     m_BlendOutDuration: -1
     m_MixInCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
