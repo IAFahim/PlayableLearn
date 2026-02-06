@@ -1,4 +1,3 @@
-using Common;
 using UnityEngine;
 using UnityEngine.Playables;
 
@@ -8,7 +7,8 @@ namespace AV.Day04.Runtime
     {
         public void OnNotify(Playable origin, INotification notification, object context)
         {
-            if (notification is Day04NotificationMarker marker) Debug.Log($"Marker received: {marker.notificationName}");
+            if (notification is not Day04NotificationMarker marker) return;
+            Debug.Log($"Marker received: {marker.notificationName}");
         }
     }
 }

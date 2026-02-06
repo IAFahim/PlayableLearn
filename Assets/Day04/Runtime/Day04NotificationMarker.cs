@@ -9,11 +9,7 @@ namespace AV.Day04.Runtime
     [Serializable]
     public class Day04NotificationMarker : Marker, INotification
     {
-        // Level 1: Just a string field exposed to the editor
         public string notificationName;
-        public bool showDebugLog = true;
-
-        // INotification Implementation
-        public PropertyName id => new PropertyName(notificationName);
+        public PropertyName id => new(notificationName);
     }
 }
