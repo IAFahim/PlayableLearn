@@ -202,6 +202,35 @@ namespace Common
     public static class TrackAssetLoggerExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static string GetTrackNameSafe(TrackAsset track)
+        {
+            try
+            {
+                return track.name;
+            }
+            catch
+            {
+                // During serialization/deserialization, Unity blocks access to name property
+                // Use instance ID as fallback
+                return $"Track(#{track.GetInstanceID()})";
+            }
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static string GetTimelineNameSafe(TimelineAsset timeline)
+        {
+            if (timeline == null) return "<No Timeline>";
+            try
+            {
+                return timeline.name;
+            }
+            catch
+            {
+                return $"Timeline(#{timeline.GetInstanceID()})";
+            }
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void GetTrackInfo(this TrackAsset track, out int clipCount, out int markerCount, out double start, out double end, out double duration)
         {
             var clips = track.GetClips();
@@ -236,53 +265,63 @@ namespace Common
         public static void GetTimelineInfo(this TrackAsset track, out string timelineName)
         {
             var timeline = track.timelineAsset;
-            timelineName = timeline != null ? timeline.name : "<No Timeline>";
+            timelineName = GetTimelineNameSafe(timeline);
         }
 
+        [HideInCallstack]
         public static void LogBeforeSerialize(this TrackAsset track, string color = "cyan")
         {
+            var trackName = GetTrackNameSafe(track);
             track.FormatTrackInfo(out var trackInfo);
             track.GetChildTrackInfo(out var childCount, out var childInfo);
             track.GetTimelineInfo(out var timelineName);
             var childStr = string.IsNullOrEmpty(childInfo) ? "" : $" | {childInfo}";
 
-            Debug.Log($"<color={color}><b>[TRACK] {track.name} OnBeforeSerialize</b></color>\n" +
+            Debug.Log($"<color={color}><b>[TRACK] {trackName} OnBeforeSerialize</b></color>\n" +
                       $"  • Timeline: {timelineName}\n" +
                       $"  • {trackInfo}{childStr}");
         }
 
+        [HideInCallstack]
         public static void LogAfterDeserialize(this TrackAsset track, string color = "lime")
         {
+            var trackName = GetTrackNameSafe(track);
             track.FormatTrackInfo(out var trackInfo);
             track.GetChildTrackInfo(out var childCount, out var childInfo);
             track.GetTimelineInfo(out var timelineName);
             var childStr = string.IsNullOrEmpty(childInfo) ? "" : $" | {childInfo}";
 
-            Debug.Log($"<color={color}><b>[TRACK] {track.name} OnAfterDeserialize</b></color>\n" +
+            Debug.Log($"<color={color}><b>[TRACK] {trackName} OnAfterDeserialize</b></color>\n" +
                       $"  • Timeline: {timelineName}\n" +
                       $"  • {trackInfo}{childStr}");
         }
 
+        [HideInCallstack]
         public static void LogVersionUpgrade(this TrackAsset track, int oldVersion, int newVersion, string color = "yellow")
         {
-            Debug.Log($"<color={color}><b>[TRACK] {track.name} Version Upgrade</b></color>\n" +
+            var trackName = GetTrackNameSafe(track);
+            Debug.Log($"<color={color}><b>[TRACK] {trackName} Version Upgrade</b></color>\n" +
                       $"  • Version: {oldVersion} → {newVersion}");
         }
 
+        [HideInCallstack]
         public static void LogTrackMixerCreated(this TrackAsset track, Playable mixerPlayable, string color = "magenta")
         {
+            var trackName = GetTrackNameSafe(track);
             track.FormatTrackInfo(out var trackInfo);
             var inputCount = mixerPlayable.GetInputCount();
             var typeName = mixerPlayable.GetPlayableType().Name;
 
-            Debug.Log($"<color={color}><b>[TRACK] {track.name} CreateTrackMixer</b></color>\n" +
+            Debug.Log($"<color={color}><b>[TRACK] {trackName} CreateTrackMixer</b></color>\n" +
                       $"  • Mixer: {typeName} with {inputCount} inputs\n" +
                       $"  • {trackInfo}");
         }
 
+        [HideInCallstack]
         public static void LogOnCreateClip(this TrackAsset track, TimelineClip clip, string color = "blue")
         {
-            Debug.Log($"<color={color}><b>[TRACK] {track.name} OnCreateClip</b></color>\n" +
+            var trackName = GetTrackNameSafe(track);
+            Debug.Log($"<color={color}><b>[TRACK] {trackName} OnCreateClip</b></color>\n" +
                       $"  • Clip: {clip.displayName}\n" +
                       $"  • Duration: {clip.duration:F3}s | Start: {clip.start:F3}s | End: {clip.end:F3}s\n" +
                       $"  • Asset: {clip.asset?.GetType().Name ?? "null"}");
@@ -300,6 +339,7 @@ namespace Common
         };
 
         // Simple, clean log without verbose details
+        [HideInCallstack]
         public static void LogSimple(
             this Playable p,
             FrameData? f = null,
@@ -316,6 +356,7 @@ namespace Common
             Debug.Log($"<color={color}>{indent}[{role}] {method} | Time:{time:F3}s Speed:{speed:F1}x{playerDataStr}</color>");
         }
 
+        [HideInCallstack]
         public static void LogFull(
             this Playable p,
             FrameData? f = null,
@@ -334,6 +375,7 @@ namespace Common
             Debug.Log(message);
         }
 
+        [HideInCallstack]
         public static void LogMixingState(this Playable p, FrameData frame, int depth = 0)
         {
             LogLogic.GetMixingState(p, frame, out var hasActiveMixing, out var mixInfo);
