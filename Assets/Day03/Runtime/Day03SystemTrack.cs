@@ -1,3 +1,4 @@
+using System;
 using Common;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -11,10 +12,27 @@ namespace AV.Day03.Runtime
     {
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
         {
-            var mixer = ScriptPlayable<Day03MixerBehaviour>.Create(graph, inputCount);
-            return mixer;
+            var mixerPlayable = ScriptPlayable<Day03MixerBehaviour>.Create(graph, inputCount);
+            this.LogTrackMixerCreated(mixerPlayable, "magenta");
+            return mixerPlayable;
         }
-        
-        
+
+        protected override void OnBeforeTrackSerialize()
+        {
+            this.LogBeforeSerialize("cyan");
+            base.OnBeforeTrackSerialize();
+        }
+
+        protected override void OnAfterTrackDeserialize()
+        {
+            base.OnAfterTrackDeserialize();
+            this.LogAfterDeserialize("lime");
+        }
+
+        protected override void OnCreateClip(TimelineClip clip)
+        {
+            this.LogOnCreateClip(clip, "blue");
+            base.OnCreateClip(clip);
+        }
     }
 }

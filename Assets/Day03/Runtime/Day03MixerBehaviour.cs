@@ -35,6 +35,11 @@ namespace AV.Day03.Runtime
             playable.LogFull(info, "red", null, "MIXER", depth: 1);
         }
 
+        public override void PrepareData(Playable playable, FrameData info)
+        {
+            playable.LogFull(info, "yellow", null, "MIXER", depth: 1);
+        }
+
         public override void PrepareFrame(Playable playable, FrameData info)
         {
             playable.LogFull(info, "orange", null, "MIXER", depth: 1);

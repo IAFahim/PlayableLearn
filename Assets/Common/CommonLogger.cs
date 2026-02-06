@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Timeline;
 using Object = UnityEngine.Object;
 
 namespace Common
@@ -180,6 +181,114 @@ namespace Common
         }
     }
 
+    [Serializable]
+    [StructLayout(LayoutKind.Sequential)]
+    public struct TrackLogState
+    {
+        public bool IsValid;
+        public double Start;
+        public double End;
+        public double Duration;
+        public int ClipCount;
+        public int MarkerCount;
+        public bool IsMuted;
+        public bool IsLocked;
+        public bool HasCurves;
+        public int ChildTrackCount;
+
+        public override string ToString() => $"[TrackLogState] Clips:{ClipCount} Duration:{Duration:F2}s Markers:{MarkerCount}";
+    }
+
+    public static class TrackAssetLoggerExtensions
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void GetTrackInfo(this TrackAsset track, out int clipCount, out int markerCount, out double start, out double end, out double duration)
+        {
+            var clips = track.GetClips();
+            clipCount = 0;
+            foreach (var _ in clips) clipCount++; // Force enumeration without alloc
+            markerCount = track.GetMarkerCount();
+            start = track.start;
+            end = track.end;
+            duration = track.duration;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void FormatTrackInfo(this TrackAsset track, out string trackInfo)
+        {
+            track.GetTrackInfo(out var clipCount, out var markerCount, out var start, out var end, out var duration);
+            var mutedStr = track.muted ? "[MUTED]" : "";
+            var lockedStr = track.locked ? "[LOCKED]" : "";
+            var curvesStr = track.hasCurves ? "[CURVES]" : "";
+            trackInfo = $"Clips:{clipCount} Markers:{markerCount} Duration:{duration:F3}s ({start:F3}s - {end:F3}s) {mutedStr}{lockedStr}{curvesStr}";
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void GetChildTrackInfo(this TrackAsset track, out int childCount, out string childInfo)
+        {
+            var childTracks = track.GetChildTracks();
+            childCount = 0;
+            foreach (var _ in childTracks) childCount++;
+            childInfo = childCount > 0 ? $"ChildTracks:{childCount}" : "";
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void GetTimelineInfo(this TrackAsset track, out string timelineName)
+        {
+            var timeline = track.timelineAsset;
+            timelineName = timeline != null ? timeline.name : "<No Timeline>";
+        }
+
+        public static void LogBeforeSerialize(this TrackAsset track, string color = "cyan")
+        {
+            track.FormatTrackInfo(out var trackInfo);
+            track.GetChildTrackInfo(out var childCount, out var childInfo);
+            track.GetTimelineInfo(out var timelineName);
+            var childStr = string.IsNullOrEmpty(childInfo) ? "" : $" | {childInfo}";
+
+            Debug.Log($"<color={color}><b>[TRACK] {track.name} OnBeforeSerialize</b></color>\n" +
+                      $"  • Timeline: {timelineName}\n" +
+                      $"  • {trackInfo}{childStr}");
+        }
+
+        public static void LogAfterDeserialize(this TrackAsset track, string color = "lime")
+        {
+            track.FormatTrackInfo(out var trackInfo);
+            track.GetChildTrackInfo(out var childCount, out var childInfo);
+            track.GetTimelineInfo(out var timelineName);
+            var childStr = string.IsNullOrEmpty(childInfo) ? "" : $" | {childInfo}";
+
+            Debug.Log($"<color={color}><b>[TRACK] {track.name} OnAfterDeserialize</b></color>\n" +
+                      $"  • Timeline: {timelineName}\n" +
+                      $"  • {trackInfo}{childStr}");
+        }
+
+        public static void LogVersionUpgrade(this TrackAsset track, int oldVersion, int newVersion, string color = "yellow")
+        {
+            Debug.Log($"<color={color}><b>[TRACK] {track.name} Version Upgrade</b></color>\n" +
+                      $"  • Version: {oldVersion} → {newVersion}");
+        }
+
+        public static void LogTrackMixerCreated(this TrackAsset track, Playable mixerPlayable, string color = "magenta")
+        {
+            track.FormatTrackInfo(out var trackInfo);
+            var inputCount = mixerPlayable.GetInputCount();
+            var typeName = mixerPlayable.GetPlayableType().Name;
+
+            Debug.Log($"<color={color}><b>[TRACK] {track.name} CreateTrackMixer</b></color>\n" +
+                      $"  • Mixer: {typeName} with {inputCount} inputs\n" +
+                      $"  • {trackInfo}");
+        }
+
+        public static void LogOnCreateClip(this TrackAsset track, TimelineClip clip, string color = "blue")
+        {
+            Debug.Log($"<color={color}><b>[TRACK] {track.name} OnCreateClip</b></color>\n" +
+                      $"  • Clip: {clip.displayName}\n" +
+                      $"  • Duration: {clip.duration:F3}s | Start: {clip.start:F3}s | End: {clip.end:F3}s\n" +
+                      $"  • Asset: {clip.asset?.GetType().Name ?? "null"}");
+        }
+    }
+
     public static class CommonLogger
     {
         private static readonly string[] IndentMap = new string[]
@@ -189,6 +298,23 @@ namespace Common
             "│  │",     // 2 depth - nested
             "│  │  │"   // 3+ depth
         };
+
+        // Simple, clean log without verbose details
+        public static void LogSimple(
+            this Playable p,
+            FrameData? f = null,
+            string color = "white",
+            object playerData = null,
+            string role = "PLAYABLE",
+            int depth = 0,
+            [CallerMemberName] string method = ""
+        )
+        {
+            LogLogic.GetTimeAndSpeed(p, out var time, out var speed);
+            var indent = depth < IndentMap.Length ? IndentMap[depth] : new string(' ', depth * 2);
+            var playerDataStr = playerData != null ? $" | Data: {playerData}" : "";
+            Debug.Log($"<color={color}>{indent}[{role}] {method} | Time:{time:F3}s Speed:{speed:F1}x{playerDataStr}</color>");
+        }
 
         public static void LogFull(
             this Playable p,
@@ -204,8 +330,8 @@ namespace Common
             var indent = depth < IndentMap.Length ? IndentMap[depth] : new string(' ', depth * 2);
             var success = state.TryLogFull(p, f, color, playerData, method, role, indent, out var message);
 
-            var contextObj = p.GetGraph().GetResolver() as Object;
-            Debug.Log(message, contextObj);
+            // No contextObj = no stack trace spam!
+            Debug.Log(message);
         }
 
         public static void LogMixingState(this Playable p, FrameData frame, int depth = 0)
@@ -215,8 +341,8 @@ namespace Common
             if (hasActiveMixing)
             {
                 var indent = depth < IndentMap.Length ? IndentMap[depth] : new string(' ', depth * 2);
-                var contextObj = p.GetGraph().GetResolver() as Object;
-                Debug.Log($"<color=yellow>{indent}{mixInfo}</color>", contextObj);
+                // No contextObj = no stack trace spam!
+                Debug.Log($"<color=yellow>{indent}{mixInfo}</color>");
             }
         }
     }
