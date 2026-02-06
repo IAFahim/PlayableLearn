@@ -27,6 +27,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35e0954fcef5f5549bdb13943726e51d, type: 3}
   m_Name: Day03LoggerPlayableAsset
   m_EditorClassIdentifier: Day03.Runtime::AV.Day03.Runtime.Day03LoggerPlayableAsset
+--- !u!114 &-3248248885011627269
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70301c8818bba681eba9867d0c4a75f9, type: 3}
+  m_Name: Day 04 Notification Marker(Clone)(Clone)
+  m_EditorClassIdentifier: Day04.Runtime::AV.Day04.Runtime.Day04NotificationMarker
+  m_Time: 2.0166666666666666
+  notificationName: FU
+  showDebugLog: 1
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0

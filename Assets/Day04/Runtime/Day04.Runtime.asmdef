@@ -3,7 +3,8 @@
   "rootNamespace": "AV.Day04.Runtime",
   "references": [
     "Unity.Timeline",
-    "Unity.Mathematics"
+    "Unity.Mathematics",
+    "Common"
   ],
   "includePlatforms": [],
   "excludePlatforms": [],
