@@ -1,0 +1,18 @@
+{
+  "name": "Day06.Runtime",
+  "rootNamespace": "AV",
+  "references": [
+    "Unity.Timeline",
+    "Unity.Mathematics",
+    "Common"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}
